@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU2-PB1 | Validación datos personales</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --pink:#FDEAF2;
+    --lav:#EDE7FF;
+    --cyan:#6ECFD4;
+    --cyan-hover:#5ABCC2;
+    --text:#2E2E33;
+    --muted:#8E91A3;
+    --line:#EFE9F5;
+    --error:#E85D7A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Inter',Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+  }
+  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{
+    height:60px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 20px;max-width:1100px;margin:0 auto;
+    border-bottom:1px solid #F0EAF6;
+  }
+  .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
+  .logo-mark{width:30px;height:30px;border-radius:8px;background:#7ED6E8;display:grid;place-items:center;color:white;font-size:14px}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none}
+  .nav a.active{color:var(--text);font-weight:600}
+  .btn-ghost{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;color:var(--text);font-weight:600;font-size:12px;cursor:pointer}
+  .btn-primary{padding:7px 16px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:600;font-size:12px;cursor:pointer}
+  .wrap{max-width:680px;margin:0 auto;padding:0 16px 30px}
+  .card{
+    background:white;border:1px solid #EDE8F0;border-radius:16px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px 18px;
+  }
+  .card-head{text-align:center;margin-bottom:16px}
+  .card-head h2{font-size:22px;font-weight:700}
+  .card-head p{font-size:12px;color:var(--muted);margin-top:4px}
+  .form{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field label{font-size:11px;font-weight:600;color:#5A5D72}
+  .control input, .control select{
+    width:100%;height:40px;padding:0 12px;border:1px solid #DFDAEE;background:#FFF;
+    border-radius:10px;font-size:13px;color:var(--text);outline:none;
+  }
+  .control input:focus, .control select:focus{border-color:var(--cyan)}
+  .control.has-error input, .control.has-error select{border-color:var(--error);background:#FFF6F7}
+  .select-wrap{position:relative}
+  .select-wrap::after{content:"▾";position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#9AA0BF;font-size:11px;pointer-events:none}
+  .select-wrap select{appearance:none;-webkit-appearance:none;padding-right:30px;cursor:pointer}
+  .hint{font-size:11px;color:var(--muted)}
+  .error-msg{
+    display:none;align-items:center;gap:6px;font-size:11px;color:var(--error);
+    background:#FFF1F3;border:1px solid #FFE0E6;padding:6px 8px;border-radius:8px;margin-top:2px;
+  }
+  .error-msg.show{display:flex}
+  .actions{display:flex;gap:10px;margin-top:4px}
+  .btn-continuar{flex:1;height:42px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-continuar:hover{background:var(--cyan-hover)}
+  .btn-cancel{height:42px;padding:0 18px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(400px,100%);background:white;border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-align:center}
+  .modal-icon{width:40px;height:40px;border-radius:10px;background:#E8FFF1;display:grid;place-items:center;margin:0 auto 12px;color:#1BBF6B}
+  .modal h3{font-size:15px;font-weight:700}
+  .modal p{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+  .modal-actions{display:flex;gap:10px;margin-top:16px}
+  .btn-modal-ok{flex:1;height:38px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;cursor:pointer}
+  @media(max-width:640px){.row{grid-template-columns:1fr}.header{padding:0 14px}.card{padding:18px 14px}}
+</style>
+</head>
+<body>
+<div class="bg-blobs">
+  <div class="blob blob-pink"></div>
+  <div class="blob blob-lav"></div>
+</div>
+
+<header class="header">
+  <div class="logo"><div class="logo-mark">◐</div> Mindzyx</div>
+  <nav class="nav">
+    <a href="#" class="active">Inicio</a>
+    <a href="#">Nosotros</a>
+    <a href="#">Ayuda</a>
+  </nav>
+  <div style="display:flex;gap:10px">
+    <button class="btn-ghost">Iniciar sesión</button>
+    <button class="btn-primary">Registrarse</button>
+  </div>
+</header>
+
+<main class="wrap" style="margin-top:28px">
+  <div class="card">
+    <div class="card-head">
+      <h2>Registrarse</h2>
+      <p>HU2-PB1 — Datos personales en orden y con validación</p>
+    </div>
+
+    <form class="form" id="registerForm" novalidate>
+      <!-- ORDEN EXACTO: Nombres, Apellidos, Edad, Género, Correo, Contraseña -->
+      <div class="field">
+        <label for="nombres">Nombres</label>
+        <div class="control" id="c-nombres"><input id="nombres" type="text" placeholder="Ej. Sofía"></div>
+        <div class="error-msg" id="e-nombres">Este campo es obligatorio</div>
+      </div>
+
+      <div class="field">
+        <label for="apellidos">Apellidos</label>
+        <div class="control" id="c-apellidos"><input id="apellidos" type="text" placeholder="Ej. Martínez"></div>
+        <div class="error-msg" id="e-apellidos">Este campo es obligatorio</div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="edad">Edad</label>
+          <div class="control" id="c-edad"><input id="edad" type="number" placeholder="Ej. 24" min="1"></div>
+          <div class="error-msg" id="e-edad">Ingresa una edad válida</div>
+        </div>
+        <div class="field">
+          <label for="genero">Género</label>
+          <div class="control select-wrap" id="c-genero">
+            <select id="genero">
+              <option value="" disabled selected>Selecciona</option>
+              <option>Masculino</option>
+              <option>Femenino</option>
+              <option>Otro</option>
+              <option>Prefiero no decir</option>
+            </select>
+          </div>
+          <div class="error-msg" id="e-genero">Este campo es obligatorio</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="correo">Correo</label>
+        <div class="control" id="c-correo"><input id="correo" type="email" placeholder="tu@correo.com"></div>
+        <div class="error-msg" id="e-correo">Ingresa un correo válido</div>
+      </div>
+
+      <div class="field">
+        <label for="contrasena">Contraseña</label>
+        <div class="control" id="c-contrasena"><input id="contrasena" type="password" placeholder="Mín. 6 caracteres, 1 letra y 1 número"></div>
+        <div class="error-msg" id="e-contrasena">La contraseña debe tener mínimo 6 caracteres e incluir al menos una letra y un número</div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn-cancel" id="cancelBtn">Cancelar</button>
+        <button type="submit" class="btn-continuar">Continuar</button>
+      </div>
+      <p class="hint" style="text-align:center;margin-top:4px">Prueba: deja vacío, pon edad texto, correo sin @, o contraseña "123" para ver errores. Correo <b>existente@correo.com</b> simula duplicado.</p>
+    </form>
+  </div>
+</main>
+
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="modal-icon">✓</div>
+    <h3>Registro creado</h3>
+    <p>Tu registro se creó en estado <b>Pendiente de verificación</b>. Revisa tu correo para activar tu cuenta.</p>
+    <div class="modal-actions">
+      <button class="btn-modal-ok" id="okBtn">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="cancelModal">
+  <div class="modal">
+    <div class="modal-icon" style="background:#FFF1F3;color:var(--error)">!</div>
+    <h3>¿Deseas cancelar el registro?</h3>
+    <p>Se perderán los datos no guardados.</p>
+    <div class="modal-actions" style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn-cancel" style="flex:1" id="stayBtn">No, continuar</button>
+      <button class="btn-continuar" style="flex:1;background:var(--error)" id="leaveBtn">Sí, cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('registerForm');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const cancelModal = document.getElementById('cancelModal');
+  const successModal = document.getElementById('successModal');
+
+  const fields = {
+    nombres: { input: document.getElementById('nombres'), control: document.getElementById('c-nombres'), error: document.getElementById('e-nombres') },
+    apellidos: { input: document.getElementById('apellidos'), control: document.getElementById('c-apellidos'), error: document.getElementById('e-apellidos') },
+    edad: { input: document.getElementById('edad'), control: document.getElementById('c-edad'), error: document.getElementById('e-edad') },
+    genero: { input: document.getElementById('genero'), control: document.getElementById('c-genero'), error: document.getElementById('e-genero') },
+    correo: { input: document.getElementById('correo'), control: document.getElementById('c-correo'), error: document.getElementById('e-correo') },
+    contrasena: { input: document.getElementById('contrasena'), control: document.getElementById('c-contrasena'), error: document.getElementById('e-contrasena') },
+  };
+
+  function showError(key, msg){
+    if(msg) fields[key].error.textContent = msg;
+    fields[key].control.classList.add('has-error');
+    fields[key].error.classList.add('show');
+  }
+  function clearError(key){
+    fields[key].control.classList.remove('has-error');
+    fields[key].error.classList.remove('show');
+  }
+  function clearAll(){
+    Object.keys(fields).forEach(k=>clearError(k));
+  }
+  // quitar error al escribir
+  Object.keys(fields).forEach(k=>{
+    fields[k].input.addEventListener('input', ()=> clearError(k));
+    fields[k].input.addEventListener('change', ()=> clearError(k));
+  });
+
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    clearAll();
+    let valid = true;
+    let firstFocus = null;
+
+    const nombres = fields.nombres.input.value.trim();
+    const apellidos = fields.apellidos.input.value.trim();
+    const edadVal = fields.edad.input.value.trim();
+    const genero = fields.genero.input.value;
+    const correo = fields.correo.input.value.trim();
+    const pass = fields.contrasena.input.value;
+
+    if(!nombres){
+      showError('nombres','Este campo es obligatorio');
+      valid=false; if(!firstFocus) firstFocus=fields.nombres.input;
+    }
+    if(!apellidos){
+      showError('apellidos','Este campo es obligatorio');
+      valid=false; if(!firstFocus) firstFocus=fields.apellidos.input;
+    }
+    // edad válida: número, entero, >0 y <120
+    const edadNum = Number(edadVal);
+    if(!edadVal || isNaN(edadNum) || !Number.isInteger(edadNum) || edadNum < 1 || edadNum > 120){
+      showError('edad','Ingresa una edad válida');
+      valid=false; if(!firstFocus) firstFocus=fields.edad.input;
+    }
+    if(!genero){
+      showError('genero','Este campo es obligatorio');
+      valid=false; if(!firstFocus) firstFocus=fields.genero.input;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!correo || !emailRegex.test(correo)){
+      showError('correo','Ingresa un correo válido');
+      valid=false; if(!firstFocus) firstFocus=fields.correo.input;
+    } else if(correo.toLowerCase() === 'existente@correo.com' || correo.toLowerCase() === 'test@test.com'){
+      showError('correo','El correo ya se encuentra registrado');
+      valid=false; if(!firstFocus) firstFocus=fields.correo.input;
+    }
+    // contraseña: mínimo 6, al menos 1 letra y 1 número
+    const passRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+    if(!passRegex.test(pass)){
+      showError('contrasena','La contraseña debe tener mínimo 6 caracteres e incluir al menos una letra y un número');
+      valid=false; if(!firstFocus) firstFocus=fields.contrasena.input;
+    }
+
+    if(!valid){
+      if(firstFocus) firstFocus.focus();
+      return;
+    }
+    // todo ok -> Pendiente de verificación
+    successModal.classList.add('open');
+  });
+
+  document.getElementById('okBtn').addEventListener('click', ()=>{
+    successModal.classList.remove('open');
+    form.reset();
+    clearAll();
+  });
+  successModal.addEventListener('click', (e)=>{ if(e.target===successModal) successModal.classList.remove('open') });
+
+  cancelBtn.addEventListener('click', ()=> cancelModal.classList.add('open'));
+  document.getElementById('stayBtn').addEventListener('click', ()=> cancelModal.classList.remove('open'));
+  document.getElementById('leaveBtn').addEventListener('click', ()=>{
+    cancelModal.classList.remove('open');
+    form.reset(); clearAll();
+  });
+  cancelModal.addEventListener('click', (e)=>{ if(e.target===cancelModal) cancelModal.classList.remove('open') });
+</script>
+</body>
+</html>

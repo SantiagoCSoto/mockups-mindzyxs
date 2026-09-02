@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU2-PB5 | Nueva contraseña</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--cyan:#6ECFD4;--text:#2E2E33;--muted:#8E91A3;--error:#E85D7A}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
+  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
+  .logo-mark{width:30px;height:30px;border-radius:8px;background:#7ED6E8;display:grid;place-items:center;color:white;font-size:14px}
+  .wrap{max-width:440px;margin:28px auto;padding:0 16px 30px}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .card h2{font-size:18px;text-align:center}
+  .card p.sub{font-size:12px;color:var(--muted);text-align:center;margin-top:4px}
+  .field{margin-top:12px}
+  .field label{font-size:11px;font-weight:600;color:#5A5D72}
+  .control input{width:100%;height:40px;padding:0 12px;border:1px solid #DFDAEE;border-radius:10px;font-size:13px;outline:none;margin-top:5px}
+  .control input:focus{border-color:var(--cyan)}
+  .control.has-error input{border-color:var(--error);background:#FFF6F7}
+  .error{font-size:11px;color:var(--error);background:#FFF1F3;border:1px solid #FFE0E6;padding:6px 8px;border-radius:8px;margin-top:6px;display:none}
+  .error.show{display:block}
+  .btn{width:100%;height:42px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer;margin-top:14px}
+  .link{font-size:11px;font-weight:600;color:#5ABCC2;background:none;border:none;cursor:pointer;text-decoration:underline}
+  .screen{display:none}
+  .screen.active{display:block}
+  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(420px,100%);background:white;border-radius:14px;padding:20px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.15)}
+  .modal-icon{width:40px;height:40px;border-radius:10px;background:#E8FFF1;display:grid;place-items:center;margin:0 auto 12px;color:#1BBF6B}
+  .modal h3{font-size:15px;font-weight:700}
+  .modal p{font-size:12px;color:var(--muted);margin-top:6px}
+  .modal button{margin-top:14px;width:100%;height:38px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+<header class="header"><div class="logo"><div class="logo-mark">◐</div> Mindzyx</div><div style="font-size:12px;color:var(--muted)">HU2-PB5 — Sprint 1</div></header>
+<main class="wrap">
+  <div class="card screen active" id="screenCode">
+    <h2>Verificar código</h2>
+    <p class="sub">Código enviado a tu correo (prueba 123456)</p>
+    <div class="field"><label>Código de verificación</label><div class="control" id="c-code"><input id="code" maxlength="6" placeholder="123456" style="text-align:center;letter-spacing:6px;font-weight:700"></div><div class="error" id="e-code"></div></div>
+    <button class="btn" id="verifyBtn">Verificar</button>
+    <div style="display:flex;justify-content:space-between;margin-top:12px"><button class="link" id="reenviar">Reenviar código</button><button class="link" style="color:var(--muted)" id="cancelCode">Cancelar</button></div>
+    <p class="hint">000000 = expirado, otro = incorrecto, 123456 = correcto</p>
+  </div>
+  <div class="card screen" id="screenNew">
+    <h2>Nueva contraseña</h2>
+    <p class="sub">Debe tener mínimo 6 caracteres, 1 letra y 1 número</p>
+    <div class="field"><label>Nueva contraseña</label><div class="control" id="c-pass1"><input id="pass1" type="password" placeholder="••••••"></div><div class="error" id="e-pass1"></div></div>
+    <div class="field"><label>Confirmar nueva contraseña</label><div class="control" id="c-pass2"><input id="pass2" type="password" placeholder="••••••"></div><div class="error" id="e-pass2"></div></div>
+    <button class="btn" id="saveBtn">Guardar contraseña</button>
+    <p class="hint" id="hintNew"></p>
+  </div>
+</main>
+<div class="modal-overlay" id="successModal"><div class="modal"><div class="modal-icon">✓</div><h3>Contraseña actualizada exitosamente</h3><p>Ya puedes iniciar sesión con tu nueva contraseña</p><button id="loginBtn">Iniciar sesión</button></div></div>
+<script>
+  const screenCode=document.getElementById('screenCode'), screenNew=document.getElementById('screenNew');
+  const code=document.getElementById('code'), cCode=document.getElementById('c-code'), eCode=document.getElementById('e-code');
+  const pass1=document.getElementById('pass1'), pass2=document.getElementById('pass2');
+  const cPass1=document.getElementById('c-pass1'), cPass2=document.getElementById('c-pass2'), ePass1=document.getElementById('e-pass1'), ePass2=document.getElementById('e-pass2');
+  const successModal=document.getElementById('successModal');
+  function showE(el,msg){ el.textContent=msg; el.classList.add('show')}
+  function hideE(el,ctrl){ el.classList.remove('show'); if(ctrl) ctrl.classList.remove('has-error')}
+  [code,pass1,pass2].forEach(i=> i.addEventListener('input', ()=>{
+    if(i===code) hideE(eCode,cCode);
+    if(i===pass1) hideE(ePass1,cPass1);
+    if(i===pass2) hideE(ePass2,cPass2);
+  }));
+  document.getElementById('verifyBtn').addEventListener('click', ()=>{
+    const v=code.value.trim();
+    hideE(eCode,cCode);
+    if(!v || v.length!==6){ cCode.classList.add('has-error'); showE(eCode,'Ingresa el código de 6 dígitos'); return; }
+    if(v==='123456'){
+      showE(eCode,'Código verificado correctamente'); eCode.style.color='#0E8F4B'; eCode.style.background='#E8FFF1'; eCode.style.borderColor='#C6F5D9';
+      setTimeout(()=>{
+        hideE(eCode,cCode); eCode.style.color=''; eCode.style.background=''; eCode.style.borderColor='';
+        screenCode.classList.remove('active'); screenNew.classList.add('active');
+      }, 800);
+    }
+    else if(v==='000000'){ cCode.classList.add('has-error'); showE(eCode,'El código expiró. Reenvía el código'); }
+    else { cCode.classList.add('has-error'); showE(eCode,'Código incorrecto. Verifica e intenta nuevamente'); }
+  });
+  document.getElementById('reenviar').addEventListener('click', ()=>{
+    hideE(eCode,cCode); showE(eCode,'Código reenviado (123456)'); eCode.style.color='#0E8F4B'; eCode.style.background='#E8FFF1'; eCode.style.borderColor='#C6F5D9';
+    setTimeout(()=>{ hideE(eCode,cCode); eCode.style.color=''; eCode.style.background=''; eCode.style.borderColor=''},2000);
+  });
+  document.getElementById('saveBtn').addEventListener('click', ()=>{
+    hideE(ePass1,cPass1); hideE(ePass2,cPass2);
+    const p1=pass1.value, p2=pass2.value;
+    const passRegex=/^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+    let ok=true;
+    if(!passRegex.test(p1)){ cPass1.classList.add('has-error'); showE(ePass1,'La contraseña debe tener mínimo 6 caracteres e incluir al menos una letra y un número'); ok=false; }
+    if(p1!==p2){ cPass2.classList.add('has-error'); showE(ePass2,'Las contraseñas no coinciden'); ok=false; }
+    if(!ok) return;
+    // actualiza en BD, log
+    console.log('LOG: contraseña actualizada');
+    successModal.classList.add('open');
+  });
+  document.getElementById('loginBtn').addEventListener('click', ()=>{
+    successModal.classList.remove('open');
+    screenNew.classList.remove('active'); screenCode.classList.add('active');
+    code.value=''; pass1.value=''; pass2.value='';
+  });
+  document.getElementById('cancelCode').addEventListener('click', ()=>{ code.value=''; hideE(eCode,cCode)});
+</script>
+</body>
+</html>

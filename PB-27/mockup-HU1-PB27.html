@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU1-PB27 | Administrar BD</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--cyan:#6ECFD4;--text:#2E2E33;--muted:#8E91A3;--error:#E85D7A}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
+  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
+  .logo-mark{width:30px;height:30px;border-radius:8px;background:#7ED6E8;display:grid;place-items:center;color:white;font-size:14px}
+  .wrap{max-width:760px;margin:28px auto;padding:0 16px 30px}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .card h2{font-size:18px;text-align:center}
+  .card p.sub{font-size:12px;color:var(--muted);text-align:center;margin-top:4px}
+  .denied{display:none;background:#FFF1F3;border:1px solid #FFE0E6;padding:14px;border-radius:12px;text-align:center;margin-top:14px}
+  .denied.show{display:block}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .tile{border:1px solid #DFDAEE;border-radius:12px;padding:14px;background:#FFF}
+  .tile h3{font-size:13px;font-weight:700}
+  .tile p{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}
+  .btn{width:100%;height:38px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:12px;cursor:pointer;margin-top:10px}
+  .btn.secondary{background:white;color:var(--text);border:1px solid #DFDAEE}
+  .btn.danger{background:var(--error)}
+  .list{margin-top:14px;border:1px solid #EDE8F0;border-radius:12px;overflow:hidden}
+  .list-head{display:flex;justify-content:space-between;padding:10px 12px;background:#F9F7FF;font-size:11px;font-weight:700;color:#5A5D72}
+  .row{display:flex;justify-content:space-between;padding:10px 12px;border-top:1px solid #F0EAF6;font-size:11px}
+  .progress{display:none;margin-top:10px;background:#F0EAF6;border-radius:20px;overflow:hidden;height:10px}
+  .progress.show{display:block}
+  .bar{height:100%;width:0%;background:var(--cyan);transition:width .3s}
+  .msg{display:none;margin-top:10px;padding:8px 10px;border-radius:10px;font-size:12px;text-align:center}
+  .msg.ok{display:block;background:#E8FFF1;border:1px solid #C6F5D9;color:#0E8F4B}
+  .msg.err{display:block;background:#FFF1F3;border:1px solid #FFE0E6;color:var(--error)}
+  .log{margin-top:12px;background:#F9F7FF;border:1px solid #EDE6FF;border-radius:10px;padding:10px;font-size:10px;color:var(--muted);max-height:100px;overflow:auto}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(420px,100%);background:white;border-radius:14px;padding:20px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.15)}
+  .modal h3{font-size:15px;font-weight:700}
+  .modal p{font-size:12px;color:var(--muted);margin-top:6px}
+  .modal-actions{display:flex;gap:10px;margin-top:16px}
+  .btn-modal{flex:1;height:38px;border-radius:20px;border:none;font-weight:700;cursor:pointer}
+  .btn-modal.cancel{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  .btn-modal.go{background:var(--cyan);color:white}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+<header class="header">
+  <div class="logo"><div class="logo-mark">◐</div> Mindzyx — Consola administración</div>
+  <div style="display:flex;gap:6px;align-items:center">
+    <span style="font-size:10px;color:#8E91A3;background:#FFF8E6;border:1px dashed #FFE9B8;padding:4px 8px;border-radius:20px">← Prueba: cambia el rol para simular si entra otro usuario</span>
+    <span style="font-size:10px">→</span>
+    <select id="roleSel" style="height:30px;border:1px solid #DFDAEE;border-radius:20px;padding:0 10px;font-size:11px"><option value="admin">Administrador</option><option value="paciente">Paciente</option><option value="psicologo">Psicólogo</option></select>
+  </div>
+</header>
+<main class="wrap">
+  <div class="card" id="deniedCard">
+    <h2>Administración de base de datos</h2>
+    <p class="sub">Solo rol Administrador — respaldos locales y mantenimiento</p>
+
+    <div class="denied" id="denied">
+      <div style="font-size:18px">🔒</div>
+      <div style="font-size:13px;font-weight:700;color:var(--error);margin-top:6px">Permiso denegado</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">No tienes permisos para acceder a esta función</div>
+    </div>
+
+    <div id="adminContent">
+      <div class="grid">
+        <div class="tile">
+          <h3>Crear respaldo</h3>
+          <p>Simulación agnóstica — Debería descargarse un respaldo con los datos actuales. Sin nube externa, formato aún por definir.</p>
+          <button class="btn" id="backupBtn">Generar Respaldo Local</button>
+          <div class="progress" id="progress"><div class="bar" id="bar"></div></div>
+          <div class="msg" id="backupMsg"></div>
+        </div>
+        <div class="tile">
+          <h3>Restaurar respaldo</h3>
+          <p>Sube el archivo .backup y restaura. Requiere confirmación explícita.</p>
+          <div style="display:flex;align-items:center;gap:8px;background:white;border:1px solid #DFDAEE;border-radius:10px;padding:6px 8px;margin-top:8px" id="restoreBox">
+            <button type="button" id="restorePick" style="padding:4px 10px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer">Seleccionar archivo</button>
+            <span id="restoreFileName" style="font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">Ningún archivo seleccionado</span>
+            <input type="file" id="restoreInput" hidden accept=".backup,.json,.sqlite,.db">
+          </div>
+          <button class="btn secondary" id="restoreBtn">Restaurar respaldo</button>
+          <div class="msg" id="restoreMsg"></div>
+        </div>
+        <div class="tile">
+          <h3>Ver respaldos</h3>
+          <p>Lista con fecha, tamaño e identificador.</p>
+          <button class="btn secondary" id="viewBtn">Ver respaldos</button>
+        </div>
+        <div class="tile">
+          <h3>Mantenimiento</h3>
+          <p>Limpia registros temporales obsoletos sin afectar datos de pacientes.</p>
+          <button class="btn secondary" id="maintBtn">Ejecutar mantenimiento</button>
+          <div class="msg" id="maintMsg"></div>
+        </div>
+      </div>
+
+      <div class="list" id="backupList" style="display:none">
+        <div class="list-head"><span>Respaldo</span><span>Tamaño</span><span>Fecha/hora</span></div>
+        <div id="listRows"></div>
+      </div>
+
+      <div style="margin-top:12px;border:1px solid #EDE6FF;border-radius:10px;background:#FBFAFF;padding:8px">
+        <div style="font-size:11px;font-weight:700;color:#6B5BCE;display:flex;align-items:center;gap:6px">▸ Consola de auditoría (visible para el Administrador) <span style="font-weight:400;color:var(--muted)">— logs de backup/restore/mantenimiento con fecha/hora y responsable</span></div>
+        <div class="log" id="log" style="margin-top:8px;max-height:100px">LOG: esperando operaciones...</div>
+        <p style="font-size:10px;color:var(--muted);margin-top:6px">Esta consola SÍ la ve el Administrador — es parte de su trabajo para trazabilidad. Los demás roles no acceden a esta pantalla.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal">
+    <h3 id="confirmTitle">¿Confirmar operación?</h3>
+    <p id="confirmText"></p>
+    <div class="modal-actions"><button class="btn-modal cancel" id="confirmNo">Cancelar</button><button class="btn-modal go" id="confirmYes">Confirmar</button></div>
+  </div>
+</div>
+
+<script>
+  const roleSel=document.getElementById('roleSel'), denied=document.getElementById('denied'), adminContent=document.getElementById('adminContent');
+  const log=document.getElementById('log'), backupMsg=document.getElementById('backupMsg'), restoreMsg=document.getElementById('restoreMsg'), maintMsg=document.getElementById('maintMsg');
+  const progress=document.getElementById('progress'), bar=document.getElementById('bar'), backupList=document.getElementById('backupList'), listRows=document.getElementById('listRows');
+  const confirmModal=document.getElementById('confirmModal'), confirmTitle=document.getElementById('confirmTitle'), confirmText=document.getElementById('confirmText');
+  let pendingAction=null;
+  let backups=[
+    {name:'mindzyx_backup_2026-09-01_10-00.backup',size:'4.2 MB',date:'2026-09-01 10:00'},
+    {name:'mindzyx_backup_2026-08-28_16-30.backup',size:'4.0 MB',date:'2026-08-28 16:30'},
+  ];
+  function addLog(msg){
+    const t=new Date().toLocaleString();
+    log.textContent += `\n[${t}] ${msg}`;
+    log.scrollTop=log.scrollHeight;
+  }
+  function updateRole(){
+    const isAdmin=roleSel.value==='admin';
+    denied.classList.toggle('show', !isAdmin);
+    adminContent.style.display=isAdmin?'block':'none';
+    if(!isAdmin) addLog('INTENTO DENEGADO rol '+roleSel.value+' -> Permiso denegado');
+  }
+  roleSel.addEventListener('change', updateRole); updateRole();
+
+  function renderList(){
+    listRows.innerHTML=backups.map(b=>`<div class="row"><span>${b.name}</span><span>${b.size}</span><span>${b.date}</span></div>`).join('');
+    backupList.style.display='block';
+  }
+
+  document.getElementById('backupBtn').addEventListener('click', ()=>{
+    backupMsg.className='msg'; backupMsg.textContent='';
+    progress.classList.add('show'); bar.style.width='0%';
+    let p=0; const iv=setInterval(()=>{
+      p+=20; bar.style.width=p+'%';
+      if(p>=100){
+        clearInterval(iv);
+        setTimeout(()=>{
+          progress.classList.remove('show');
+          const now=new Date(); const name='mindzyx_backup_'+now.toISOString().slice(0,10)+'_'+String(now.getHours()).padStart(2,'0')+'-'+String(now.getMinutes()).padStart(2,'0')+'.backup';
+          const size=(3.8+Math.random()).toFixed(1)+' MB';
+          const date=now.toLocaleString();
+          backups.unshift({name,size,date});
+          renderList();
+          backupMsg.textContent='Respaldo creado correctamente — Debería descargarse un respaldo: '+name+' ('+size+', '+date+') [simulación — aún sin decidir SQL/NoSQL]';
+          backupMsg.className='msg ok';
+          // descarga simulada genérica (agnóstica SQL/NoSQL)
+          const blob=new Blob(['{"simulacion":"backup Mindzyx","archivo":"'+name+'","nota":"Debería descargarse un respaldo — formato aún por definir (SQL/NoSQL)"}'],{type:'application/json'});
+          const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+          addLog('BACKUP creado por admin (simulación agnóstica): '+name+' — Debería descargarse un respaldo');
+        },300);
+      }
+    },250);
+  });
+
+  const restoreInput=document.getElementById('restoreInput'), restoreFileName=document.getElementById('restoreFileName'), restoreBox=document.getElementById('restoreBox');
+  let restoreFile=null;
+  document.getElementById('restorePick').addEventListener('click', ()=> restoreInput.click());
+  restoreInput.addEventListener('change', ()=>{
+    const f=restoreInput.files[0];
+    if(f){ restoreFile=f; restoreFileName.textContent=f.name; restoreFileName.style.color='#2E2E33'; restoreBox.style.borderColor='#6ECFD4'; restoreMsg.className='msg'; restoreMsg.textContent=''; }
+    else { restoreFile=null; restoreFileName.textContent='Ningún archivo seleccionado'; restoreFileName.style.color=''; restoreBox.style.borderColor=''; }
+  });
+  document.getElementById('restoreBtn').addEventListener('click', ()=>{
+    restoreMsg.className='msg'; restoreMsg.textContent='';
+    if(!restoreFile){
+      restoreMsg.textContent='Debes seleccionar un archivo de respaldo (.backup) antes de restaurar';
+      restoreMsg.className='msg err';
+      restoreBox.style.borderColor='#E85D7A';
+      return;
+    }
+    pendingAction='restore';
+    confirmTitle.textContent='¿Restaurar respaldo?';
+    confirmText.textContent='Se restaurará el archivo "'+restoreFile.name+'" ('+(restoreFile.size/1024/1024).toFixed(2)+' MB). Esta operación crítica requiere confirmación explícita y sobrescribirá los datos actuales.';
+    confirmModal.classList.add('open');
+  });
+  document.getElementById('maintBtn').addEventListener('click', ()=>{
+    maintMsg.className='msg'; maintMsg.textContent='';
+    // ejecuta directo sin confirm (mantenimiento es menos crítico pero igual loguea)
+    maintMsg.textContent='Mantenimiento completado — registros temporales eliminados (0 datos de pacientes afectados). Último: '+new Date().toLocaleString();
+    maintMsg.className='msg ok';
+    addLog('MANTENIMIENTO ejecutado por admin — limpia temporales, sin afectar pacientes');
+  });
+  document.getElementById('viewBtn').addEventListener('click', ()=>{
+    renderList();
+    addLog('VIEW respaldos consultado por admin');
+  });
+
+  document.getElementById('confirmNo').addEventListener('click', ()=> confirmModal.classList.remove('open'));
+  document.getElementById('confirmYes').addEventListener('click', ()=>{
+    confirmModal.classList.remove('open');
+    if(pendingAction==='restore'){
+      // simula 70% éxito con archivo seleccionado
+      if(Math.random()>0.3){
+        restoreMsg.textContent='Respaldo restaurado correctamente desde "'+restoreFile.name+'"';
+        restoreMsg.className='msg ok';
+        addLog('RESTORE exitoso por admin desde archivo: '+restoreFile.name);
+      } else {
+        restoreMsg.textContent='No fue posible restaurar el respaldo. Verifique el archivo "'+restoreFile.name+'" e intente nuevamente';
+        restoreMsg.className='msg err';
+        addLog('RESTORE FALLIDO por admin — archivo inválido: '+restoreFile.name);
+      }
+    }
+    pendingAction=null;
+  });
+</script>
+</body>
+</html>

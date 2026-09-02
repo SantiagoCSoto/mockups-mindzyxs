@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU2-PB2 | Control de acceso por estado</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--cyan:#6ECFD4;--text:#2E2E33;--muted:#8E91A3;--error:#E85D7A;--warn:#E8A347}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
+  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
+  .logo-mark{width:30px;height:30px;border-radius:8px;background:#7ED6E8;display:grid;place-items:center;color:white;font-size:14px}
+  .wrap{max-width:520px;margin:28px auto;padding:0 16px 30px}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .card h2{font-size:18px;font-weight:700;text-align:center}
+  .card p.sub{font-size:12px;color:var(--muted);text-align:center;margin-top:4px}
+  .form{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+  .field label{font-size:11px;font-weight:600;color:#5A5D72}
+  .control input, .control select{width:100%;height:40px;padding:0 12px;border:1px solid #DFDAEE;border-radius:10px;font-size:13px;outline:none}
+  .btn{height:42px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer;margin-top:6px}
+  .alert{display:none;padding:10px 12px;border-radius:10px;font-size:12px;margin-top:10px;line-height:1.4}
+  .alert.show{display:block}
+  .alert.error{background:#FFF1F3;border:1px solid #FFE0E6;color:var(--error)}
+  .alert.warn{background:#FFF8E6;border:1px solid #FFE9B8;color:#8A6A00}
+  .alert.ok{background:#E8FFF1;border:1px solid #C6F5D9;color:#0E8F4B}
+  .alert.info{background:#EAF7FA;border:1px solid #C8EEF3;color:#1A7A85}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .chip{padding:5px 10px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;cursor:pointer}
+  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
+  .log{margin-top:12px;background:#F9F7FF;border:1px solid #EDE6FF;border-radius:10px;padding:10px;font-size:10px;color:var(--muted);max-height:90px;overflow:auto}
+  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+<header class="header"><div class="logo"><div class="logo-mark">◐</div> Mindzyx</div><div style="font-size:12px;color:var(--muted)">HU2-PB2 — Sprint 1</div></header>
+<main class="wrap">
+  <div class="card">
+    <h2>Control de acceso por estado</h2>
+    <p class="sub">El usuario solo ve su login y el mensaje de bloqueo — los botones de arriba son solo para probar</p>
+    <div style="margin-top:8px;padding:6px 8px;background:#FFF8E6;border:1px dashed #FFE9B8;border-radius:8px;font-size:10px;color:#8A6A00;text-align:center">⚠️ Panel de prueba — Los botones de estado son solo para simular cada tipo de usuario. El usuario final NO los ve.</div>
+    <div class="chips" id="chips">
+      <button class="chip active" data-user="paciente@test.com">Activa</button>
+      <button class="chip" data-user="suspendida@test.com">Suspendida</button>
+      <button class="chip" data-user="inactiva@test.com">Inactiva</button>
+      <button class="chip" data-user="psicologo-pendiente@test.com">Psicólogo pendiente</button>
+      <button class="chip" data-user="expirada@test.com">Sesión expirada</button>
+    </div>
+    <div class="form">
+      <div class="field"><label>Correo (elige chip)</label><div class="control"><input id="correo" value="paciente@test.com"></div></div>
+      <div class="field"><label>Contraseña</label><div class="control"><input id="pass" type="password" value="123456a"></div></div>
+      <button class="btn" id="loginBtn">Iniciar sesión</button>
+      <div class="alert error" id="a-error"></div>
+      <div class="alert warn" id="a-warn"></div>
+      <div class="alert ok" id="a-ok"></div>
+      <div class="alert info" id="a-info"></div>
+      <details style="margin-top:12px;border:1px solid #EDE6FF;border-radius:10px;background:#FBFAFF;padding:8px">
+        <summary style="font-size:11px;font-weight:700;color:#6B5BCE;cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px">▸ Consola interna (solo testeo/auditoría — NO la ve el usuario) <span style="font-weight:400;color:var(--muted)">— clic para abrir</span></summary>
+        <div class="log" id="log" style="margin-top:8px;max-height:90px">LOG: esperando intentos...</div>
+        <p style="font-size:10px;color:var(--muted);margin-top:6px">Esta consola es solo para testeo y trazabilidad. En producción el usuario solo ve el mensaje de bloqueo (suspendida/pendiente/expirada) de arriba, no estos logs.</p>
+      </details>
+    </div>
+    <p class="hint">Activa → deja pasar y redirige por rol. Suspendida/Inactiva → bloqueo. Pendiente → aviso. Expirada → redirige a login.</p>
+  </div>
+</main>
+<script>
+  const correo=document.getElementById('correo'), log=document.getElementById('log');
+  const aError=document.getElementById('a-error'), aWarn=document.getElementById('a-warn'), aOk=document.getElementById('a-ok'), aInfo=document.getElementById('a-info');
+  const users={
+    'paciente@test.com':{estado:'Activa',rol:'Paciente'},
+    'suspendida@test.com':{estado:'Suspendida'},
+    'inactiva@test.com':{estado:'Inactiva'},
+    'psicologo-pendiente@test.com':{estado:'Pendiente de aprobación',rol:'Psicólogo'},
+    'expirada@test.com':{estado:'Activa',expirada:true}
+  };
+  function hideAll(){ [aError,aWarn,aOk,aInfo].forEach(a=>a.classList.remove('show'))}
+  function addLog(msg){
+    const t=new Date().toLocaleTimeString();
+    log.textContent += `\n[${t}] ${msg}`;
+    log.scrollTop=log.scrollHeight;
+  }
+  document.querySelectorAll('.chip').forEach(c=>{
+    c.addEventListener('click', ()=>{
+      document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+      c.classList.add('active');
+      correo.value=c.dataset.user;
+      hideAll();
+    });
+  });
+  document.getElementById('loginBtn').addEventListener('click', ()=>{
+    hideAll();
+    const u=users[correo.value.trim().toLowerCase()];
+    if(!u){ aError.textContent='Correo o contraseña incorrectos'; aError.classList.add('show'); addLog('LOGIN FALLIDO - usuario no existe: '+correo.value); return; }
+    if(u.expirada){
+      aInfo.textContent='Tu sesión ha expirado. Inicia sesión nuevamente'; aInfo.classList.add('show');
+      addLog('BLOQUEO por sesión expirada: '+correo.value + ' -> redirige a login');
+      return;
+    }
+    if(u.estado==='Suspendida' || u.estado==='Inactiva'){
+      aError.textContent='Tu cuenta se encuentra suspendida. Contacta al administrador'; aError.classList.add('show');
+      addLog('BLOQUEO estado '+u.estado+': '+correo.value);
+      return;
+    }
+    if(u.estado==='Pendiente de aprobación'){
+      aWarn.textContent='Tu cuenta está pendiente de aprobación por el administrador. Intenta más tarde'; aWarn.classList.add('show');
+      addLog('BLOQUEO pendiente aprobación: '+correo.value);
+      return;
+    }
+    if(u.estado==='Activa'){
+      aOk.textContent='Acceso permitido → Redirigiendo a '+ (u.rol==='Paciente'?'Panel del paciente':u.rol==='Psicólogo'?'Panel del psicólogo':'Consola') + ' (rol válido)';
+      aOk.classList.add('show');
+      addLog('ACCESO PERMITIDO Activa: '+correo.value + ' rol '+u.rol);
+    }
+  });
+  // simula sesión expirada en segundo plano cada 12s
+  setInterval(()=>{
+    if(Math.random()>0.7){
+      aInfo.textContent='Tu sesión ha expirado. Inicia sesión nuevamente (expiró en segundo plano)';
+      aInfo.classList.add('show');
+      addLog('SESION EXPIRADA en segundo plano -> redirige a Landing/login');
+    }
+  },12000);
+</script>
+</body>
+</html>

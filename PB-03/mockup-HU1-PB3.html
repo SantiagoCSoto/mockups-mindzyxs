@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU1-PB3 | Cerrar sesión</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--cyan:#6ECFD4;--text:#2E2E33;--muted:#8E91A3;--error:#E85D7A}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
+  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
+  .logo-mark{width:30px;height:30px;border-radius:8px;background:#7ED6E8;display:grid;place-items:center;color:white;font-size:14px}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none}
+  .nav a.active{color:var(--text);font-weight:600}
+  .btn-ghost{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;color:var(--text);font-weight:600;font-size:12px;cursor:pointer}
+  .btn-primary{padding:7px 16px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:600;font-size:12px;cursor:pointer}
+  .btn-out{padding:7px 14px;border-radius:20px;border:1px solid #FFE0E6;background:#FFF1F3;color:var(--error);font-size:12px;font-weight:700;cursor:pointer}
+  .wrap{max-width:720px;margin:28px auto;padding:0 16px 30px}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:40px 20px;text-align:center;min-height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .avatar{width:56px;height:56px;border-radius:14px;background:#EDE6FF;display:grid;place-items:center;color:#7A6AE6;font-weight:700;font-size:20px;margin-bottom:12px}
+  .card h2{font-size:18px;font-weight:700}
+  .card p.sub{font-size:12px;color:var(--muted);margin-top:6px}
+  .card p.empty{font-size:11px;color:var(--muted);margin-top:14px;background:#F9F7FF;border:1px dashed #EDE6FF;padding:8px 12px;border-radius:10px}
+  .landing{margin-top:16px;background:white;border:1px solid #EDE8F0;border-radius:16px;padding:22px 20px;text-align:center;display:none}
+  .landing.show{display:block}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(420px,100%);background:white;border-radius:14px;padding:20px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.15)}
+  .modal h3{font-size:15px;font-weight:700}
+  .modal p{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+  .modal-actions{display:flex;gap:10px;margin-top:16px}
+  .btn-modal{flex:1;height:38px;border-radius:20px;border:none;font-weight:700;cursor:pointer}
+  .btn-modal.cancel{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  .btn-modal.leave{background:var(--error);color:white}
+  .btn-modal.ok{background:var(--cyan);color:white}
+  details{margin-top:12px;border:1px solid #EDE6FF;border-radius:10px;background:#FBFAFF;padding:8px}
+  details summary{font-size:11px;font-weight:700;color:#6B5BCE;cursor:pointer;list-style:none}
+  .log{margin-top:8px;background:#F9F7FF;border:1px solid #EDE6FF;border-radius:8px;padding:8px;font-size:10px;color:var(--muted);max-height:80px;overflow:auto}
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+<header class="header">
+  <div class="logo"><div class="logo-mark">◐</div> Mindzyx</div>
+  <nav class="nav">
+    <a href="#">Inicio</a>
+    <a href="#" class="active">Panel</a>
+    <a href="#">Ayuda</a>
+  </nav>
+  <button class="btn-out" id="headerLogout">Cerrar sesión</button>
+</header>
+
+<main class="wrap">
+  <div class="card" id="emptyCard">
+    <div class="avatar">C</div>
+    <h2>Hola, Camila R.</h2>
+    <p class="sub">Página vacía — prueba de cierre de sesión (HU1-PB3)</p>
+    <p class="empty">Aquí iría el contenido del panel. Para esta prueba está vacía, solo con el header arriba igual que en los demás mockups.</p>
+    <p style="font-size:11px;color:var(--muted);margin-top:10px">El botón <b>Cerrar sesión</b> está arriba donde en los demás está <b>Iniciar sesión</b> — header consistente.</p>
+  </div>
+
+  <div class="landing" id="landing">
+    <h3 style="font-size:16px">Landing Page pública</h3>
+    <p style="font-size:12px;color:var(--muted);margin-top:6px">Sesión cerrada correctamente. Token/cookie eliminado.</p>
+    <button class="btn-primary" style="margin-top:14px" id="relogin">Volver a iniciar sesión</button>
+  </div>
+
+  <details>
+    <summary>▸ Consola interna (solo testeo/auditoría — NO la ve el usuario)</summary>
+    <div class="log" id="log">LOG: sesión activa — token abc123<br>LOG: usuario Camila R. en sistema</div>
+    <p style="font-size:10px;color:var(--muted);margin-top:6px">Esta consola es solo para testeo. El usuario final solo ve el modal de confirmación y la Landing Page, no estos logs.</p>
+  </details>
+</main>
+
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal">
+    <div style="width:40px;height:40px;border-radius:10px;background:#FFF1F3;display:grid;place-items:center;margin:0 auto 12px;color:var(--error)">!</div>
+    <h3>¿Deseas cerrar sesión?</h3>
+    <p>Se eliminará tu token/cookie y volverás a la Landing Page. Elige <b>Sí, cerrar sesión</b> o <b>No, permanecer</b>.</p>
+    <div class="modal-actions"><button class="btn-modal cancel" id="stayBtn">No, permanecer</button><button class="btn-modal leave" id="leaveBtn">Sí, cerrar sesión</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="errorModal">
+  <div class="modal">
+    <div style="width:40px;height:40px;border-radius:10px;background:#FFF1F3;display:grid;place-items:center;margin:0 auto 12px;color:var(--error)">×</div>
+    <h3>No fue posible cerrar sesión. Intenta nuevamente</h3>
+    <p>Error interno — la sesión sigue activa y no se cerró.</p>
+    <div class="modal-actions"><button class="btn-modal ok" id="errorOk">Entendido</button></div>
+  </div>
+</div>
+
+<script>
+  const confirmModal=document.getElementById('confirmModal'), errorModal=document.getElementById('errorModal');
+  const log=document.getElementById('log'), emptyCard=document.getElementById('emptyCard'), landing=document.getElementById('landing');
+  const headerLogout=document.getElementById('headerLogout');
+  let sessionActive=true;
+  function openConfirm(){ if(!sessionActive) return; confirmModal.classList.add('open'); }
+  headerLogout.addEventListener('click', openConfirm);
+  document.getElementById('stayBtn').addEventListener('click', ()=>{
+    confirmModal.classList.remove('open');
+    log.textContent += '\nLOG: usuario eligió No, permanecer — sesión sigue activa';
+  });
+  document.getElementById('leaveBtn').addEventListener('click', ()=>{
+    confirmModal.classList.remove('open');
+    if(Math.random()<0.15){
+      errorModal.classList.add('open');
+      log.textContent += '\nLOG ERROR: fallo al cerrar sesión';
+      return;
+    }
+    sessionActive=false;
+    log.textContent += '\nLOG: token/cookie eliminado — sesión invalidada';
+    log.textContent += '\nLOG: redirige a Landing Page pública';
+    emptyCard.style.display='none';
+    landing.classList.add('show');
+    headerLogout.style.display='none';
+  });
+  document.getElementById('errorOk').addEventListener('click', ()=> errorModal.classList.remove('open'));
+  document.getElementById('relogin').addEventListener('click', ()=>{
+    sessionActive=true;
+    emptyCard.style.display='flex';
+    landing.classList.remove('show');
+    headerLogout.style.display='block';
+    log.textContent += '\nLOG: nueva sesión iniciada';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU3-PB1 | Tarjeta profesional</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3; --error:#E85D7A; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
+  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
+  .logo-mark{width:30px;height:30px;border-radius:8px;background:#7ED6E8;display:grid;place-items:center;color:white;font-size:14px}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none}
+  .nav a.active{color:var(--text);font-weight:600}
+  .btn-ghost{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;color:var(--text);font-weight:600;font-size:12px;cursor:pointer}
+  .btn-primary{padding:7px 16px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:600;font-size:12px;cursor:pointer}
+  .wrap{max-width:680px;margin:28px auto;padding:0 16px 30px}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px 18px}
+  .card-head{text-align:center;margin-bottom:16px}
+  .card-head h2{font-size:22px;font-weight:700}
+  .card-head p{font-size:12px;color:var(--muted);margin-top:4px}
+  .form{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field label{font-size:11px;font-weight:600;color:#5A5D72}
+  .control select, .control input{width:100%;height:40px;padding:0 12px;border:1px solid #DFDAEE;background:#FFF;border-radius:10px;font-size:13px;outline:none}
+  .control select:focus, .control input:focus{border-color:var(--cyan)}
+  .control.has-error select, .control.has-error .upload{border-color:var(--error);background:#FFF6F7}
+  .select-wrap{position:relative}
+  .select-wrap::after{content:"▾";position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#9AA0BF;font-size:11px;pointer-events:none}
+  .select-wrap select{appearance:none;-webkit-appearance:none;padding-right:30px;cursor:pointer}
+  .error-msg{display:none;align-items:center;gap:6px;font-size:11px;color:var(--error);background:#FFF1F3;border:1px solid #FFE0E6;padding:6px 8px;border-radius:8px;margin-top:2px}
+  .error-msg.show{display:flex}
+  .credentials{display:none;background:#F9F7FF;border:1px dashed #D8D0F0;border-radius:10px;padding:12px}
+  .credentials.open{display:block}
+  .credentials-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .icon-box{width:30px;height:30px;border-radius:8px;background:#EDE6FF;display:grid;place-items:center;color:#7A6AE6;font-size:14px}
+  .credentials-head h4{font-size:12px;font-weight:700}
+  .upload{display:flex;align-items:center;gap:10px;background:white;border:1px solid #DFDAEE;border-radius:10px;padding:8px 10px}
+  .upload-btn{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
+  .file-name{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+  .file-meta{font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center}
+  .hint{font-size:11px;color:var(--muted)}
+  .actions{display:flex;gap:10px;margin-top:4px}
+  .btn-continuar{flex:1;height:42px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-continuar:hover{background:var(--cyan-hover)}
+  .btn-cancel{height:42px;padding:0 18px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(420px,100%);background:white;border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-align:center}
+  .modal-icon{width:40px;height:40px;border-radius:10px;background:#FFF1F3;display:grid;place-items:center;margin:0 auto 12px;color:var(--error)}
+  .modal-icon.ok{background:#E8FFF1;color:#1BBF6B}
+  .modal h3{font-size:15px;font-weight:700}
+  .modal p{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+  .modal-actions{display:flex;gap:10px;margin-top:16px}
+  .btn-modal{flex:1;height:38px;border-radius:20px;border:none;font-weight:700;cursor:pointer}
+  .btn-modal.cancel{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  .btn-modal.ok{background:var(--cyan);color:white}
+  .btn-modal.leave{background:var(--error);color:white}
+  @media(max-width:640px){.header{padding:0 14px}.card{padding:18px 14px}}
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+<header class="header">
+  <div class="logo"><div class="logo-mark">◐</div> Mindzyx</div>
+  <nav class="nav"><a href="#" class="active">Inicio</a><a href="#">Nosotros</a><a href="#">Ayuda</a></nav>
+  <div style="display:flex;gap:10px"><button class="btn-ghost">Iniciar sesión</button><button class="btn-primary">Registrarse</button></div>
+</header>
+<main class="wrap">
+  <div class="card">
+    <div class="card-head">
+      <h2>Registrarse</h2>
+      <p>HU3-PB1 — Tarjeta profesional (solo Psicólogo)</p>
+    </div>
+    <form class="form" id="form" novalidate>
+      <div class="field">
+        <label for="tipo">Tipo de usuario *</label>
+        <div class="control select-wrap" id="c-tipo"><select id="tipo"><option value="" disabled selected>Selecciona una opción</option><option value="paciente">Paciente</option><option value="psicologo">Psicólogo</option></select></div>
+        <div class="error-msg" id="e-tipo">Debes seleccionar un tipo de cuenta: Paciente o Psicólogo</div>
+      </div>
+
+      <!-- resto de datos simplificados para contexto -->
+      <div class="field"><label>Nombres</label><div class="control"><input type="text" placeholder="Ej. Sofía"></div></div>
+      <div class="field"><label>Correo</label><div class="control"><input type="email" placeholder="tu@correo.com"></div></div>
+
+      <div class="credentials" id="credentials">
+        <div class="credentials-head"><div class="icon-box">🎓</div><div><h4>Subir tarjeta profesional *</h4></div></div>
+        <div class="upload" id="uploadBox">
+          <button type="button" class="upload-btn" id="pickBtn">Seleccionar archivo</button>
+          <span class="file-name" id="fileName">Ningún archivo seleccionado</span>
+          <input type="file" id="fileInput" hidden>
+        </div>
+        <p class="hint" style="margin-top:6px">Formatos permitidos: <b>PDF</b> — Tamaño máximo <b>5MB</b></p>
+        <div class="file-meta" id="fileMeta" style="display:none;margin-top:6px"></div>
+        <div class="error-msg" id="e-file" style="margin-top:8px"></div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn-cancel" id="cancelBtn">Cancelar / Volver</button>
+        <button type="submit" class="btn-continuar">Continuar</button>
+      </div>
+      <p class="hint" style="text-align:center">Prueba: 1) Continuar sin archivo 2) subir .jpg 3) subir PDF &gt;5MB 4) PDF válido</p>
+    </form>
+  </div>
+</main>
+
+<div class="modal-overlay" id="cancelModal">
+  <div class="modal">
+    <div class="modal-icon">!</div>
+    <h3>¿Deseas cancelar el registro?</h3>
+    <p>Se perderán los datos no guardados y volverás a la Landing Page.</p>
+    <div class="modal-actions"><button class="btn-modal cancel" id="stayBtn">No, continuar</button><button class="btn-modal leave" id="leaveBtn">Sí, cancelar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="modal-icon ok">✓</div>
+    <h3>Registro exitoso</h3>
+    <p>Tu cuenta está pendiente de aprobación por el administrador</p>
+    <div class="modal-actions"><button class="btn-modal ok" id="loginBtn">Iniciar sesión</button></div>
+  </div>
+</div>
+
+<script>
+  const tipo=document.getElementById('tipo'), cTipo=document.getElementById('c-tipo'), eTipo=document.getElementById('e-tipo');
+  const credentials=document.getElementById('credentials'), pickBtn=document.getElementById('pickBtn');
+  const fileInput=document.getElementById('fileInput'), fileName=document.getElementById('fileName');
+  const fileMeta=document.getElementById('fileMeta'), eFile=document.getElementById('e-file'), uploadBox=document.getElementById('uploadBox');
+  let selectedFile=null;
+
+  tipo.addEventListener('change', ()=>{
+    if(tipo.value==='psicologo'){ credentials.classList.add('open'); }
+    else { credentials.classList.remove('open'); clearFileError(); }
+    if(tipo.value){ cTipo.classList.remove('has-error'); eTipo.classList.remove('show'); }
+  });
+
+  pickBtn.addEventListener('click', ()=> fileInput.click());
+  fileInput.addEventListener('change', ()=>{
+    const f=fileInput.files[0];
+    if(!f){ selectedFile=null; fileName.textContent='Ningún archivo seleccionado'; fileName.style.color=''; fileMeta.style.display='none'; return; }
+    selectedFile=f;
+    fileName.textContent=f.name;
+    fileName.style.color='#2E2E33';
+    fileMeta.style.display='flex';
+    fileMeta.textContent = (f.type || 'archivo') + ' • ' + (f.size/1024/1024).toFixed(2) + ' MB';
+    clearFileError();
+  });
+
+  function showFileError(msg){
+    eFile.textContent=msg; eFile.classList.add('show'); uploadBox.style.borderColor='#E85D7A'; uploadBox.style.background='#FFF6F7';
+  }
+  function clearFileError(){ eFile.classList.remove('show'); uploadBox.style.borderColor=''; uploadBox.style.background=''; }
+
+  document.getElementById('form').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    let ok=true;
+    if(!tipo.value){ cTipo.classList.add('has-error'); eTipo.classList.add('show'); ok=false; }
+    else { cTipo.classList.remove('has-error'); eTipo.classList.remove('show'); }
+
+    if(tipo.value==='psicologo'){
+      if(!selectedFile){
+        showFileError('La tarjeta profesional es obligatoria para registrarse como psicólogo'); ok=false;
+      } else {
+        const isPdf = selectedFile.type==='application/pdf' || selectedFile.name.toLowerCase().endsWith('.pdf');
+        if(!isPdf){ showFileError('El archivo debe estar en formato PDF'); ok=false; }
+        else if(selectedFile.size > 5*1024*1024){ showFileError('El archivo supera el tamaño máximo permitido de 5MB'); ok=false; }
+        else { clearFileError(); }
+      }
+    }
+    if(!ok) return;
+    // si es psicólogo y pasa -> pendiente aprobación, si es paciente pasa directo
+    if(tipo.value==='psicologo'){
+      document.getElementById('successModal').classList.add('open');
+    } else {
+      // paciente también válido pero sin tarjeta, simulamos éxito genérico
+      document.getElementById('successModal').querySelector('p').textContent='Registro exitoso. Revisa tu correo para verificar tu cuenta.';
+      document.getElementById('successModal').classList.add('open');
+    }
+  });
+
+  // modales
+  const cancelModal=document.getElementById('cancelModal'), successModal=document.getElementById('successModal');
+  document.getElementById('cancelBtn').addEventListener('click',()=>cancelModal.classList.add('open'));
+  document.getElementById('stayBtn').addEventListener('click',()=>cancelModal.classList.remove('open'));
+  document.getElementById('leaveBtn').addEventListener('click',()=>{
+    cancelModal.classList.remove('open');
+    document.getElementById('form').reset(); credentials.classList.remove('open');
+    selectedFile=null; fileName.textContent='Ningún archivo seleccionado'; fileName.style.color=''; fileMeta.style.display='none'; clearFileError();
+    cTipo.classList.remove('has-error'); eTipo.classList.remove('show');
+  });
+  document.getElementById('loginBtn').addEventListener('click',()=>{
+    successModal.classList.remove('open');
+    // resetea para demo
+    document.getElementById('form').reset(); credentials.classList.remove('open');
+    selectedFile=null; fileName.textContent='Ningún archivo seleccionado'; fileMeta.style.display='none';
+  });
+  cancelModal.addEventListener('click',e=>{if(e.target===cancelModal)cancelModal.classList.remove('open')});
+  successModal.addEventListener('click',e=>{if(e.target===successModal)successModal.classList.remove('open')});
+</script>
+</body>
+</html>
