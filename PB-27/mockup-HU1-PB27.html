@@ -39,15 +39,6 @@
   .msg.ok{display:block;background:#E8FFF1;border:1px solid #C6F5D9;color:#0E8F4B}
   .msg.err{display:block;background:#FFF1F3;border:1px solid #FFE0E6;color:var(--error)}
   .log{margin-top:12px;background:#F9F7FF;border:1px solid #EDE6FF;border-radius:10px;padding:10px;font-size:10px;color:var(--muted);max-height:100px;overflow:auto}
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
-  .modal-overlay.open{display:flex}
-  .modal{width:min(420px,100%);background:white;border-radius:14px;padding:20px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.15)}
-  .modal h3{font-size:15px;font-weight:700}
-  .modal p{font-size:12px;color:var(--muted);margin-top:6px}
-  .modal-actions{display:flex;gap:10px;margin-top:16px}
-  .btn-modal{flex:1;height:38px;border-radius:20px;border:none;font-weight:700;cursor:pointer}
-  .btn-modal.cancel{border:1px solid #DFDAEE;background:white;color:var(--text)}
-  .btn-modal.go{background:var(--cyan);color:white}
   @media(max-width:640px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -76,25 +67,14 @@
       <div class="grid">
         <div class="tile">
           <h3>Crear respaldo</h3>
-          <p>Simulación agnóstica — Debería descargarse un respaldo con los datos actuales. Sin nube externa, formato aún por definir.</p>
+          <p>Genera un respaldo local (.bak nativo de SQL Server) y lo descarga al equipo, sin nube externa.</p>
           <button class="btn" id="backupBtn">Generar Respaldo Local</button>
           <div class="progress" id="progress"><div class="bar" id="bar"></div></div>
           <div class="msg" id="backupMsg"></div>
         </div>
         <div class="tile">
-          <h3>Restaurar respaldo</h3>
-          <p>Sube el archivo .backup y restaura. Requiere confirmación explícita.</p>
-          <div style="display:flex;align-items:center;gap:8px;background:white;border:1px solid #DFDAEE;border-radius:10px;padding:6px 8px;margin-top:8px" id="restoreBox">
-            <button type="button" id="restorePick" style="padding:4px 10px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer">Seleccionar archivo</button>
-            <span id="restoreFileName" style="font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">Ningún archivo seleccionado</span>
-            <input type="file" id="restoreInput" hidden accept=".backup,.json,.sqlite,.db">
-          </div>
-          <button class="btn secondary" id="restoreBtn">Restaurar respaldo</button>
-          <div class="msg" id="restoreMsg"></div>
-        </div>
-        <div class="tile">
           <h3>Ver respaldos</h3>
-          <p>Lista con fecha, tamaño e identificador.</p>
+          <p>Lista con fecha, tamaño e identificador, y descarga de respaldos existentes.</p>
           <button class="btn secondary" id="viewBtn">Ver respaldos</button>
         </div>
         <div class="tile">
@@ -106,12 +86,12 @@
       </div>
 
       <div class="list" id="backupList" style="display:none">
-        <div class="list-head"><span>Respaldo</span><span>Tamaño</span><span>Fecha/hora</span></div>
+        <div class="list-head"><span>Respaldo</span><span>Tamaño</span><span>Fecha/hora</span><span></span></div>
         <div id="listRows"></div>
       </div>
 
       <div style="margin-top:12px;border:1px solid #EDE6FF;border-radius:10px;background:#FBFAFF;padding:8px">
-        <div style="font-size:11px;font-weight:700;color:#6B5BCE;display:flex;align-items:center;gap:6px">▸ Consola de auditoría (visible para el Administrador) <span style="font-weight:400;color:var(--muted)">— logs de backup/restore/mantenimiento con fecha/hora y responsable</span></div>
+        <div style="font-size:11px;font-weight:700;color:#6B5BCE;display:flex;align-items:center;gap:6px">▸ Consola de auditoría (visible para el Administrador) <span style="font-weight:400;color:var(--muted)">— logs de respaldos y mantenimiento con fecha/hora y responsable</span></div>
         <div class="log" id="log" style="margin-top:8px;max-height:100px">LOG: esperando operaciones...</div>
         <p style="font-size:10px;color:var(--muted);margin-top:6px">Esta consola SÍ la ve el Administrador — es parte de su trabajo para trazabilidad. Los demás roles no acceden a esta pantalla.</p>
       </div>
@@ -119,23 +99,13 @@
   </div>
 </main>
 
-<div class="modal-overlay" id="confirmModal">
-  <div class="modal">
-    <h3 id="confirmTitle">¿Confirmar operación?</h3>
-    <p id="confirmText"></p>
-    <div class="modal-actions"><button class="btn-modal cancel" id="confirmNo">Cancelar</button><button class="btn-modal go" id="confirmYes">Confirmar</button></div>
-  </div>
-</div>
-
 <script>
   const roleSel=document.getElementById('roleSel'), denied=document.getElementById('denied'), adminContent=document.getElementById('adminContent');
-  const log=document.getElementById('log'), backupMsg=document.getElementById('backupMsg'), restoreMsg=document.getElementById('restoreMsg'), maintMsg=document.getElementById('maintMsg');
+  const log=document.getElementById('log'), backupMsg=document.getElementById('backupMsg'), maintMsg=document.getElementById('maintMsg');
   const progress=document.getElementById('progress'), bar=document.getElementById('bar'), backupList=document.getElementById('backupList'), listRows=document.getElementById('listRows');
-  const confirmModal=document.getElementById('confirmModal'), confirmTitle=document.getElementById('confirmTitle'), confirmText=document.getElementById('confirmText');
-  let pendingAction=null;
   let backups=[
-    {name:'mindzyx_backup_2026-09-01_10-00.backup',size:'4.2 MB',date:'2026-09-01 10:00'},
-    {name:'mindzyx_backup_2026-08-28_16-30.backup',size:'4.0 MB',date:'2026-08-28 16:30'},
+    {name:'mindzyx_full_2026-09-15_18-45.bak',size:'0.9 MB',date:'2026-09-15 18:45'},
+    {name:'mindzyx_full_2026-09-15_16-50.bak',size:'0.9 MB',date:'2026-09-15 16:50'},
   ];
   function addLog(msg){
     const t=new Date().toLocaleString();
@@ -151,8 +121,13 @@
   roleSel.addEventListener('change', updateRole); updateRole();
 
   function renderList(){
-    listRows.innerHTML=backups.map(b=>`<div class="row"><span>${b.name}</span><span>${b.size}</span><span>${b.date}</span></div>`).join('');
+    listRows.innerHTML=backups.map(b=>`<div class="row"><span>${b.name}</span><span>${b.size}</span><span>${b.date}</span><span><button class="btn secondary" style="width:auto;margin-top:0;padding:2px 10px" onclick="descargarRespaldo('${b.name}')">⬇</button></span></div>`).join('');
     backupList.style.display='block';
+  }
+  function descargarRespaldo(name){
+    const blob=new Blob(['respaldos SQL Server estilo .bak (simulación)'],{type:'application/octet-stream'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+    addLog('DOWNLOAD respaldo por admin: '+name);
   }
 
   document.getElementById('backupBtn').addEventListener('click', ()=>{
@@ -164,46 +139,22 @@
         clearInterval(iv);
         setTimeout(()=>{
           progress.classList.remove('show');
-          const now=new Date(); const name='mindzyx_backup_'+now.toISOString().slice(0,10)+'_'+String(now.getHours()).padStart(2,'0')+'-'+String(now.getMinutes()).padStart(2,'0')+'.backup';
-          const size=(3.8+Math.random()).toFixed(1)+' MB';
+          const now=new Date(); const name='mindzyx_full_'+now.toISOString().slice(0,10)+'_'+String(now.getHours()).padStart(2,'0')+'-'+String(now.getMinutes()).padStart(2,'0')+'.bak';
+          const size=(0.8+Math.random()).toFixed(1)+' MB';
           const date=now.toLocaleString();
           backups.unshift({name,size,date});
           renderList();
-          backupMsg.textContent='Respaldo creado correctamente — Debería descargarse un respaldo: '+name+' ('+size+', '+date+') [simulación — aún sin decidir SQL/NoSQL]';
+          backupMsg.textContent='Respaldo creado correctamente — backup nativo .bak de SQL Server: '+name+' ('+size+', '+date+')';
           backupMsg.className='msg ok';
-          // descarga simulada genérica (agnóstica SQL/NoSQL)
-          const blob=new Blob(['{"simulacion":"backup Mindzyx","archivo":"'+name+'","nota":"Debería descargarse un respaldo — formato aún por definir (SQL/NoSQL)"}'],{type:'application/json'});
-          const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
-          addLog('BACKUP creado por admin (simulación agnóstica): '+name+' — Debería descargarse un respaldo');
+          descargarRespaldo(name);
+          addLog('BACKUP creado por admin: '+name+' ('+size+') [backup nativo .bak]');
         },300);
       }
     },250);
   });
 
-  const restoreInput=document.getElementById('restoreInput'), restoreFileName=document.getElementById('restoreFileName'), restoreBox=document.getElementById('restoreBox');
-  let restoreFile=null;
-  document.getElementById('restorePick').addEventListener('click', ()=> restoreInput.click());
-  restoreInput.addEventListener('change', ()=>{
-    const f=restoreInput.files[0];
-    if(f){ restoreFile=f; restoreFileName.textContent=f.name; restoreFileName.style.color='#2E2E33'; restoreBox.style.borderColor='#6ECFD4'; restoreMsg.className='msg'; restoreMsg.textContent=''; }
-    else { restoreFile=null; restoreFileName.textContent='Ningún archivo seleccionado'; restoreFileName.style.color=''; restoreBox.style.borderColor=''; }
-  });
-  document.getElementById('restoreBtn').addEventListener('click', ()=>{
-    restoreMsg.className='msg'; restoreMsg.textContent='';
-    if(!restoreFile){
-      restoreMsg.textContent='Debes seleccionar un archivo de respaldo (.backup) antes de restaurar';
-      restoreMsg.className='msg err';
-      restoreBox.style.borderColor='#E85D7A';
-      return;
-    }
-    pendingAction='restore';
-    confirmTitle.textContent='¿Restaurar respaldo?';
-    confirmText.textContent='Se restaurará el archivo "'+restoreFile.name+'" ('+(restoreFile.size/1024/1024).toFixed(2)+' MB). Esta operación crítica requiere confirmación explícita y sobrescribirá los datos actuales.';
-    confirmModal.classList.add('open');
-  });
   document.getElementById('maintBtn').addEventListener('click', ()=>{
     maintMsg.className='msg'; maintMsg.textContent='';
-    // ejecuta directo sin confirm (mantenimiento es menos crítico pero igual loguea)
     maintMsg.textContent='Mantenimiento completado — registros temporales eliminados (0 datos de pacientes afectados). Último: '+new Date().toLocaleString();
     maintMsg.className='msg ok';
     addLog('MANTENIMIENTO ejecutado por admin — limpia temporales, sin afectar pacientes');
@@ -211,24 +162,6 @@
   document.getElementById('viewBtn').addEventListener('click', ()=>{
     renderList();
     addLog('VIEW respaldos consultado por admin');
-  });
-
-  document.getElementById('confirmNo').addEventListener('click', ()=> confirmModal.classList.remove('open'));
-  document.getElementById('confirmYes').addEventListener('click', ()=>{
-    confirmModal.classList.remove('open');
-    if(pendingAction==='restore'){
-      // simula 70% éxito con archivo seleccionado
-      if(Math.random()>0.3){
-        restoreMsg.textContent='Respaldo restaurado correctamente desde "'+restoreFile.name+'"';
-        restoreMsg.className='msg ok';
-        addLog('RESTORE exitoso por admin desde archivo: '+restoreFile.name);
-      } else {
-        restoreMsg.textContent='No fue posible restaurar el respaldo. Verifique el archivo "'+restoreFile.name+'" e intente nuevamente';
-        restoreMsg.className='msg err';
-        addLog('RESTORE FALLIDO por admin — archivo inválido: '+restoreFile.name);
-      }
-    }
-    pendingAction=null;
   });
 </script>
 </body>
