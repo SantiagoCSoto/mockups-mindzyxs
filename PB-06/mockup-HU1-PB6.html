@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU1-PB6 | Modo invitado</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
+  .logo{display:flex;align-items:center}
+  .logo-img{height:44px;width:auto;object-fit:contain}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none}
+  .nav a.active{color:var(--text);font-weight:600}
+  .btn-ghost{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;color:var(--text);font-weight:600;font-size:12px;cursor:pointer}
+  .btn-primary{padding:7px 16px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:600;font-size:12px;cursor:pointer}
+  .guest-pill{font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:6px 12px;border-radius:20px;white-space:nowrap}
+  .wrap{width:100%;max-width:760px;margin:0 auto;padding:24px 16px 30px;flex:1}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .hero{text-align:center;padding:34px 24px;margin-bottom:16px}
+  .hero h1{font-size:26px;font-weight:700}
+  .hero p{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .screen{display:none}
+  .screen.active{display:block}
+  .landing-actions{text-align:center;padding:28px 24px}
+  .landing-actions h2{font-size:18px;font-weight:700}
+  .landing-actions p.sub{font-size:12px;color:var(--muted);margin-top:6px}
+  .btn-guest{width:100%;max-width:340px;height:48px;margin-top:18px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
+  .btn-guest:hover{filter:brightness(1.05)}
+  .divider{font-size:11px;color:var(--muted);margin:14px 0 4px}
+  .btn-secondary{width:100%;max-width:340px;height:40px;margin-top:8px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
+  .btn-secondary:hover{border-color:var(--cyan);background:#F8FEFF}
+  .panel-head{text-align:center}
+  .panel-head .badge-guest{display:inline-block;font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:5px 12px;border-radius:20px;margin-bottom:8px}
+  .panel-head h2{font-size:20px;font-weight:700}
+  .panel-head p.sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .section{margin-top:18px}
+  .section-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6B5BCE;background:#F9F7FF;padding:6px 10px;border-radius:20px;display:inline-block}
+  .grid-avail{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+  .grid-locked{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+  .tile{border:1px solid #DFDAEE;border-radius:12px;padding:16px 12px;background:#FFF;text-align:center}
+  .tile .ico{width:40px;height:40px;border-radius:10px;background:#E6F7F8;display:grid;place-items:center;margin:0 auto 8px;font-size:18px}
+  .tile h3{font-size:12px;font-weight:700}
+  .tile p{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.4}
+  .tile .btn{width:100%;height:34px;margin-top:12px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:12px;cursor:pointer}
+  .tile .btn:hover{background:var(--cyan-hover)}
+  .tile.locked{background:#FBFAFF;border-style:dashed;border-color:#E2DCF3;opacity:.85}
+  .tile.locked .ico{background:#F0ECFB;color:#A49BC9}
+  .tile.locked h3{color:#9A90C4}
+  .tile.locked p{color:#B9B1D8}
+  .lock-badge{display:inline-block;font-size:9px;font-weight:700;color:#8E91A3;background:#F3F1FA;border:1px solid #E2DCF3;padding:2px 8px;border-radius:20px;margin-top:10px}
+  .lock-note{font-size:11px;color:var(--muted);background:#FFF8E6;border:1px dashed #FFE9B8;padding:8px 12px;border-radius:10px;margin-top:12px;line-height:1.5}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
+  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
+  .chip.err.active{background:var(--error);border-color:var(--error)}
+  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2D2F36;color:white;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none;z-index:60}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:10px 0;margin-top:20px}
+  .footer-in{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12px}
+  .footer-in a{color:var(--muted);text-decoration:none}
+  .footer-in a:hover{color:var(--text)}
+  .footer-in a.aviso{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 16px;border-radius:20px;text-decoration:none;font-size:12px;transition:.15s;box-shadow:0 2px 6px rgba(107,91,206,0.18)}
+  .footer-in a.aviso:hover{background:#E7DDFF;border-color:#B9A3F2;color:#4A38B0;box-shadow:0 3px 10px rgba(107,91,206,0.25)}
+  .footer-in a.aviso .ico{font-size:13px}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(480px,100%);background:white;border-radius:14px;padding:24px 22px;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-align:center;max-height:92vh;overflow:auto}
+  .modal-icon{width:52px;height:52px;border-radius:14px;background:#FFF9E6;color:var(--warning);display:grid;place-items:center;margin:0 auto 14px}
+  .modal-icon.err{background:#FFF1F3;color:var(--error)}
+  .modal-icon.ok{background:#E8FFF1;color:var(--ok)}
+  .modal h3{font-size:16px;font-weight:700;color:var(--text)}
+  .modal .aviso-txt{font-size:12.5px;color:var(--muted);line-height:1.65;margin-top:12px;text-align:left}
+  .modal .aviso-txt b{color:var(--text)}
+  .modal .highlight{color:var(--error);font-weight:600}
+  .modal .aviso-txt.small{font-size:11.5px}
+  .modal p.sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .modal-actions{display:flex;gap:10px;margin-top:20px}
+  .btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-modal.ok{background:var(--cyan);color:white}
+  .btn-modal.ok:hover{background:var(--cyan-hover)}
+  .btn-modal.close{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  @media(max-width:760px){
+    .header{padding:0 14px}
+    .grid-avail{grid-template-columns:1fr}
+    .grid-locked{grid-template-columns:repeat(2,1fr)}
+    .nav{font-size:12px;gap:12px}
+  }
+</style>
+</head>
+<body>
+<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header">
+  <div class="logo"><img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img"></div>
+  <nav class="nav">
+    <a href="#" class="active" id="navLanding">Inicio</a>
+    <a href="#">Nosotros</a>
+    <a href="#">Ayuda</a>
+  </nav>
+  <div id="headerGuest" style="display:flex;gap:8px;align-items:center">
+    <button class="btn-ghost" id="headerLogin">Iniciar sesión</button>
+    <button class="btn-primary" id="headerRegister">Registrarse</button>
+  </div>
+  <div id="headerPanel" style="display:none;gap:8px;align-items:center">
+    <span class="guest-pill">👤 Modo invitado</span>
+    <button class="btn-ghost" id="headerLogin2">Iniciar sesión</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="screen active" id="landingScreen">
+    <div class="card hero">
+      <h1>Mindzyx</h1>
+      <p>Monitoreo y apoyo de tu bienestar emocional.</p>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted)">HU1-PB6 — Sprint 1 • Modo invitado</div>
+    </div>
+    <div class="card landing-actions">
+      <h2>Entra sin crear una cuenta</h2>
+      <p class="sub">Usa servicios básicos sin registrarte ni iniciar sesión.</p>
+      <button class="btn-guest" id="guestBtn">Modo invitado</button>
+      <div class="divider">— o —</div>
+      <button class="btn-secondary" id="altLogin">Iniciar sesión</button>
+      <button class="btn-secondary" id="altRegister">Registrarse</button>
+    </div>
+    <p class="hint">Demo: presiona <b>Modo invitado</b> para acceder al Panel de invitado. Si activás <b>Simular error</b>, se muestra "No fue posible acceder en modo invitado. Intente nuevamente".</p>
+  </div>
+
+  <div class="screen" id="panelScreen">
+    <div class="card">
+      <div class="panel-head">
+        <span class="badge-guest">👤 Modo invitado — sin cuenta</span>
+        <h2>Inicio (Invitado)</h2>
+        <p class="sub">Opciones disponibles sin crear cuenta ni iniciar sesión. Navegación limitada.</p>
+      </div>
+
+      <div class="section">
+        <span class="section-title">Disponibles para invitado</span>
+        <div class="grid-avail">
+          <div class="tile">
+            <div class="ico">📝</div>
+            <h3>Responder cuestionario</h3>
+            <p>Cuestionario de bienestar emocional</p>
+            <button class="btn" id="qBtn">Entrar</button>
+          </div>
+          <div class="tile">
+            <div class="ico">💡</div>
+            <h3>Ver recomendaciones básicas</h3>
+            <p>Consejos generales de cuidado</p>
+            <button class="btn" id="recBtn">Entrar</button>
+          </div>
+          <div class="tile">
+            <div class="ico">🆘</div>
+            <h3>Líneas de ayuda</h3>
+            <p>Contactos de emergencia y apoyo</p>
+            <button class="btn" id="helpBtn">Entrar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-title">Funciones exclusivas — usuarios registrados</span>
+        <div class="grid-locked">
+          <div class="tile locked">
+            <div class="ico">🧠</div>
+            <h3>Historial emocional</h3>
+            <p>Registro de tus estados</p>
+            <div class="lock-badge">🔒 Exclusivo</div>
+          </div>
+          <div class="tile locked">
+            <div class="ico">📈</div>
+            <h3>Gráficos de progreso</h3>
+            <p>Evolución por tiempo</p>
+            <div class="lock-badge">🔒 Exclusivo</div>
+          </div>
+          <div class="tile locked">
+            <div class="ico">⏰</div>
+            <h3>Recordatorios</h3>
+            <p>Avisos programados</p>
+            <div class="lock-badge">🔒 Exclusivo</div>
+          </div>
+          <div class="tile locked">
+            <div class="ico">🎓</div>
+            <h3>Autorización de psicólogo</h3>
+            <p>Vincular un profesional</p>
+            <div class="lock-badge">🔒 Exclusivo</div>
+          </div>
+        </div>
+        <p class="lock-note">🔒 Estas funciones requieren <b>crear una cuenta o iniciar sesión</b>. Como invitado sólo podés usar las tres opciones básicas de arriba.</p>
+      </div>
+
+      <div style="text-align:center;margin-top:18px">
+        <button class="btn-secondary" style="max-width:280px" id="exitGuest">← Volver a la Landing</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
+      <div class="controls">
+        <button class="chip active" id="obligatorioChip">Aviso aclaratorio obligatorio (antes del cuestionario)</button>
+        <button class="chip err" id="errChip">Simular error de acceso</button>
+      </div>
+      <p class="hint">Cada acceso en modo invitado, aviso visualizado y bloqueo de funciones exclusivas se registra en logs internos (consola del navegador).</p>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Inicio</a>
+    <a href="#">Nosotros</a>
+    <a href="#">Ayuda</a>
+    <a href="#" class="aviso" id="footerAviso"><span class="ico">⚠️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle">
+  <div class="modal">
+    <div class="modal-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+    </div>
+    <h3 id="avisoTitle">Mensaje aclaratorio</h3>
+    <div class="aviso-txt">
+      <b>Mindzyx</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
+      Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.
+      <br><br>
+      Ante un <b>riesgo alto o una situación de urgencia</b>, busca ayuda profesional o utiliza las <b>líneas de ayuda disponibles</b> en tu país (por ejemplo, servicios de emergencia o líneas de crisis locales).
+      <br><br>
+      Mindzyx es solo una <b>herramienta de apoyo y monitoreo emocional</b> y <b>no reemplaza la atención profesional</b>.
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal close" id="btnCerrar">Cerrar</button>
+      <button class="btn-modal ok" id="btnEntendido">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="errModal" role="alertdialog" aria-modal="true" aria-labelledby="errTitle">
+  <div class="modal">
+    <div class="modal-icon err">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+    </div>
+    <h3 id="errTitle">Modo invitado</h3>
+    <p class="sub" id="errMsg"></p>
+    <div class="modal-actions">
+      <button class="btn-modal ok" id="errOk">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="modal">
+    <div class="modal-icon ok">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+    </div>
+    <h3 id="helpTitle">Líneas de ayuda</h3>
+    <div class="aviso-txt small">
+      Si estás pasando por una situación difícil o de riesgo, buscá ayuda profesional o comunicate con las líneas de ayuda de tu país:
+      <br><br>
+      • <b>Emergencias</b> (911 o el número local de emergencias de tu país)<br>
+      • <b>Líneas de crisis</b> locales disponibles en tu región<br>
+      • <b>Profesionales de salud mental</b> o servicios de salud cercanos
+      <br><br>
+      Mindzyx es una herramienta de apoyo y no reemplaza la atención profesional.
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal ok" id="helpOk">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const landingScreen=document.getElementById('landingScreen'), panelScreen=document.getElementById('panelScreen');
+  const headerGuest=document.getElementById('headerGuest'), headerPanel=document.getElementById('headerPanel');
+  const toast=document.getElementById('toast');
+  const obligatorioChip=document.getElementById('obligatorioChip'), errChip=document.getElementById('errChip');
+  const avisoModal=document.getElementById('avisoModal'), errModal=document.getElementById('errModal'), helpModal=document.getElementById('helpModal');
+  const btnEntendido=document.getElementById('btnEntendido'), btnCerrar=document.getElementById('btnCerrar'), errOk=document.getElementById('errOk'), helpOk=document.getElementById('helpOk');
+  const errTitle=document.getElementById('errTitle'), errMsg=document.getElementById('errMsg');
+
+  let accessError=false;
+  let avisoObligatorio=true;
+  let guestAvisoOk=false;
+  let pendingAction=null;
+
+  function addLog(msg){ console.log('[HU1-PB6]', new Date().toLocaleTimeString(), msg); }
+  function showToast(msg){
+    toast.textContent=msg; toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t=setTimeout(()=>toast.classList.remove('show'),2400);
+  }
+  function showScreen(panel){
+    landingScreen.classList.toggle('active', !panel);
+    panelScreen.classList.toggle('active', panel);
+    headerGuest.style.display=panel?'none':'flex';
+    headerPanel.style.display=panel?'flex':'none';
+    document.getElementById('navLanding').className=panel?'':'active';
+  }
+  function openErr(title,msg){
+    errTitle.textContent=title;
+    errMsg.textContent=msg;
+    errModal.classList.add('open');
+  }
+
+  document.getElementById('guestBtn').addEventListener('click', ()=>{
+    if(accessError){
+      addLog('ERROR: no fue posible acceder en modo invitado. Intente nuevamente');
+      openErr('Modo invitado','No fue posible acceder en modo invitado. Intente nuevamente');
+      return;
+    }
+    guestAvisoOk=false;
+    showScreen(true);
+    addLog('ACCESO modo invitado desde Landing Page — rol invitado, sin cuenta');
+    showToast('Entrando en modo invitado ✓');
+  });
+
+  document.getElementById('exitGuest').addEventListener('click', ()=>{
+    showScreen(false);
+    pendingAction=null;
+    addLog('SALIDA del modo invitado — vuelve a la Landing');
+  });
+
+  function openAviso(fromSensitive){
+    if(accessError){
+      addLog('ERROR: no fue posible cargar el mensaje aclaratorio. Intente nuevamente');
+      openErr('Mensaje aclaratorio','No fue posible cargar el mensaje aclaratorio. Intente nuevamente');
+      return;
+    }
+    avisoModal.classList.add('open');
+    addLog(fromSensitive
+      ? 'VISUALIZACIÓN del mensaje aclaratorio (obligatorio, antes de '+fromSensitive+')'
+      : 'VISUALIZACIÓN del mensaje aclaratorio por enlace "Aviso: no diagnóstico"');
+  }
+
+  document.getElementById('footerAviso').addEventListener('click', (e)=>{ e.preventDefault(); openAviso(null); });
+
+  btnEntendido.addEventListener('click', ()=>{
+    avisoModal.classList.remove('open');
+    guestAvisoOk=true;
+    addLog('AVISO ACEPTADO — botón "Entendido"');
+    if(pendingAction){
+      const a=pendingAction; pendingAction=null;
+      if(a==='Responder cuestionario'){
+        addLog('ACCESO PERMITIDO: '+a+' (invitado)');
+        showToast('Comenzando cuestionario (invitado) ✓');
+      } else {
+        showToast('Continúa: '+a);
+      }
+    }
+  });
+
+  btnCerrar.addEventListener('click', ()=>{
+    avisoModal.classList.remove('open');
+    addLog('AVISO CERRADO — botón "Cerrar" — retorna al panel sin continuar');
+    pendingAction=null;
+  });
+
+  errOk.addEventListener('click', ()=>{ errModal.classList.remove('open'); pendingAction=null; });
+  helpOk.addEventListener('click', ()=>{ helpModal.classList.remove('open'); });
+  helpModal.addEventListener('click', (e)=>{ if(e.target===helpModal) helpModal.classList.remove('open'); });
+
+  document.getElementById('qBtn').addEventListener('click', ()=>{
+    if(accessError){
+      addLog('ERROR: no fue posible cargar el mensaje aclaratorio. Intente nuevamente');
+      openErr('Mensaje aclaratorio','No fue posible cargar el mensaje aclaratorio. Intente nuevamente');
+      return;
+    }
+    if(avisoObligatorio && !guestAvisoOk){
+      pendingAction='Responder cuestionario';
+      addLog('INTENTO de responder cuestionario por primera vez -> se muestra aviso obligatorio antes de continuar');
+      openAviso('Responder cuestionario');
+    } else {
+      addLog('ACCESO PERMITIDO: Responder cuestionario (invitado)');
+      showToast('Comenzando cuestionario (invitado) ✓');
+    }
+  });
+
+  document.getElementById('recBtn').addEventListener('click', ()=>{
+    addLog('ACCESO: Ver recomendaciones básicas (invitado)');
+    showToast('Mostrando recomendaciones básicas ✓');
+  });
+
+  document.getElementById('helpBtn').addEventListener('click', ()=>{
+    helpModal.classList.add('open');
+    addLog('ACCESO: Líneas de ayuda consultadas (invitado)');
+  });
+
+  document.querySelectorAll('.tile.locked').forEach(t=>{
+    t.addEventListener('click', ()=>{
+      const name=t.querySelector('h3').textContent;
+      addLog('INTENTO BLOQUEADO para invitado: '+name+' — función exclusiva de usuarios registrados');
+      showToast('🔒 "'+name+'" requiere crear una cuenta o iniciar sesión');
+    });
+  });
+
+  obligatorioChip.addEventListener('click', ()=>{
+    avisoObligatorio=!avisoObligatorio;
+    obligatorioChip.classList.toggle('active', avisoObligatorio);
+    addLog(avisoObligatorio
+      ? 'DEMO: aviso aclaratorio OBLIGATORIO antes del cuestionario'
+      : 'DEMO: aviso aclaratorio NO obligatorio');
+  });
+
+  errChip.addEventListener('click', ()=>{
+    accessError=!accessError;
+    errChip.classList.toggle('active', accessError);
+    addLog(accessError
+      ? 'DEMO: modo error de acceso ACTIVADO'
+      : 'DEMO: modo error de acceso DESACTIVADO');
+  });
+
+  document.querySelectorAll('#headerLogin, #headerLogin2').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      addLog('INTENTO de iniciar sesión desde header');
+      showToast('Ir a Iniciar sesión (fuera de este mockup)');
+    });
+  });
+  document.getElementById('headerRegister').addEventListener('click', ()=>{
+    addLog('INTENTO de registrarse desde header');
+    showToast('Ir a Registrarse (fuera de este mockup)');
+  });
+  document.getElementById('altLogin').addEventListener('click', ()=>{
+    addLog('INTENTO de iniciar sesión desde la Landing');
+    showToast('Ir a Iniciar sesión (fuera de este mockup)');
+  });
+  document.getElementById('altRegister').addEventListener('click', ()=>{
+    addLog('INTENTO de registrarse desde la Landing');
+    showToast('Ir a Registrarse (fuera de este mockup)');
+  });
+
+  addLog('Sistema listo — botón "Modo invitado" disponible en la Landing Page');
+</script>
+</body>
+</html>
