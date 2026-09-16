@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU1-PB9 | Recomendaciones básicas (Invitado)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
+  .logo{display:flex;align-items:center}
+  .logo-img{height:44px;width:auto;object-fit:contain}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none}
+  .nav a.active{color:var(--text);font-weight:600}
+  .guest-pill{font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:6px 12px;border-radius:20px;white-space:nowrap}
+  .wrap{width:100%;max-width:680px;margin:0 auto;padding:24px 16px 30px;flex:1}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .screen{display:none}
+  .screen.active{display:block}
+  .panel-head{text-align:center}
+  .panel-head .badge-guest{display:inline-block;font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:5px 12px;border-radius:20px;margin-bottom:8px}
+  .panel-head h2{font-size:20px;font-weight:700}
+  .panel-head p.sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .cta-wrap{text-align:center;margin-top:18px}
+  .btn-guest{width:100%;max-width:340px;height:48px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
+  .btn-guest:hover{filter:brightness(1.05)}
+  .btn-secondary{height:40px;padding:0 20px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
+  .btn-secondary:hover{border-color:var(--cyan);background:#F8FEFF}
+  .mini-opts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+  .mini-opts .tile{width:160px;border:1px solid #DFDAEE;border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;transition:.15s}
+  .mini-opts .tile:hover{border-color:var(--cyan);background:#F8FEFF}
+  .mini-opts .ico{width:36px;height:36px;border-radius:10px;background:#E6F7F8;display:grid;place-items:center;margin:0 auto 6px;font-size:16px}
+  .mini-opts h3{font-size:12px;font-weight:700}
+  .mini-opts p{font-size:10px;color:var(--muted);margin-top:3px}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
+  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
+  .chip.risk.active-bajo{background:#E8FFF1;color:#0E8F4B;border-color:#7FE0B0}
+  .chip.risk.active-medio{background:#FFF8E6;color:#8A6A00;border-color:#F3D48A}
+  .chip.risk.active-alto{background:#FFF1F3;color:var(--error);border-color:#FFBFCF}
+  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5}
+  .recom-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+  .recom-title{font-size:18px;font-weight:800;text-align:left}
+  .recom-sub{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
+  .priority-badge{display:none;font-size:10px;font-weight:700;color:#B3541E;background:#FFF1E5;border:1px solid #FFD9B0;padding:4px 10px;border-radius:20px}
+  .priority-badge.show{display:inline-block}
+  .rec-list{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .rec-item{display:flex;align-items:center;gap:12px;border:1px solid #DFDAEE;border-radius:14px;padding:14px;background:#FFF;transition:.15s}
+  .rec-item.prio{border-color:#FFD9B0;background:#FFFDFB;box-shadow:0 2px 10px rgba(232,163,71,0.12)}
+  .rec-item.prio .rec-ico{background:#FFF1E5}
+  .rec-ico{width:44px;height:44px;border-radius:12px;background:#E6F7F8;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+  .rec-info{flex:1;min-width:0}
+  .rec-info h4{font-size:13px;font-weight:700}
+  .rec-info p{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+  .rec-info .prio-tag{display:inline-block;font-size:9px;font-weight:700;color:#B3541E;background:#FFF1E5;border:1px solid #FFD9B0;margin-top:5px;padding:2px 8px;border-radius:20px}
+  .btn-ver{height:36px;padding:0 16px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap}
+  .btn-ver:hover{background:var(--cyan-hover)}
+  .empty-state{display:none;text-align:center;padding:30px 12px}
+  .empty-state.show{display:block}
+  .empty-ico{width:56px;height:56px;border-radius:14px;background:#F3F1FA;color:var(--muted);display:grid;place-items:center;margin:0 auto 14px}
+  .empty-state h3{font-size:15px;font-weight:700}
+  .empty-state p{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .empty-state .btn-guest{margin-top:20px}
+  .detail-head{text-align:center}
+  .detail-ico{width:60px;height:60px;border-radius:16px;background:#E6F7F8;display:grid;place-items:center;font-size:26px;margin:0 auto 12px}
+  .detail-head h2{font-size:19px;font-weight:800}
+  .detail-head p.dur{display:inline-block;font-size:11px;font-weight:700;color:#2A8A94;background:#EAF9FA;border:1px solid #C6EEF1;margin-top:8px;padding:5px 12px;border-radius:20px}
+  .detail-block{margin-top:18px;text-align:left}
+  .detail-block h3{font-size:12px;font-weight:700;color:#6B5BCE;letter-spacing:.04em;margin-bottom:8px}
+  .detail-steps{list-style:none;counter-reset:step;display:flex;flex-direction:column;gap:8px}
+  .detail-steps li{font-size:12.5px;color:var(--text);line-height:1.55;background:#F9F8FC;border:1px solid #EDE8F0;border-radius:10px;padding:10px 12px;counter-increment:step}
+  .detail-steps li::before{content:counter(step);display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#6ECFD4;color:white;font-size:11px;font-weight:700;margin-right:8px}
+  .detail-note{font-size:11.5px;color:var(--muted);background:#FFFDFB;border:1px dashed #F0D9BC;border-radius:10px;padding:10px 12px;margin-top:10px;line-height:1.6}
+  .detail-note b{color:var(--text)}
+  .detail-actions{display:flex;gap:10px;margin-top:20px}
+  .btn-detail{flex:1;height:44px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-detail.ok{background:var(--cyan);color:white}
+  .btn-detail.ok:hover{background:var(--cyan-hover)}
+  .btn-detail.outline{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  .btn-detail.outline:hover{border-color:var(--cyan);background:#F8FEFF}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2D2F36;color:white;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none;z-index:60}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:10px 0;margin-top:20px}
+  .footer-in{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12px}
+  .footer-in a{color:var(--muted);text-decoration:none}
+  .footer-in a:hover{color:var(--text)}
+  .footer-in a.aviso{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 16px;border-radius:20px;text-decoration:none;font-size:12px;transition:.15s;box-shadow:0 2px 6px rgba(107,91,206,0.18)}
+  .footer-in a.aviso:hover{background:#E7DDFF;border-color:#B9A3F2;color:#4A38B0;box-shadow:0 3px 10px rgba(107,91,206,0.25)}
+  .footer-in a.aviso .ico{font-size:13px}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(480px,100%);background:white;border-radius:14px;padding:24px 22px;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-align:center;max-height:92vh;overflow:auto}
+  .modal-icon{width:52px;height:52px;border-radius:14px;background:#FFF9E6;color:var(--warning);display:grid;place-items:center;margin:0 auto 14px}
+  .modal h3{font-size:16px;font-weight:700;color:var(--text)}
+  .modal .aviso-txt{font-size:12.5px;color:var(--muted);line-height:1.65;margin-top:12px;text-align:left}
+  .modal .aviso-txt b{color:var(--text)}
+  .modal .highlight{color:var(--error);font-weight:600}
+  .modal-actions{display:flex;gap:10px;margin-top:20px}
+  .btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-modal.ok{background:var(--cyan);color:white}
+  .btn-modal.ok:hover{background:var(--cyan-hover)}
+  .btn-modal.close{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  @media(max-width:560px){
+    .header{padding:0 14px}
+    .nav{font-size:12px;gap:12px}
+    .mini-opts .tile{width:100%}
+  }
+</style>
+</head>
+<body>
+<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header">
+  <div class="logo"><img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img"></div>
+  <nav class="nav">
+    <a href="#" class="active">Inicio</a>
+    <a href="#">Nosotros</a>
+    <a href="#">Ayuda</a>
+  </nav>
+  <span class="guest-pill">👤 Modo invitado</span>
+</header>
+
+<main class="wrap">
+
+  <div class="screen active" id="screenPanel">
+    <div class="card">
+      <div class="panel-head">
+        <span class="badge-guest">👤 Modo invitado — sin cuenta</span>
+        <h2>Panel de invitado</h2>
+        <p class="sub">Accede a recomendaciones básicas de autocuidado y aprende a manejar tu estado emocional.</p>
+      </div>
+      <div class="mini-opts">
+        <div class="tile" id="openRecom"><div class="ico">💡</div><h3>Ver recomendaciones básicas</h3><p>Contenido de autocuidado administrable</p></div>
+        <div class="tile" data-out="true"><div class="ico">📝</div><h3>Responder cuestionario</h3><p>Ver PB-07 / PB-08</p></div>
+        <div class="tile" data-out="true"><div class="ico">🆘</div><h3>Líneas de ayuda</h3><p>Ver PB-08</p></div>
+      </div>
+      <div style="text-align:center;margin-top:16px">
+        <button class="btn-secondary" id="panelExit">Salir del modo invitado</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
+      <p class="hint" style="text-align:left;margin-top:8px">También se accede desde la pantalla <b>Resultado del riesgo (Invitado)</b> de HU1-PB8 con el botón <b>Ver recomendaciones básicas</b>.</p>
+    </div>
+  </div>
+
+  <div class="screen" id="screenRecom">
+    <div class="card">
+      <div class="recom-head">
+        <div>
+          <h2 class="recom-title">Recomendaciones básicas</h2>
+          <p class="recom-sub" id="recomSub">Contenido de autocuidado administrable por el administrador, no sustituye atención profesional.</p>
+        </div>
+      </div>
+      <span class="priority-badge" id="priorityBadge">🎯 Organizadas según tu nivel de riesgo</span>
+
+      <div class="rec-list" id="recList"></div>
+
+      <div class="empty-state" id="emptyState">
+        <div class="empty-ico">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h13v17H6a2 2 0 0 0 0 4h13"></path></svg>
+        </div>
+        <h3>No hay recomendaciones disponibles en este momento</h3>
+        <p>El administrador aún no ha cargado contenido de autocuidado. Inténtalo más tarde.</p>
+        <button class="btn-guest" id="emptyBack">Volver al inicio (Invitado)</button>
+      </div>
+
+      <div style="text-align:center;margin-top:18px">
+        <button class="btn-secondary" id="volverRecom">← Volver</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
+      <p class="hint" style="text-align:left;margin-top:8px;margin-bottom:4px">Simular nivel de riesgo calculado en la sesión (para priorizar el orden):</p>
+      <div class="controls">
+        <button class="chip risk active-bajo active" id="rkNone">Sin riesgo en sesión</button>
+        <button class="chip risk" id="rkBajo">Riesgo bajo</button>
+        <button class="chip risk" id="rkMedio">Riesgo medio</button>
+        <button class="chip risk" id="rkAlto">Riesgo alto</button>
+      </div>
+      <div class="controls">
+        <button class="chip" id="noContentChip">Simular sin contenido cargado (admin)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screenDetail">
+    <div class="card">
+      <div class="detail-head">
+        <div class="detail-ico" id="detIco">🧘</div>
+        <h2 id="detTitle">—</h2>
+        <p class="dur" id="detDur">—</p>
+        <p class="sub" style="font-size:12px;color:var(--muted);margin-top:10px" id="detIntro"></p>
+      </div>
+      <div class="detail-block">
+        <h3>Pasos</h3>
+        <ol class="detail-steps" id="detSteps"></ol>
+      </div>
+      <div class="detail-block">
+        <h3>Instrucciones</h3>
+        <p style="font-size:12.5px;color:var(--text);line-height:1.65" id="detInstruc"></p>
+      </div>
+      <div class="detail-note">⚠️ Estas recomendaciones son de <b>autocuidado básico</b>, no constituyen un <b>tratamiento clínico</b> ni sustituyen la atención de un profesional de la salud mental.</div>
+      <div class="detail-actions">
+        <button class="btn-detail outline" id="detBack">Volver a recomendaciones</button>
+        <button class="btn-detail ok" id="detHome">Volver al inicio (Invitado)</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Inicio</a>
+    <a href="#">Nosotros</a>
+    <a href="#">Ayuda</a>
+    <a href="#" class="aviso" id="footerAviso"><span class="ico">⚠️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle">
+  <div class="modal">
+    <div class="modal-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+    </div>
+    <h3>Mensaje aclaratorio</h3>
+    <div class="aviso-txt">
+      <b>Mindzyx</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
+      Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.
+      <br><br>
+      El contenido de autocuidado es de <b>carácter básico e informativo</b> y <b>no constituye un tratamiento clínico</b>.
+      <br><br>
+      Ante un <b>riesgo alto o una situación de urgencia</b>, busca ayuda profesional o utiliza las <b>líneas de ayuda disponibles</b> en tu país.
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal close" id="avisoCerrar">Cerrar</button>
+      <button class="btn-modal ok" id="avisoOk">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const recommendations=[
+    {
+      id:'respiracion', icon:'🌬️', title:'Respiración guiada',
+      dur:'Duración sugerida: 5 minutos',
+      intro:'Ejercicio simple de respiración consciente para reducir la tensión del momento.',
+      steps:['Siéntate o recuéstate en una posición cómoda y cierra los ojos si lo prefieres.','Inhala lentamente por la nariz contando hasta 4.','Sostén la respiración contando hasta 4.','Exhala por la boca contando hasta 6.','Repite el ciclo durante 5 minutos, llevando tu atención solo a la respiración.'],
+      instruc:'Realiza este ejercicio en un lugar tranquilo. Si sientes mareo, vuelve a la respiración normal y descansa. No reemplaza la supervisión de un profesional de la salud.'
+    },
+    {
+      id:'relajacion', icon:'💆', title:'Relajación muscular',
+      dur:'Duración sugerida: 10 minutos',
+      intro:'Técnica de tensión y distensión muscular para soltar la tensión acumulada.',
+      steps:['Acuéstate o siéntate cómodamente.','Tensa los músculos de los pies durante 5 segundos y luego suelta.','Sube por cada grupo muscular: piernas, abdomen, manos, brazos, hombros, cuello y rostro.','En cada zona tensa 5 segundos y relaja 10 segundos.','Termina respirando despacio durante 1 minuto.'],
+      instruc:'Evita tensar zonas con dolor o lesión. Si el dolor aumenta, detén el ejercicio. Es una práctica de autocuidado básico y no sustituye un tratamiento clínico.'
+    },
+    {
+      id:'pausa', icon:'🧘', title:'Pausa consciente',
+      dur:'Duración sugerida: 3 minutos',
+      intro:'Toma un momento para reconectar con el presente y calmar la mente.',
+      steps:['Detén cualquier actividad y deja a un lado distracciones.','Observa tu entorno: nombra 3 cosas que ves, 2 que escuchas y 1 que sientes.','Lleva tu atención a la respiración durante 1 minuto.','Pregúntate cómo te sientes en este momento, sin juzgar la respuesta.'],
+      instruc:'Puedes hacer esta pausa varias veces al día cuando te sientas abrumado. Es una herramienta de autocuidado básico, no un tratamiento clínico.'
+    },
+    {
+      id:'sueño', icon:'🌙', title:'Higiene del sueño',
+      dur:'Duración sugerida: 15 minutos (rutina nocturna)',
+      intro:'Hábitos simples para favorecer un descanso de mejor calidad.',
+      steps:['Define una hora fija para ir a dormir y para despertar.','30 minutos antes, apaga pantallas y luce baja.','Evita cafeína y comidas pesadas cerca de la hora de dormir.','Crea una rutina relajante: lectura breve, respiración suave o música tranquila.','Mantén el dormitorio oscuro, fresco y silencioso.'],
+      instruc:'Establece estos hábitos de forma progresiva. Si los problemas de sueño persisten, consulta a un profesional de la salud. Es contenido de autocuidado básico, no tratamiento clínico.'
+    }
+  ];
+  const riskPriority={'bajo':'respiracion','medio':'relajacion','alto':'sueño'};
+  const riskLabel={bajo:'Riesgo bajo',medio:'Riesgo medio',alto:'Riesgo alto'};
+
+  const screens={panel:document.getElementById('screenPanel'),recom:document.getElementById('screenRecom'),detail:document.getElementById('screenDetail')};
+  const toast=document.getElementById('toast');
+  const recList=document.getElementById('recList'), emptyState=document.getElementById('emptyState');
+  const priorityBadge=document.getElementById('priorityBadge');
+  const avisoModal=document.getElementById('avisoModal');
+
+  let riskLevel=null;
+  let simulateNoContent=false;
+  let pendingRecId=null;
+  const riskChips={none:document.getElementById('rkNone'),bajo:document.getElementById('rkBajo'),medio:document.getElementById('rkMedio'),alto:document.getElementById('rkAlto')};
+  const riskActiveClass={none:'active-bajo',bajo:'active-bajo',medio:'active-medio',alto:'active-alto'};
+
+  function addLog(msg){ console.log('[HU1-PB9]', new Date().toLocaleTimeString(), msg); }
+  function showToast(msg){
+    toast.textContent=msg; toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t=setTimeout(()=>toast.classList.remove('show'),2400);
+  }
+  function showScreen(name){
+    Object.keys(screens).forEach(k=>screens[k].classList.toggle('active', k===name));
+  }
+  function renderState(){
+    if(simulateNoContent){
+      recList.style.display='none';
+      emptyState.classList.add('show');
+      priorityBadge.classList.remove('show');
+      return;
+    }
+    recList.style.display='flex';
+    emptyState.classList.remove('show');
+
+    let ordered=[...recommendations];
+    let top=null;
+    if(riskLevel && riskPriority[riskLevel]){
+      const id=riskPriority[riskLevel];
+      top=ordered.find(r=>r.id===id);
+      if(top){ ordered=ordered.filter(r=>r.id!==id); ordered.unshift(top); }
+      priorityBadge.classList.add('show');
+      priorityBadge.textContent='🎯 Organizadas según tu nivel de riesgo ('+riskLabel[riskLevel]+')';
+    } else {
+      priorityBadge.classList.remove('show');
+    }
+
+    recList.innerHTML='';
+    ordered.forEach(r=>{
+      const isTop=(top && r.id===top.id);
+      const item=document.createElement('div');
+      item.className='rec-item'+(isTop?' prio':'');
+      item.innerHTML=
+        '<div class="rec-ico">'+r.icon+'</div>'+
+        '<div class="rec-info">'+
+          '<h4>'+r.title+'</h4>'+
+          '<p>'+r.dur+'</p>'+
+          (isTop?'<span class="prio-tag">Prioritaria para tu nivel</span>':'')+
+        '</div>'+
+        '<button class="btn-ver" data-id="'+r.id+'">Ver / Abrir</button>';
+      item.querySelector('.btn-ver').addEventListener('click',()=>openDetail(r.id));
+      recList.appendChild(item);
+    });
+  }
+  function setRisk(key){
+    riskLevel=key==='none'?null:key;
+    Object.keys(riskChips).forEach(k=>{
+      riskChips[k].classList.remove('active');
+      riskChips[k].className='chip risk '+riskActiveClass[k];
+    });
+    riskChips[key].classList.add('active');
+    renderState();
+    addLog('DEMO: nivel de riesgo en la sesión = '+(riskLevel?riskLabel[riskLevel]:'sin nivel calculado')+' — orden de recomendaciones '+(riskLevel?'priorizado':'estándar'));
+  }
+  function openDetail(id){
+    if(simulateNoContent){ return; }
+    addLog('VISUALIZACIÓN del mensaje aclaratorio antes del detalle de "'+recommendations.find(r=>r.id===id).title+'" (aplica al contenido de autocuidado)');
+    pendingRecId=id;
+    avisoModal.classList.add('open');
+  }
+  function showDetail(id){
+    const r=recommendations.find(x=>x.id===id);
+    document.getElementById('detIco').textContent=r.icon;
+    document.getElementById('detTitle').textContent=r.title;
+    document.getElementById('detDur').textContent=r.dur;
+    document.getElementById('detIntro').textContent=r.intro;
+    const steps=document.getElementById('detSteps');
+    steps.innerHTML='';
+    r.steps.forEach(s=>{ const li=document.createElement('li'); li.textContent=s; steps.appendChild(li); });
+    document.getElementById('detInstruc').textContent=r.instruc;
+    showScreen('detail');
+    addLog('VISUALIZACIÓN del detalle de "'+r.title+'" (pasos, duración sugerida e instrucciones)');
+  }
+
+  document.getElementById('openRecom').addEventListener('click', ()=>{
+    renderState();
+    showScreen('recom');
+    addLog('CONSULTA de recomendaciones básicas (invitado) desde el Panel de invitado');
+  });
+  document.querySelectorAll('.mini-opts .tile[data-out]').forEach(t=>{
+    t.addEventListener('click', ()=>{ showToast('Fuera del alcance de este mockup (ver PB-07 / PB-08)'); });
+  });
+  document.getElementById('panelExit').addEventListener('click', ()=>{
+    addLog('SALIDA del modo invitado — vuelve a la Landing (fuera de este mockup)');
+    showToast('Volviendo a la Landing (fuera de este mockup)');
+  });
+  document.getElementById('volverRecom').addEventListener('click', ()=>{
+    showScreen('panel');
+    addLog('NAVEGACIÓN: Volver desde Recomendaciones básicas — regresa al panel de invitado');
+  });
+
+  document.getElementById('avisoOk').addEventListener('click', ()=>{
+    avisoModal.classList.remove('open');
+    addLog('AVISO ACEPTADO — botón "Entendido"');
+    if(pendingRecId){ showDetail(pendingRecId); pendingRecId=null; }
+  });
+  document.getElementById('avisoCerrar').addEventListener('click', ()=>{
+    avisoModal.classList.remove('open');
+    pendingRecId=null;
+    addLog('AVISO CERRADO — no se muestra el detalle');
+  });
+  document.getElementById('footerAviso').addEventListener('click', (e)=>{
+    e.preventDefault();
+    avisoModal.classList.add('open');
+    addLog('VISUALIZACIÓN del mensaje aclaratorio por enlace "Aviso: no diagnóstico"');
+  });
+
+  document.getElementById('detBack').addEventListener('click', ()=>{
+    showScreen('recom');
+    addLog('NAVEGACIÓN: "Volver a recomendaciones" — regresa a la lista de recomendaciones');
+  });
+  document.getElementById('detHome').addEventListener('click', ()=>{
+    showScreen('panel');
+    addLog('NAVEGACIÓN: "Volver al inicio (Invitado)" — regresa al panel de invitado');
+  });
+  document.getElementById('emptyBack').addEventListener('click', ()=>{
+    showScreen('panel');
+    addLog('NAVEGACIÓN: "Volver al inicio (Invitado)" desde estado vacío');
+  });
+
+  riskChips.none.addEventListener('click', ()=>setRisk('none'));
+  riskChips.bajo.addEventListener('click', ()=>setRisk('bajo'));
+  riskChips.medio.addEventListener('click', ()=>setRisk('medio'));
+  riskChips.alto.addEventListener('click', ()=>setRisk('alto'));
+  document.getElementById('noContentChip').addEventListener('click', ()=>{
+    simulateNoContent=!simulateNoContent;
+    document.getElementById('noContentChip').classList.toggle('active', simulateNoContent);
+    renderState();
+    addLog(simulateNoContent?'DEMO: sin contenido cargado por el administrador — estado vacío mostrado':'DEMO: contenido del administrador restaurado');
+  });
+
+  renderState();
+  addLog('Sistema listo — consulta de recomendaciones básicas de autocuidado administrables habilitada');
+</script>
+</body>
+</html>
