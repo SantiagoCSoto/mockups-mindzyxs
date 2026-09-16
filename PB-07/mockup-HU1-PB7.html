@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU1-PB7 | Cuestionario emocional (Invitado)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
+  .logo{display:flex;align-items:center}
+  .logo-img{height:44px;width:auto;object-fit:contain}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none}
+  .nav a.active{color:var(--text);font-weight:600}
+  .guest-pill{font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:6px 12px;border-radius:20px;white-space:nowrap}
+  .wrap{width:100%;max-width:680px;margin:0 auto;padding:24px 16px 30px;flex:1}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .screen{display:none}
+  .screen.active{display:block}
+  .panel-head{text-align:center}
+  .panel-head .badge-guest{display:inline-block;font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:5px 12px;border-radius:20px;margin-bottom:8px}
+  .panel-head h2{font-size:20px;font-weight:700}
+  .panel-head p.sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .cta-wrap{text-align:center;margin-top:18px}
+  .btn-guest{width:100%;max-width:340px;height:48px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
+  .btn-guest:hover{filter:brightness(1.05)}
+  .btn-secondary{height:40px;padding:0 20px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
+  .btn-secondary:hover{border-color:var(--cyan);background:#F8FEFF}
+  .mini-opts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+  .mini-opts .tile{width:160px;border:1px solid #DFDAEE;border-radius:12px;padding:14px 10px;text-align:center}
+  .mini-opts .ico{width:36px;height:36px;border-radius:10px;background:#E6F7F8;display:grid;place-items:center;margin:0 auto 6px;font-size:16px}
+  .mini-opts h3{font-size:12px;font-weight:700}
+  .mini-opts p{font-size:10px;color:var(--muted);margin-top:3px}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
+  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
+  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5}
+  .quiz-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+  .q-num{font-size:11px;font-weight:700;color:#6B5BCE;background:#F9F7FF;border:1px solid #EDE6FF;padding:5px 12px;border-radius:20px}
+  .q-optional{font-size:10px;font-weight:700;color:var(--muted);background:#F3F1FA;border:1px solid #E2DCF3;padding:4px 10px;border-radius:20px}
+  .progress{height:8px;background:#F0EAF6;border-radius:20px;overflow:hidden;margin:10px 0 16px}
+  .bar{height:100%;background:var(--cyan);border-radius:20px;transition:width .3s;width:0%}
+  .q-title{font-size:16px;font-weight:700;line-height:1.45}
+  .opts{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+  .opt{padding:14px 16px;border:1px solid #DFDAEE;border-radius:12px;background:#FFF;font-size:13px;text-align:left;cursor:pointer;transition:.15s;font-family:inherit}
+  .opt:hover{border-color:var(--cyan);background:#F8FEFF}
+  .opt.selected{border-color:var(--cyan);background:#E6F7F8;font-weight:600;box-shadow:0 0 0 1px var(--cyan)}
+  .err-msg{display:none;align-items:center;gap:6px;font-size:12px;color:var(--error);background:#FFF1F3;border:1px solid #FFE0E6;padding:8px 10px;border-radius:10px;margin-top:14px}
+  .err-msg.show{display:flex}
+  .quiz-actions{display:flex;gap:10px;margin-top:18px}
+  .btn-next{flex:1;height:44px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-next:hover{background:var(--cyan-hover)}
+  .btn-cancel{height:44px;padding:0 18px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
+  .done-icon{width:56px;height:56px;border-radius:14px;background:#E8FFF1;color:var(--ok);display:grid;place-items:center;margin:0 auto 14px}
+  .done{text-align:center;padding:36px 22px}
+  .done h2{font-size:20px;font-weight:700}
+  .done p.sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .done .btn-guest{margin-top:22px}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2D2F36;color:white;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none;z-index:60}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:10px 0;margin-top:20px}
+  .footer-in{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12px}
+  .footer-in a{color:var(--muted);text-decoration:none}
+  .footer-in a:hover{color:var(--text)}
+  .footer-in a.aviso{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 16px;border-radius:20px;text-decoration:none;font-size:12px;transition:.15s;box-shadow:0 2px 6px rgba(107,91,206,0.18)}
+  .footer-in a.aviso:hover{background:#E7DDFF;border-color:#B9A3F2;color:#4A38B0;box-shadow:0 3px 10px rgba(107,91,206,0.25)}
+  .footer-in a.aviso .ico{font-size:13px}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(480px,100%);background:white;border-radius:14px;padding:24px 22px;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-align:center;max-height:92vh;overflow:auto}
+  .modal-icon{width:52px;height:52px;border-radius:14px;background:#FFF9E6;color:var(--warning);display:grid;place-items:center;margin:0 auto 14px}
+  .modal-icon.err{background:#FFF1F3;color:var(--error)}
+  .modal-icon.ok{background:#E8FFF1;color:var(--ok)}
+  .modal h3{font-size:16px;font-weight:700;color:var(--text)}
+  .modal .aviso-txt{font-size:12.5px;color:var(--muted);line-height:1.65;margin-top:12px;text-align:left}
+  .modal .aviso-txt b{color:var(--text)}
+  .modal .highlight{color:var(--error);font-weight:600}
+  .modal p.sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .result-score{font-size:26px;font-weight:700;color:#6B5BCE;margin-top:10px}
+  .result-tag{display:inline-block;font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;margin-top:8px}
+  .result-tag.bajo{background:#E8FFF1;color:#0E8F4B}
+  .result-tag.medio{background:#FFF8E6;color:#8A6A00}
+  .result-tag.alto{background:#FFF1F3;color:var(--error)}
+  .modal-actions{display:flex;gap:10px;margin-top:20px}
+  .btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-modal.ok{background:var(--cyan);color:white}
+  .btn-modal.ok:hover{background:var(--cyan-hover)}
+  .btn-modal.close{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  .btn-modal.danger{background:var(--error);color:white}
+  @media(max-width:560px){
+    .header{padding:0 14px}
+    .nav{font-size:12px;gap:12px}
+    .mini-opts .tile{width:100%}
+  }
+</style>
+</head>
+<body>
+<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header">
+  <div class="logo"><img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img"></div>
+  <nav class="nav">
+    <a href="#" class="active">Inicio</a>
+    <a href="#">Nosotros</a>
+    <a href="#">Ayuda</a>
+  </nav>
+  <span class="guest-pill">👤 Modo invitado</span>
+</header>
+
+<main class="wrap">
+
+  <div class="screen active" id="screenPanel">
+    <div class="card">
+      <div class="panel-head">
+        <span class="badge-guest">👤 Modo invitado — sin cuenta</span>
+        <h2>Panel de invitado</h2>
+        <p class="sub">Respondiendo el cuestionario emocional sin registrarte. Navegación limitada.</p>
+      </div>
+      <div class="cta-wrap">
+        <button class="btn-guest" id="panelQBtn">Responder cuestionario</button>
+      </div>
+      <div class="mini-opts">
+        <div class="tile"><div class="ico">💡</div><h3>Ver recomendaciones básicas</h3><p>Fuera del alcance de este mockup</p></div>
+        <div class="tile"><div class="ico">🆘</div><h3>Líneas de ayuda</h3><p>Fuera del alcance de este mockup</p></div>
+      </div>
+      <div style="text-align:center;margin-top:16px">
+        <button class="btn-secondary" id="panelExit">Salir del modo invitado</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
+      <div class="controls">
+        <button class="chip active" id="obligChip">Aviso aclaratorio obligatorio antes del cuestionario</button>
+      </div>
+      <p class="hint">Al presionar <b>Responder cuestionario</b> se muestra el mensaje aclaratorio (si es obligatorio) y luego el cuestionario. Cada acción queda registrada en logs (consola del navegador).</p>
+    </div>
+  </div>
+
+  <div class="screen" id="screenQuiz">
+    <div class="card">
+      <div class="quiz-head">
+        <span class="q-num" id="qNum">Pregunta 1 de 6</span>
+        <span class="q-optional" id="qOptional" style="display:none">Opcional</span>
+      </div>
+      <div class="progress"><div class="bar" id="qBar"></div></div>
+      <h2 class="q-title" id="qTitle"></h2>
+      <div class="opts" id="qOptions"></div>
+      <div class="err-msg" id="qError">Debes seleccionar una respuesta para continuar</div>
+      <div class="quiz-actions">
+        <button class="btn-cancel" id="cancelQ">Cancelar / Volver</button>
+        <button class="btn-next" id="nextQ">Siguiente →</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
+      <div class="controls">
+        <button class="chip" id="forceChip">Simular pregunta obligatoria sin responder (valida al finalizar)</button>
+        <button class="chip" id="resetQuiz">Reiniciar cuestionario</button>
+      </div>
+      <p class="hint">Deja una pregunta obligatoria sin responder y presiona <b>Siguiente</b> para ver el mensaje de validación. En la última pregunta el botón cambia a <b>Finalizar</b>.</p>
+    </div>
+  </div>
+
+  <div class="screen" id="screenDone">
+    <div class="card done">
+      <div class="done-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+      </div>
+      <h2>Cuestionario completado</h2>
+      <p class="sub">
+        Tus respuestas fueron <b>guardadas temporalmente en la sesión del invitado</b> sin pedir datos personales.
+        Podrás ver un resultado básico sobre tus síntomas emocionales.
+      </p>
+      <button class="btn-guest" id="viewResult">Ver resultado</button>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Inicio</a>
+    <a href="#">Nosotros</a>
+    <a href="#">Ayuda</a>
+    <a href="#" class="aviso" id="footerAviso"><span class="ico">⚠️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle">
+  <div class="modal">
+    <div class="modal-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+    </div>
+    <h3>Mensaje aclaratorio</h3>
+    <div class="aviso-txt">
+      <b>Mindzyx</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
+      Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.
+      <br><br>
+      Ante un <b>riesgo alto o una situación de urgencia</b>, busca ayuda profesional o utiliza las <b>líneas de ayuda disponibles</b> en tu país.
+      <br><br>
+      Mindzyx es solo una <b>herramienta de apoyo y monitoreo emocional</b> y <b>no reemplaza la atención profesional</b>.
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal close" id="avisoCerrar">Cerrar</button>
+      <button class="btn-modal ok" id="avisoOk">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="cancelModal" role="alertdialog" aria-modal="true" aria-labelledby="cancelTitle">
+  <div class="modal">
+    <div class="modal-icon err">!</div>
+    <h3 id="cancelTitle">¿Deseas salir del cuestionario?</h3>
+    <p class="sub">Se perderán tus respuestas</p>
+    <div class="modal-actions">
+      <button class="btn-modal close" id="stayBtn">No, continuar</button>
+      <button class="btn-modal danger" id="leaveBtn">Sí, salir</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+  <div class="modal">
+    <div class="modal-icon ok">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+    </div>
+    <h3 id="resultTitle">Resultado básico — Invitado</h3>
+    <div class="result-score" id="resultScore">—</div>
+    <div class="result-tag" id="resultTag">—</div>
+    <p class="sub" id="resultText"></p>
+    <p class="sub" style="font-size:11px;color:var(--muted);border-top:1px dashed #EDE6FF;padding-top:10px;margin-top:10px">
+      Simulación: tus respuestas se guardaron temporalmente en la sesión y serán usadas para el cálculo de riesgo. ⚠️ Este resultado <b>no es un diagnóstico clínico</b>.
+    </p>
+    <div class="modal-actions">
+      <button class="btn-modal ok" id="resultBack">Volver al panel de invitado</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const questions=[
+    {id:'q1',text:'¿Con qué frecuencia te has sentido triste o desanimado en las últimas dos semanas?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true},
+    {id:'q2',text:'¿Has tenido dificultades para dormir o te has sentido cansado(a)?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true},
+    {id:'q3',text:'¿Te ha costado concentrarte o tomar decisiones?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true},
+    {id:'q4',text:'¿Deseas recibir recomendaciones básicas al finalizar?',options:['Sí','No'],obligatoria:false},
+    {id:'q5',text:'¿Has sentido ansiedad o nerviosismo sin razón aparente?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true},
+    {id:'q6',text:'¿Has perdido interés o placer en actividades que antes disfrutabas?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true}
+  ];
+  const scoreMap={'Nunca':0,'A veces':1,'A menudo':2,'Casi siempre':3,'Sí':0,'No':0};
+
+  const screens={panel:document.getElementById('screenPanel'),quiz:document.getElementById('screenQuiz'),done:document.getElementById('screenDone')};
+  const toast=document.getElementById('toast');
+  const obligChip=document.getElementById('obligChip'), forceChip=document.getElementById('forceChip'), resetQuiz=document.getElementById('resetQuiz');
+  const avisoModal=document.getElementById('avisoModal'), cancelModal=document.getElementById('cancelModal'), resultModal=document.getElementById('resultModal');
+  const qNum=document.getElementById('qNum'), qOptional=document.getElementById('qOptional'), qBar=document.getElementById('qBar');
+  const qTitle=document.getElementById('qTitle'), qOptions=document.getElementById('qOptions'), qError=document.getElementById('qError');
+  const nextQ=document.getElementById('nextQ');
+
+  let current=0;
+  let selection='';
+  let answers={};
+  let avisoObligatorio=true;
+  let forceEmpty=false;
+
+  function addLog(msg){ console.log('[HU1-PB7]', new Date().toLocaleTimeString(), msg); }
+  function showToast(msg){
+    toast.textContent=msg; toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t=setTimeout(()=>toast.classList.remove('show'),2400);
+  }
+  function showScreen(name){
+    Object.keys(screens).forEach(k=>screens[k].classList.toggle('active', k===name));
+  }
+  function clearError(){ qError.classList.remove('show'); }
+  function showError(){ qError.classList.add('show'); }
+
+  function renderQuestion(){
+    const q=questions[current];
+    selection=answers[q.id]||'';
+    qNum.textContent='Pregunta '+(current+1)+' de '+questions.length;
+    qOptional.style.display=q.obligatoria?'none':'inline-block';
+    qBar.style.width=((current)/(questions.length-1)*100)+'%';
+    qTitle.textContent=q.text;
+    qOptions.innerHTML='';
+    q.options.forEach((o,i)=>{
+      const b=document.createElement('button');
+      b.type='button';
+      b.className='opt'+(o===selection?' selected':'');
+      b.textContent=(i+1)+'. '+o;
+      b.addEventListener('click',()=>{
+        selection=o;
+        clearError();
+        qOptions.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));
+        b.classList.add('selected');
+      });
+      qOptions.appendChild(b);
+    });
+    const isLast=current===questions.length-1;
+    nextQ.textContent=isLast?'Finalizar':'Siguiente →';
+    clearError();
+  }
+
+  function startQuiz(){
+    current=0; selection=''; answers={}; forceChip.classList.remove('active'); forceEmpty=false;
+    renderQuestion();
+    showScreen('quiz');
+    addLog('INICIO del cuestionario emocional (invitado) — sesión temporal');
+  }
+
+  function exitToPanel(){
+    showScreen('panel');
+    addLog('FIN del cuestionario — vuelve al panel de invitado (no guardado como completado)');
+  }
+
+  document.getElementById('panelQBtn').addEventListener('click', ()=>{
+    if(avisoObligatorio){
+      avisoModal.classList.add('open');
+      addLog('VISUALIZACIÓN del mensaje aclaratorio (obligatorio, antes de iniciar el cuestionario)');
+      return;
+    }
+    startQuiz();
+  });
+
+  document.getElementById('avisoOk').addEventListener('click', ()=>{
+    avisoModal.classList.remove('open');
+    addLog('AVISO ACEPTADO — botón "Entendido"');
+    startQuiz();
+  });
+  document.getElementById('avisoCerrar').addEventListener('click', ()=>{
+    avisoModal.classList.remove('open');
+    addLog('AVISO CERRADO — no se inicia el cuestionario');
+  });
+  document.getElementById('footerAviso').addEventListener('click', (e)=>{
+    e.preventDefault();
+    avisoModal.classList.add('open');
+    addLog('VISUALIZACIÓN del mensaje aclaratorio por enlace "Aviso: no diagnóstico"');
+  });
+
+  function validateMandatory(){
+    for(const q of questions){
+      if(q.obligatoria && !answers[q.id]){
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function finalizeQuiz(){
+    if(forceEmpty){
+      const pend=questions.find(q=>q.obligatoria && !answers[q.id]) || questions[0];
+      answers[pend.id]='';
+    }
+    if(!validateMandatory()){
+      showError();
+      addLog('VALIDACIÓN fallida: hay preguntas obligatorias sin responder — no se permite finalizar');
+      return;
+    }
+    addLog('FINALIZACIÓN del cuestionario (invitado) — respuestas guardadas temporalmente en la sesión: '+JSON.stringify(answers));
+    showScreen('done');
+  }
+
+  nextQ.addEventListener('click', ()=>{
+    const q=questions[current];
+    if(q.obligatoria && !selection){
+      showError();
+      addLog('BLOQUEO de avance: no se seleccionó respuesta en "'+q.text.slice(0,40)+'"');
+      return;
+    }
+    answers[q.id]=selection;
+    addLog('RESPUESTA guardada ('+(current+1)+'/'+questions.length+'): '+q.text.slice(0,34)+'... = '+selection);
+    if(current===questions.length-1){
+      finalizeQuiz();
+      return;
+    }
+    current++;
+    renderQuestion();
+  });
+
+  document.getElementById('cancelQ').addEventListener('click', ()=>{
+    cancelModal.classList.add('open');
+    addLog('INTENTO de cancelar el cuestionario — se muestra confirmación');
+  });
+  document.getElementById('stayBtn').addEventListener('click', ()=>{
+    cancelModal.classList.remove('open');
+    addLog('Confirmación: NO salir — continúa en el cuestionario');
+  });
+  document.getElementById('leaveBtn').addEventListener('click', ()=>{
+    cancelModal.classList.remove('open');
+    current=0; selection=''; answers={}; forceChip.classList.remove('active'); forceEmpty=false;
+    exitToPanel();
+    addLog('CONFIRMADO salir — respuestas descartadas, cuestionario NO marcado como completado');
+  });
+
+  document.getElementById('viewResult').addEventListener('click', ()=>{
+    let sum=0;
+    questions.forEach(q=>{ sum+=(scoreMap[answers[q.id]]||0); });
+    const scoreEl=document.getElementById('resultScore'), tagEl=document.getElementById('resultTag'), txtEl=document.getElementById('resultText');
+    scoreEl.textContent=sum+' / '+(questions.filter(q=>!q.obligatoria).length? (questions.length*3)-0: questions.length*3);
+    if(sum<=4){ tagEl.className='result-tag bajo'; tagEl.textContent='Riesgo bajo'; txtEl.textContent='No se observan síntomas significativos. Sigue con tu monitoreo habitual.'; }
+    else if(sum<=9){ tagEl.className='result-tag medio'; tagEl.textContent='Riesgo medio'; txtEl.textContent='Se recomienda mantener un monitoreo periódico y revisar las recomendaciones básicas.'; }
+    else { tagEl.className='result-tag alto'; tagEl.textContent='Riesgo alto'; txtEl.textContent='Se recomienda buscar ayuda profesional o contactar las líneas de ayuda de tu país.'; }
+    resultModal.classList.add('open');
+    addLog('RESULTADO básico mostrado al invitado — puntaje '+sum+' (simulación para cálculo de riesgo)');
+  });
+  document.getElementById('resultBack').addEventListener('click', ()=>{
+    resultModal.classList.remove('open');
+    current=0; selection=''; answers={}; forceChip.classList.remove('active'); forceEmpty=false;
+    exitToPanel();
+  });
+
+  document.getElementById('panelExit').addEventListener('click', ()=>{
+    addLog('SALIDA del modo invitado — vuelve a la Landing');
+    showToast('Volviendo a la Landing (fuera de este mockup)');
+  });
+  document.querySelectorAll('.mini-opts .tile').forEach(t=>{
+    t.addEventListener('click', ()=>{
+      showToast('Opción fuera del alcance de este mockup — ver PB-06');
+    });
+  });
+
+  obligChip.addEventListener('click', ()=>{
+    avisoObligatorio=!avisoObligatorio;
+    obligChip.classList.toggle('active', avisoObligatorio);
+    addLog(avisoObligatorio?'DEMO: aviso obligatorio ACTIVADO':'DEMO: aviso obligatorio DESACTIVADO (se inicia directo)');
+  });
+
+  forceChip.addEventListener('click', ()=>{
+    forceEmpty=!forceEmpty;
+    forceChip.classList.toggle('active', forceEmpty);
+    addLog(forceEmpty?'DEMO: simular pregunta obligatoria sin responder ACTIVADO':'DEMO: simular pregunta obligatoria sin responder DESACTIVADO');
+  });
+
+  resetQuiz.addEventListener('click', ()=>{
+    current=0; selection=''; answers={}; forceChip.classList.remove('active'); forceEmpty=false;
+    renderQuestion();
+    showScreen('quiz');
+    addLog('DEMO: cuestionario reiniciado');
+  });
+
+  addLog('Sistema listo — botón "Responder cuestionario" disponible en el panel de invitado');
+</script>
+</body>
+</html>
