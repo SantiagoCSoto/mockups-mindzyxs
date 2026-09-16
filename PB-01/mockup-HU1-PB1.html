@@ -223,7 +223,7 @@
         </div>
       </div>
 
-      <!-- Datos personales en orden: Nombres, Apellidos, Edad, Género, Correo, Contraseña -->
+<!-- Datos personales en orden: Nombres, Apellidos, Fecha de nacimiento, Género, Correo, Contraseña -->
       <div class="row">
         <div class="field">
           <label for="nombres">Nombres</label>
@@ -237,8 +237,9 @@
 
       <div class="row">
         <div class="field">
-          <label for="edad">Edad</label>
-          <div class="control"><input id="edad" type="number" placeholder="Ej. 24" min="0"></div>
+          <label for="fecha-nacimiento">Fecha de nacimiento</label>
+          <div class="control"><input id="fecha-nacimiento" type="date"></div>
+          <span class="hint">Debe ser mayor de 14 años</span>
         </div>
         <div class="field">
           <label for="genero">Género</label>

@@ -109,7 +109,7 @@
     </div>
 
     <form class="form" id="registerForm" novalidate>
-      <!-- ORDEN EXACTO: Nombres, Apellidos, Edad, Género, Correo, Contraseña -->
+      <!-- ORDEN EXACTO: Nombres, Apellidos, Fecha de nacimiento, Género, Correo, Contraseña -->
       <div class="field">
         <label for="nombres">Nombres</label>
         <div class="control" id="c-nombres"><input id="nombres" type="text" placeholder="Ej. Sofía"></div>
@@ -124,9 +124,9 @@
 
       <div class="row">
         <div class="field">
-          <label for="edad">Edad</label>
-          <div class="control" id="c-edad"><input id="edad" type="number" placeholder="Ej. 24" min="1"></div>
-          <div class="error-msg" id="e-edad">Ingresa una edad válida</div>
+          <label for="fecha-nacimiento">Fecha de nacimiento</label>
+          <div class="control" id="c-fecha-nacimiento"><input id="fecha-nacimiento" type="date" max=""></div>
+          <div class="error-msg" id="e-fecha-nacimiento">Ingresa una fecha de nacimiento válida</div>
         </div>
         <div class="field">
           <label for="genero">Género</label>
@@ -159,7 +159,7 @@
         <button type="button" class="btn-cancel" id="cancelBtn">Cancelar</button>
         <button type="submit" class="btn-continuar">Continuar</button>
       </div>
-      <p class="hint" style="text-align:center;margin-top:4px">Prueba: deja vacío, pon edad texto, correo sin @, o contraseña "123" para ver errores. Correo <b>existente@correo.com</b> simula duplicado.</p>
+      <p class="hint" style="text-align:center;margin-top:4px">Prueba: deja vacío, pon fecha futura, fecha que te haga menor de 14, correo sin @, o contraseña "123" para ver errores. Correo <b>existente@correo.com</b> simula duplicado.</p>
     </form>
   </div>
 </main>
@@ -193,10 +193,18 @@
   const cancelModal = document.getElementById('cancelModal');
   const successModal = document.getElementById('successModal');
 
+  // Bloquear fechas futuras en el date input
+  (()=>{
+    const hoy = new Date();
+    const mm = String(hoy.getMonth()+1).padStart(2,'0');
+    const dd = String(hoy.getDate()).padStart(2,'0');
+    document.getElementById('fecha-nacimiento').setAttribute('max', `${hoy.getFullYear()}-${mm}-${dd}`);
+  })();
+
   const fields = {
     nombres: { input: document.getElementById('nombres'), control: document.getElementById('c-nombres'), error: document.getElementById('e-nombres') },
     apellidos: { input: document.getElementById('apellidos'), control: document.getElementById('c-apellidos'), error: document.getElementById('e-apellidos') },
-    edad: { input: document.getElementById('edad'), control: document.getElementById('c-edad'), error: document.getElementById('e-edad') },
+    fechaNacimiento: { input: document.getElementById('fecha-nacimiento'), control: document.getElementById('c-fecha-nacimiento'), error: document.getElementById('e-fecha-nacimiento') },
     genero: { input: document.getElementById('genero'), control: document.getElementById('c-genero'), error: document.getElementById('e-genero') },
     correo: { input: document.getElementById('correo'), control: document.getElementById('c-correo'), error: document.getElementById('e-correo') },
     contrasena: { input: document.getElementById('contrasena'), control: document.getElementById('c-contrasena'), error: document.getElementById('e-contrasena') },
@@ -228,7 +236,7 @@
 
     const nombres = fields.nombres.input.value.trim();
     const apellidos = fields.apellidos.input.value.trim();
-    const edadVal = fields.edad.input.value.trim();
+    const fechaVal = fields.fechaNacimiento.input.value;
     const genero = fields.genero.input.value;
     const correo = fields.correo.input.value.trim();
     const pass = fields.contrasena.input.value;
@@ -241,11 +249,23 @@
       showError('apellidos','Este campo es obligatorio');
       valid=false; if(!firstFocus) firstFocus=fields.apellidos.input;
     }
-    // edad válida: número, entero, >0 y <120
-    const edadNum = Number(edadVal);
-    if(!edadVal || isNaN(edadNum) || !Number.isInteger(edadNum) || edadNum < 1 || edadNum > 120){
-      showError('edad','Ingresa una edad válida');
-      valid=false; if(!firstFocus) firstFocus=fields.edad.input;
+    // fecha de nacimiento válida: formato yyyy-MM-dd, no futura y >= 14 años
+    let nacimiento = null;
+    if(fechaVal){
+      const partes = fechaVal.split('-').map(Number);
+      if(partes.length === 3) nacimiento = new Date(partes[0], partes[1]-1, partes[2]);
+    }
+    const hoy = new Date();
+    const menor14 = new Date(hoy.getFullYear()-14, hoy.getMonth(), hoy.getDate());
+    if(!fechaVal || !nacimiento || isNaN(nacimiento.getTime())){
+      showError('fechaNacimiento','Ingresa una fecha de nacimiento válida');
+      valid=false; if(!firstFocus) firstFocus=fields.fechaNacimiento.input;
+    } else if(nacimiento > hoy){
+      showError('fechaNacimiento','La fecha de nacimiento no puede ser en el futuro');
+      valid=false; if(!firstFocus) firstFocus=fields.fechaNacimiento.input;
+    } else if(nacimiento > menor14){
+      showError('fechaNacimiento','Debes tener al menos 14 años para registrarte');
+      valid=false; if(!firstFocus) firstFocus=fields.fechaNacimiento.input;
     }
     if(!genero){
       showError('genero','Este campo es obligatorio');
