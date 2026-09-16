@@ -4,157 +4,305 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mindzyx — HU1-PB4 | Mensaje Aclaratorio</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#FFFFFF;
-    --pink:#FDEAF2;
-    --lav:#EDE7FF;
-    --cyan:#6ECFD4;
-    --cyan-hover:#5ABCC2;
-    --text:#2E2E33;
-    --muted:#8E91A3;
-    --line:#EFE9F5;
-    --error:#E85D7A;
-    --warning:#F5A623; /* Agregado para el icono de alerta */
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    font-family:'Inter',Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    min-height:100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  .bg-blobs{
-    position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF;
-  }
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
   .blob{position:absolute;border-radius:50%;opacity:0.6}
-  .blob-pink{
-    width:600px;height:420px;
-    background: #FDE0EE;
-    top:-90px; left:-110px; border-radius:40% 60% 50% 50%;
-  }
-  .blob-lav{
-    width:600px;height:400px;
-    background: #EDE6FF;
-    top:-60px; right:-110px; border-radius:60% 40% 55% 45%;
-  }
-  .header{
-    height:60px;display:flex;align-items:center;justify-content:space-between;
-    padding:0 20px;max-width:1100px;margin:0 auto; width: 100%;
-    border-bottom:1px solid #F0EAF6;
-  }
-  .logo{
-    display:flex;align-items:center;
-  }
-  /* --- Ajuste clave para el Logo --- */
-  .logo-img{
-    height: 44px;
-    width: auto;
-    object-fit: contain;
-  }
-  .nav{ display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
+  .logo{display:flex;align-items:center}
+  .logo-img{height:44px;width:auto;object-fit:contain}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
   .nav a{color:var(--muted);text-decoration:none}
   .nav a.active{color:var(--text);font-weight:600}
-  .btn-ghost{
-    padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;color:var(--text);font-weight:600;font-size:12px;cursor:pointer;
-  }
-  
-  /* Contenedor central para la tarjeta */
-  .wrap{
-    flex: 1; display: flex; align-items: center; justify-content: center;
-    width: 100%; max-width:540px; margin:0 auto; padding: 20px 16px;
-  }
-  .card{
-    background:white;
-    border:1px solid #EDE8F0;
-    border-radius:16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-    padding:36px 30px;
-    text-align: center;
-    width: 100%;
-  }
-  .alert-icon{
-    width: 56px; height: 56px; border-radius: 14px;
-    background: #FFF9E6; color: var(--warning);
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 20px;
-  }
-  .card-head h2{
-    font-size:20px;font-weight:700; color: var(--text); margin-bottom: 12px;
-  }
-  .card p{
-    font-size: 13.5px; color: var(--muted); line-height: 1.6; margin-bottom: 24px;
-  }
-  .highlight{
-    color: var(--error); font-weight: 600;
-  }
-  .actions{
-    display:flex; gap:10px; justify-content: center;
-  }
-  .btn-continuar{
-    height:42px; padding: 0 32px; border-radius:20px; border:none; background:var(--cyan); color:white; font-weight:700; font-size:13px; cursor:pointer;
-  }
-  .btn-continuar:hover{ background:var(--cyan-hover)}
-  
-  @media(max-width:640px){
+  .role-box{display:flex;gap:6px;align-items:center;font-size:10px;color:var(--muted);white-space:nowrap}
+  .role-box select{height:30px;border:1px solid #DFDAEE;border-radius:20px;padding:0 10px;font-size:11px;background:#FFF}
+  .wrap{width:100%;max-width:760px;margin:0 auto;padding:24px 16px 30px;flex:1}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .hero{text-align:center;padding:34px 24px;margin-bottom:16px}
+  .hero h1{font-size:26px;font-weight:700}
+  .hero p{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .section{margin-top:18px}
+  .section-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6B5BCE;background:#F9F7FF;padding:6px 10px;border-radius:20px;display:inline-block}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+  .tile{border:1px solid #DFDAEE;border-radius:12px;padding:16px 14px;background:#FFF;text-align:center}
+  .tile .ico{width:40px;height:40px;border-radius:10px;background:#E6F7F8;display:grid;place-items:center;margin:0 auto 8px;font-size:18px}
+  .tile h3{font-size:12px;font-weight:700}
+  .tile p{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.4}
+  .btn{width:100%;height:36px;margin-top:12px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:12px;cursor:pointer}
+  .btn:hover{background:var(--cyan-hover)}
+  .btn.warn{background:var(--warning)}
+  .btn.warn:hover{background:#D28F32}
+  .demo-note{font-size:11px;color:var(--muted);background:#FFF8E6;border:1px dashed #FFE9B8;padding:8px 12px;border-radius:10px;line-height:1.5}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
+  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
+  .chip.err.active{background:var(--error);border-color:var(--error)}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2D2F36;color:white;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none;z-index:60}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:10px 0;margin-top:20px}
+  .footer-in{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12px}
+  .footer-in a{color:var(--muted);text-decoration:none}
+  .footer-in a:hover{color:var(--text)}
+  .footer-in a.aviso{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 16px;border-radius:20px;text-decoration:none;font-size:12px;transition:.15s;box-shadow:0 2px 6px rgba(107,91,206,0.18)}
+  .footer-in a.aviso:hover{background:#E7DDFF;border-color:#B9A3F2;color:#4A38B0;box-shadow:0 3px 10px rgba(107,91,206,0.25)}
+  .footer-in a.aviso .ico{font-size:13px}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(480px,100%);background:white;border-radius:14px;padding:24px 22px;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-align:center;max-height:92vh;overflow:auto}
+  .modal-icon{width:52px;height:52px;border-radius:14px;background:#FFF9E6;color:var(--warning);display:grid;place-items:center;margin:0 auto 14px}
+  .modal-icon.err{background:#FFF1F3;color:var(--error)}
+  .modal h3{font-size:16px;font-weight:700;color:var(--text)}
+  .modal .aviso-txt{font-size:12.5px;color:var(--muted);line-height:1.65;margin-top:12px;text-align:left}
+  .modal .aviso-txt b{color:var(--text)}
+  .modal .highlight{color:var(--error);font-weight:600}
+  .modal-actions{display:flex;gap:10px;margin-top:20px}
+  .btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-modal.ok{background:var(--cyan);color:white}
+  .btn-modal.ok:hover{background:var(--cyan-hover)}
+  .btn-modal.close{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  .badge-role{font-size:10px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:3px 8px;border-radius:20px}
+  @media(max-width:680px){
     .header{padding:0 14px}
-    .card{padding:28px 20px}
+    .grid{grid-template-columns:1fr}
+    .role-box .role-label{display:none}
   }
 </style>
 </head>
 <body>
-<div class="bg-blobs">
-  <div class="blob blob-pink"></div>
-  <div class="blob blob-lav"></div>
-</div>
+<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
 
 <header class="header">
-  <div class="logo">
-    <!-- El ../ saca la ruta de la carpeta PB-04 para encontrar Logo1.png en la raíz -->
-    <img src="../Logo1.png" alt="Mindzyxs Logo" class="logo-img">
-  </div>
+  <div class="logo"><img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img"></div>
   <nav class="nav">
     <a href="#" class="active">Inicio</a>
     <a href="#">Nosotros</a>
     <a href="#">Ayuda</a>
   </nav>
-  <div style="display:flex;gap:10px">
-    <button class="btn-ghost">Iniciar sesión</button>
+  <div class="role-box">
+    <span class="role-label">Rol:</span>
+    <select id="roleSel">
+      <option value="invitado">Invitado</option>
+      <option value="paciente">Paciente</option>
+      <option value="psicologo">Psicólogo</option>
+    </select>
   </div>
 </header>
 
 <main class="wrap">
+  <div class="card hero">
+    <h1>Bienvenido a Mindzyx</h1>
+    <p>Sistema de apoyo y <b>monitoreo emocional</b>. Antes de usar cualquier funcionalidad sensible se muestra el <b>Mensaje aclaratorio</b>.</p>
+    <div style="margin-top:10px"><span class="badge-role" id="roleBadge">Invitado</span></div>
+  </div>
+
   <div class="card">
-    
-    <!-- Icono de Advertencia -->
-    <div class="alert-icon">
+    <span class="section-title">Funcionalidades sensibles — demo</span>
+    <p class="demo-note" style="margin-top:10px">
+      ⚠️ Panel de prueba: al hacer clic por <b>primera vez</b> en <b>Iniciar cuestionario</b>, <b>Ver resultados</b> o <b>Ver recomendaciones</b>,
+      el sistema muestra automáticamente el Mensaje aclaratorio <b>antes de continuar</b>. El enlace <b>Aviso: no diagnóstico</b> está en la barra inferior.
+    </p>
+    <div class="grid">
+      <div class="tile">
+        <div class="ico">📝</div>
+        <h3>Iniciar cuestionario</h3>
+        <p>Primera funcionalidad sensible</p>
+        <button class="btn" data-feature="Iniciar cuestionario">Acceder</button>
+      </div>
+      <div class="tile">
+        <div class="ico">📊</div>
+        <h3>Ver resultados</h3>
+        <p>Resultados del monitoreo</p>
+        <button class="btn" data-feature="Ver resultados">Acceder</button>
+      </div>
+      <div class="tile">
+        <div class="ico">💡</div>
+        <h3>Ver recomendaciones</h3>
+        <p>Recomendaciones personalizadas</p>
+        <button class="btn" data-feature="Ver recomendaciones">Acceder</button>
+      </div>
+    </div>
+
+    <div class="controls">
+      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
+      <button class="chip active" id="firstTimeChip">Primera vez (auto-mostrar)</button>
+      <button class="chip" id="resetAck">Resetear aviso visto</button>
+      <button class="chip err" id="errChip">Simular error de carga del mensaje</button>
+    </div>
+    <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:14px">Cada visualización del mensaje y cada error se registran en logs internos para auditoría (consola del navegador).</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Inicio</a>
+    <a href="#">Nosotros</a>
+    <a href="#">Ayuda</a>
+    <a href="#" class="aviso" id="footerAviso"><span class="ico">⚠️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle">
+  <div class="modal">
+    <div class="modal-icon">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="16" x2="12" y2="12"></line>
         <line x1="12" y1="8" x2="12.01" y2="8"></line>
       </svg>
     </div>
-
-    <div class="card-head">
-      <h2>Aviso Aclaratório</h2>
-    </div>
-    
-    <!-- Texto basado estrictamente en tu Excel para el PB-04 -->
-    <p>
-      Mindzyxs es una plataforma diseñada exclusivamente para el monitoreo y apoyo del bienestar emocional. 
+    <h3 id="avisoTitle">Mensaje aclaratorio</h3>
+    <div class="aviso-txt">
+      <b>Mindzyx</b> es una plataforma diseñada exclusivamente para el <b>monitoreo y apoyo del bienestar emocional</b>.
+      Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.
       <br><br>
-      <span class="highlight">Este sistema no realiza diagnósticos clínicos</span> ni reemplaza la atención de un profesional de la salud mental. Si te encuentras en una situación de crisis, por favor contacta a los servicios de emergencia de tu país.
-    </p>
-
-    <div class="actions">
-      <button type="button" class="btn-continuar" onclick="window.location.href='#'">He leído y entendido</button>
+      Ante un <b>riesgo alto o una situación de urgencia</b>, busca ayuda profesional o utiliza las <b>líneas de ayuda disponibles</b> en tu país (por ejemplo, servicios de emergencia o líneas de crisis locales).
+      <br><br>
+      Mindzyx es solo una <b>herramienta de apoyo y monitoreo emocional</b> y <b>no reemplaza la atención profesional</b>.
     </div>
-
+    <div class="modal-actions">
+      <button class="btn-modal close" id="btnCerrar">Cerrar</button>
+      <button class="btn-modal ok" id="btnEntendido">Entendido</button>
+    </div>
   </div>
-</main>
+</div>
 
+<div class="modal-overlay" id="errModal" role="alertdialog" aria-modal="true" aria-labelledby="errTitle">
+  <div class="modal">
+    <div class="modal-icon err">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+    </div>
+    <h3 id="errTitle">Mensaje aclaratorio</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5">No fue posible cargar el mensaje aclaratorio. Intente nuevamente</p>
+    <div class="modal-actions">
+      <button class="btn-modal ok" id="errOk">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const roleSel=document.getElementById('roleSel'), roleBadge=document.getElementById('roleBadge');
+  const avisoModal=document.getElementById('avisoModal'), errModal=document.getElementById('errModal');
+  const btnEntendido=document.getElementById('btnEntendido'), btnCerrar=document.getElementById('btnCerrar'), errOk=document.getElementById('errOk');
+  const footerAviso=document.getElementById('footerAviso');
+  const toast=document.getElementById('toast');
+  const firstTimeChip=document.getElementById('firstTimeChip'), resetAck=document.getElementById('resetAck'), errChip=document.getElementById('errChip');
+
+  let hasAcknowledged=false;
+  let loadError=false;
+  let pendingAction=null;
+
+  function addLog(msg){
+    console.log('[HU1-PB4]', new Date().toLocaleTimeString(), msg);
+  }
+  function showToast(msg){
+    toast.textContent=msg; toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t=setTimeout(()=>toast.classList.remove('show'),2200);
+  }
+
+  roleSel.addEventListener('change', ()=>{
+    roleBadge.textContent=roleSel.options[roleSel.selectedIndex].text;
+    addLog('Rol actual: '+roleBadge.textContent);
+  });
+
+  function openAviso(fromSensitive){
+    // se intenta cargar el contenido del mensaje: puede fallar
+    if(loadError){
+      errModal.classList.add('open');
+      addLog('ERROR: no fue posible cargar el mensaje aclaratorio (rol '+roleBadge.textContent+')');
+      return;
+    }
+    pendingAction = fromSensitive ? pendingAction : null;
+    avisoModal.classList.add('open');
+    if(fromSensitive){
+      addLog('VISUALIZACIÓN auto (primera vez, antes de '+fromSensitive+') rol '+roleBadge.textContent);
+    } else {
+      addLog('VISUALIZACIÓN por enlace "Aviso: no diagnóstico" rol '+roleBadge.textContent);
+    }
+  }
+
+  footerAviso.addEventListener('click', (e)=>{ e.preventDefault(); openAviso(null); });
+
+  function continueAction(){
+    if(pendingAction){
+      const a=pendingAction; pendingAction=null;
+      addLog('ACCESO PERMITIDO tras aceptar aviso: '+a);
+      showToast('Accediendo a: '+a+' ✓');
+    }
+  }
+
+  btnEntendido.addEventListener('click', ()=>{
+    avisoModal.classList.remove('open');
+    hasAcknowledged=true;
+    firstTimeChip.classList.remove('active');
+    addLog('AVISO ACEPTADO — botón "Entendido" (primera verificación registrada)');
+    continueAction();
+  });
+
+  btnCerrar.addEventListener('click', ()=>{
+    avisoModal.classList.remove('open');
+    addLog('AVISO CERRADO — botón "Cerrar" — retorna a la pantalla anterior sin alterar información');
+    if(pendingAction){
+      const a=pendingAction;
+      addLog('ACCESO CANCELADO por "Cerrar": '+a);
+      showToast('Acceso a "'+a+'" cancelado — retornaste a la pantalla anterior');
+      pendingAction=null;
+    }
+  });
+
+  errOk.addEventListener('click', ()=>{
+    errModal.classList.remove('open');
+    if(pendingAction){
+      showToast('No fue posible cargar el mensaje aclaratorio. Intente nuevamente');
+      pendingAction=null;
+    }
+  });
+
+  document.querySelectorAll('.tile .btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const f=b.dataset.feature;
+      if(loadError){
+        pendingAction=f;
+        openAviso(f); // mostrará el error y registrará el log
+        return;
+      }
+      if(!hasAcknowledged){
+        pendingAction=f;
+        addLog('INTENTO de acceder por primera vez a: '+f+' -> se muestra aviso antes de continuar');
+        openAviso(f);
+      } else {
+        addLog('ACCESO directo (aviso ya visualizado previamente): '+f);
+        showToast('Accediendo a: '+f+' ✓');
+      }
+    });
+  });
+
+  resetAck.addEventListener('click', ()=>{
+    hasAcknowledged=false;
+    firstTimeChip.classList.add('active');
+    addLog('DEMO: aviso reiniciado — la próxima función sensible volverá a mostrarlo automáticamente');
+    showToast('Aviso reiniciado (primera vez)');
+  });
+
+  errChip.addEventListener('click', ()=>{
+    loadError=!loadError;
+    errChip.classList.toggle('active', loadError);
+    addLog(loadError
+      ? 'DEMO: modo error de carga ACTIVADO — el mensaje no podrá cargarse'
+      : 'DEMO: modo error de carga DESACTIVADO');
+  });
+
+  addLog('Sistema listo — el enlace "Aviso: no diagnóstico" está en la barra inferior');
+</script>
 </body>
 </html>
