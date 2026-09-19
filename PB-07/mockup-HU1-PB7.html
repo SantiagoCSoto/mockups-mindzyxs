@@ -32,9 +32,10 @@
   .panel-head h2{font-size:20px;font-weight:700}
   .panel-head p.sub{font-size:12px;color:var(--muted);margin-top:4px}
   .cta-wrap{text-align:center;margin-top:18px}
-  .btn-guest{width:100%;max-width:340px;height:48px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
+  .btn-guest{display:inline-block;width:100%;max-width:340px;min-height:48px;line-height:48px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35);text-decoration:none;text-align:center}
   .btn-guest:hover{filter:brightness(1.05)}
-  .btn-secondary{height:40px;padding:0 20px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
+  .btn-guest:disabled{opacity:.5;cursor:not-allowed}
+  .btn-secondary{min-height:40px;padding:0 20px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
   .btn-secondary:hover{border-color:var(--cyan);background:#F8FEFF}
   .mini-opts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
   .mini-opts .tile{width:160px;border:1px solid #DFDAEE;border-radius:12px;padding:14px 10px;text-align:center}
@@ -42,12 +43,17 @@
   .mini-opts h3{font-size:12px;font-weight:700}
   .mini-opts p{font-size:10px;color:var(--muted);margin-top:3px}
   .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
-  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
-  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
   .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5}
+  .pending-box{text-align:center;margin-top:14px;padding:12px;border:1px dashed #DFDAEE;border-radius:12px}
+  .pending-box h3{font-size:14px;font-weight:700}
+  .pending-box p{font-size:11px;color:var(--muted);margin-top:4px}
+  .pending-box.error{border-color:#FFE0E6;background:#FFF7F8}
+  .pending-box.error p{color:var(--error)}
+  .done-list{margin-top:12px;font-size:12px;color:var(--muted);text-align:center}
+  .done-list .tag{display:inline-block;font-size:11px;font-weight:700;background:#E8FFF1;color:#0E8F4B;padding:4px 10px;border-radius:20px;margin:2px}
   .quiz-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
   .q-num{font-size:11px;font-weight:700;color:#6B5BCE;background:#F9F7FF;border:1px solid #EDE6FF;padding:5px 12px;border-radius:20px}
-  .q-optional{font-size:10px;font-weight:700;color:var(--muted);background:#F3F1FA;border:1px solid #E2DCF3;padding:4px 10px;border-radius:20px}
+  .quiz-title{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:2px}
   .progress{height:8px;background:#F0EAF6;border-radius:20px;overflow:hidden;margin:10px 0 16px}
   .bar{height:100%;background:var(--cyan);border-radius:20px;transition:width .3s;width:0%}
   .q-title{font-size:16px;font-weight:700;line-height:1.45}
@@ -65,7 +71,9 @@
   .done{text-align:center;padding:36px 22px}
   .done h2{font-size:20px;font-weight:700}
   .done p.sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
-  .done .btn-guest{margin-top:22px}
+  .done .btn-guest{margin-top:14px}
+  .done .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+  .done-score{font-size:15px;font-weight:700;color:#6B5BCE;margin-top:10px}
   .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2D2F36;color:white;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none;z-index:60}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:10px 0;margin-top:20px}
@@ -80,17 +88,11 @@
   .modal{width:min(480px,100%);background:white;border-radius:14px;padding:24px 22px;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-align:center;max-height:92vh;overflow:auto}
   .modal-icon{width:52px;height:52px;border-radius:14px;background:#FFF9E6;color:var(--warning);display:grid;place-items:center;margin:0 auto 14px}
   .modal-icon.err{background:#FFF1F3;color:var(--error)}
-  .modal-icon.ok{background:#E8FFF1;color:var(--ok)}
   .modal h3{font-size:16px;font-weight:700;color:var(--text)}
   .modal .aviso-txt{font-size:12.5px;color:var(--muted);line-height:1.65;margin-top:12px;text-align:left}
   .modal .aviso-txt b{color:var(--text)}
   .modal .highlight{color:var(--error);font-weight:600}
   .modal p.sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
-  .result-score{font-size:26px;font-weight:700;color:#6B5BCE;margin-top:10px}
-  .result-tag{display:inline-block;font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;margin-top:8px}
-  .result-tag.bajo{background:#E8FFF1;color:#0E8F4B}
-  .result-tag.medio{background:#FFF8E6;color:#8A6A00}
-  .result-tag.alto{background:#FFF1F3;color:var(--error)}
   .modal-actions{display:flex;gap:10px;margin-top:20px}
   .btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer}
   .btn-modal.ok{background:var(--cyan);color:white}
@@ -126,31 +128,26 @@
         <h2>Panel de invitado</h2>
         <p class="sub">Respondiendo el cuestionario emocional sin registrarte. Navegación limitada.</p>
       </div>
+      <div class="pending-box" id="pendingBox"><p>Cargando cuestionarios disponibles…</p></div>
       <div class="cta-wrap">
-        <button class="btn-guest" id="panelQBtn">Responder cuestionario</button>
+        <button class="btn-guest" id="panelQBtn" disabled>Responder cuestionario</button>
       </div>
-      <div class="mini-opts">
-        <div class="tile"><div class="ico">💡</div><h3>Ver recomendaciones básicas</h3><p>Fuera del alcance de este mockup</p></div>
-        <div class="tile"><div class="ico">🆘</div><h3>Líneas de ayuda</h3><p>Fuera del alcance de este mockup</p></div>
-      </div>
+      <div class="done-list" id="doneList"></div>
       <div style="text-align:center;margin-top:16px">
         <button class="btn-secondary" id="panelExit">Salir del modo invitado</button>
       </div>
     </div>
     <div class="card" style="margin-top:14px">
-      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
-      <div class="controls">
-        <button class="chip active" id="obligChip">Aviso aclaratorio obligatorio antes del cuestionario</button>
-      </div>
-      <p class="hint">Al presionar <b>Responder cuestionario</b> se muestra el mensaje aclaratorio (si es obligatorio) y luego el cuestionario. Cada acción queda registrada en logs (consola del navegador).</p>
+      <span style="font-size:11px;font-weight:700;color:#5A5D72">API:</span>
+      <p class="hint"><b>GET</b> /api/cuestionario/invitado?excluidos=… · <b>POST</b> /inicio · <b>POST</b> /finalizar — Los cuestionarios rotan: al completar uno se marca como hecho en la sesión (cookies) y se ofrece el siguiente. Sin pendientes, no se puede responder más.</p>
     </div>
   </div>
 
   <div class="screen" id="screenQuiz">
     <div class="card">
+      <div class="quiz-title" id="quizTitle"></div>
       <div class="quiz-head">
-        <span class="q-num" id="qNum">Pregunta 1 de 6</span>
-        <span class="q-optional" id="qOptional" style="display:none">Opcional</span>
+        <span class="q-num" id="qNum"></span>
       </div>
       <div class="progress"><div class="bar" id="qBar"></div></div>
       <h2 class="q-title" id="qTitle"></h2>
@@ -161,14 +158,7 @@
         <button class="btn-next" id="nextQ">Siguiente →</button>
       </div>
     </div>
-    <div class="card" style="margin-top:14px">
-      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
-      <div class="controls">
-        <button class="chip" id="forceChip">Simular pregunta obligatoria sin responder (valida al finalizar)</button>
-        <button class="chip" id="resetQuiz">Reiniciar cuestionario</button>
-      </div>
-      <p class="hint">Deja una pregunta obligatoria sin responder y presiona <b>Siguiente</b> para ver el mensaje de validación. En la última pregunta el botón cambia a <b>Finalizar</b>.</p>
-    </div>
+    <p class="hint">Todas las preguntas son obligatorias. En la última pregunta el botón cambia a <b>Finalizar</b>.</p>
   </div>
 
   <div class="screen" id="screenDone">
@@ -181,7 +171,12 @@
         Tus respuestas fueron <b>guardadas temporalmente en la sesión del invitado</b> sin pedir datos personales.
         Podrás ver un resultado básico sobre tus síntomas emocionales.
       </p>
-      <button class="btn-guest" id="viewResult">Ver resultado</button>
+      <div class="done-score" id="doneScore"></div>
+      <a class="btn-guest" id="viewResult" href="../PB-08/mockup-HU1-PB8.html">Ver resultado</a>
+      <div class="row">
+        <button class="btn-secondary" id="nextPendingBtn">Responder otro cuestionario</button>
+        <button class="btn-secondary" id="backPanelBtn">Volver al panel de invitado</button>
+      </div>
     </div>
   </div>
 
@@ -201,8 +196,8 @@
     <div class="modal-icon">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
     </div>
-    <h3>Mensaje aclaratorio</h3>
-    <div class="aviso-txt">
+    <h3 id="avisoTitle">Mensaje aclaratorio</h3>
+    <div class="aviso-txt" id="avisoText">
       <b>Mindzyx</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
       Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.
       <br><br>
@@ -229,227 +224,176 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
-  <div class="modal">
-    <div class="modal-icon ok">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
-    </div>
-    <h3 id="resultTitle">Resultado básico — Invitado</h3>
-    <div class="result-score" id="resultScore">—</div>
-    <div class="result-tag" id="resultTag">—</div>
-    <p class="sub" id="resultText"></p>
-    <p class="sub" style="font-size:11px;color:var(--muted);border-top:1px dashed #EDE6FF;padding-top:10px;margin-top:10px">
-      Simulación: tus respuestas se guardaron temporalmente en la sesión y serán usadas para el cálculo de riesgo. ⚠️ Este resultado <b>no es un diagnóstico clínico</b>.
-    </p>
-    <div class="modal-actions">
-      <button class="btn-modal ok" id="resultBack">Volver al panel de invitado</button>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <script>
-  const questions=[
-    {id:'q1',text:'¿Con qué frecuencia te has sentido triste o desanimado en las últimas dos semanas?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true},
-    {id:'q2',text:'¿Has tenido dificultades para dormir o te has sentido cansado(a)?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true},
-    {id:'q3',text:'¿Te ha costado concentrarte o tomar decisiones?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true},
-    {id:'q4',text:'¿Deseas recibir recomendaciones básicas al finalizar?',options:['Sí','No'],obligatoria:false},
-    {id:'q5',text:'¿Has sentido ansiedad o nerviosismo sin razón aparente?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true},
-    {id:'q6',text:'¿Has perdido interés o placer en actividades que antes disfrutabas?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true}
-  ];
-  const scoreMap={'Nunca':0,'A veces':1,'A menudo':2,'Casi siempre':3,'Sí':0,'No':0};
+  const API='http://localhost:5015';
+  const $=id=>document.getElementById(id);
+  const screens={panel:$('screenPanel'),quiz:$('screenQuiz'),done:$('screenDone')};
+  const toast=$('toast');
+  const pendingBox=$('pendingBox'), panelQBtn=$('panelQBtn'), doneList=$('doneList');
+  const avisoModal=$('avisoModal'), cancelModal=$('cancelModal');
+  const qNum=$('qNum'), qBar=$('qBar'), qTitle=$('qTitle'), qOptions=$('qOptions'), qError=$('qError'), nextQ=$('nextQ');
+  const quizTitle=$('quizTitle'), doneScore=$('doneScore');
 
-  const screens={panel:document.getElementById('screenPanel'),quiz:document.getElementById('screenQuiz'),done:document.getElementById('screenDone')};
-  const toast=document.getElementById('toast');
-  const obligChip=document.getElementById('obligChip'), forceChip=document.getElementById('forceChip'), resetQuiz=document.getElementById('resetQuiz');
-  const avisoModal=document.getElementById('avisoModal'), cancelModal=document.getElementById('cancelModal'), resultModal=document.getElementById('resultModal');
-  const qNum=document.getElementById('qNum'), qOptional=document.getElementById('qOptional'), qBar=document.getElementById('qBar');
-  const qTitle=document.getElementById('qTitle'), qOptions=document.getElementById('qOptions'), qError=document.getElementById('qError');
-  const nextQ=document.getElementById('nextQ');
-
-  let current=0;
-  let selection='';
-  let answers={};
-  let avisoObligatorio=true;
-  let forceEmpty=false;
+  let quiz=null;            // cuestionario pendiente actual (del API)
+  let current=0, selectionId=null, answers={};
+  let avisoObligatorio=true, avisoCache=null;
 
   function addLog(msg){ console.log('[HU1-PB7]', new Date().toLocaleTimeString(), msg); }
-  function showToast(msg){
-    toast.textContent=msg; toast.classList.add('show');
-    clearTimeout(showToast._t);
-    showToast._t=setTimeout(()=>toast.classList.remove('show'),2400);
-  }
-  function showScreen(name){
-    Object.keys(screens).forEach(k=>screens[k].classList.toggle('active', k===name));
-  }
+  function showToast(msg){ toast.textContent=msg; toast.classList.add('show'); clearTimeout(showToast._t); showToast._t=setTimeout(()=>toast.classList.remove('show'),2400); }
+  function showScreen(n){ Object.keys(screens).forEach(k=>screens[k].classList.toggle('active', k===n)); }
   function clearError(){ qError.classList.remove('show'); }
-  function showError(){ qError.classList.add('show'); }
+  function showError(t){ if(t) qError.textContent=t; qError.classList.add('show'); }
 
-  function renderQuestion(){
-    const q=questions[current];
-    selection=answers[q.id]||'';
-    qNum.textContent='Pregunta '+(current+1)+' de '+questions.length;
-    qOptional.style.display=q.obligatoria?'none':'inline-block';
-    qBar.style.width=((current)/(questions.length-1)*100)+'%';
-    qTitle.textContent=q.text;
-    qOptions.innerHTML='';
-    q.options.forEach((o,i)=>{
-      const b=document.createElement('button');
-      b.type='button';
-      b.className='opt'+(o===selection?' selected':'');
-      b.textContent=(i+1)+'. '+o;
-      b.addEventListener('click',()=>{
-        selection=o;
-        clearError();
-        qOptions.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));
-        b.classList.add('selected');
-      });
-      qOptions.appendChild(b);
-    });
-    const isLast=current===questions.length-1;
-    nextQ.textContent=isLast?'Finalizar':'Siguiente →';
-    clearError();
+  // --- sesión del invitado (cookies): cuest_<id>=1 marca cuestionario hecho al 100% ---
+  function setDone(id){ document.cookie='cuest_'+id+'=1;max-age=31536000;path=/;SameSite=Lax'; }
+  function getDoneIds(){
+    return document.cookie.split(';').map(s=>s.trim()).filter(s=>s.startsWith('cuest_'))
+      .map(s=>s.split('=')[0].replace('cuest_','')).filter(v=>/^\d+$/.test(v));
+  }
+  function paintDone(){
+    const ids=getDoneIds();
+    doneList.innerHTML=ids.length
+      ? 'Cuestionarios completados en esta sesión: '+ids.map(i=>'<span class="tag">✔ #'+i+'</span>').join(' ')
+      : '';
   }
 
-  function startQuiz(){
-    current=0; selection=''; answers={}; forceChip.classList.remove('active'); forceEmpty=false;
-    renderQuestion();
-    showScreen('quiz');
-    addLog('INICIO del cuestionario emocional (invitado) — sesión temporal');
+  async function api(path, opts){
+    const r=await fetch(API+path, opts);
+    if(!r.ok){ let m=''; try{ m=(await r.json()).error||''; }catch(_){} throw new Error(m||('HTTP '+r.status)); }
+    return r.status===204?null:r.json();
   }
 
-  function exitToPanel(){
-    showScreen('panel');
-    addLog('FIN del cuestionario — vuelve al panel de invitado (no guardado como completado)');
+  // --- carga el siguiente cuestionario pendiente (rotación) ---
+  async function loadPending(){
+    paintDone();
+    pendingBox.classList.remove('error');
+    pendingBox.innerHTML='<p>Cargando cuestionarios disponibles…</p>';
+    panelQBtn.disabled=true;
+    try{
+      const excl=getDoneIds().join(',');
+      const q=await api('/api/cuestionario/invitado'+(excl?'?excluidos='+encodeURIComponent(excl):''));
+      if(!q||q.disponible===false){
+        quiz=null;
+        pendingBox.innerHTML='<h3>Sin cuestionarios pendientes</h3><p>'+((q&&q.mensaje)||'No tienes cuestionarios pendientes por responder.')+'</p>';
+        addLog('Sin cuestionarios pendientes — no se puede responder más');
+        return;
+      }
+      quiz=q;
+      avisoObligatorio=q.avisoObligatorio!==false;
+      pendingBox.innerHTML='<h3>'+escapeHtml(q.titulo)+'</h3><p>'+q.preguntas.length+' preguntas · todas obligatorias</p>';
+      panelQBtn.disabled=false;
+      addLog('Cuestionario pendiente cargado: "'+q.titulo+'" ('+q.preguntas.length+' preguntas)');
+    }catch(e){
+      quiz=null;
+      pendingBox.classList.add('error');
+      pendingBox.innerHTML='<h3>No fue posible cargar el cuestionario</h3><p>Intente nuevamente. <a href="#" id="retryLoad">Reintentar</a></p>';
+      $('retryLoad').addEventListener('click',ev=>{ev.preventDefault();loadPending();});
+      addLog('ERROR de carga del cuestionario: '+e.message);
+    }
+  }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  // --- aviso aclaratorio (GET /api/aviso, log en POST /visualizacion) ---
+  async function ensureAviso(){
+    if(avisoCache) return avisoCache;
+    try{
+      avisoCache=await api('/api/aviso');
+      $('avisoText').innerHTML='<b>'+escapeHtml(avisoCache.titulo)+'</b><br><br>'+escapeHtml(avisoCache.texto).replace(/\n/g,'<br>');
+    }catch(e){ addLog('Aviso por defecto (API no disponible): '+e.message); }
+    return avisoCache;
+  }
+  function logVisualizacion(resultado){
+    api('/api/aviso/visualizacion',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({origen:'cuestionario-invitado',resultado})}).catch(()=>{});
   }
 
-  document.getElementById('panelQBtn').addEventListener('click', ()=>{
+  panelQBtn.addEventListener('click', async ()=>{
+    if(!quiz) return;
     if(avisoObligatorio){
+      await ensureAviso();
       avisoModal.classList.add('open');
+      logVisualizacion('ok');
       addLog('VISUALIZACIÓN del mensaje aclaratorio (obligatorio, antes de iniciar el cuestionario)');
       return;
     }
     startQuiz();
   });
+  $('avisoOk').addEventListener('click', ()=>{ avisoModal.classList.remove('open'); addLog('AVISO ACEPTADO — botón "Entendido"'); startQuiz(); });
+  $('avisoCerrar').addEventListener('click', ()=>{ avisoModal.classList.remove('open'); addLog('AVISO CERRADO — no se inicia el cuestionario'); });
+  $('footerAviso').addEventListener('click', async e=>{ e.preventDefault(); await ensureAviso(); avisoModal.classList.add('open'); logVisualizacion('ok'); });
 
-  document.getElementById('avisoOk').addEventListener('click', ()=>{
-    avisoModal.classList.remove('open');
-    addLog('AVISO ACEPTADO — botón "Entendido"');
-    startQuiz();
-  });
-  document.getElementById('avisoCerrar').addEventListener('click', ()=>{
-    avisoModal.classList.remove('open');
-    addLog('AVISO CERRADO — no se inicia el cuestionario');
-  });
-  document.getElementById('footerAviso').addEventListener('click', (e)=>{
-    e.preventDefault();
-    avisoModal.classList.add('open');
-    addLog('VISUALIZACIÓN del mensaje aclaratorio por enlace "Aviso: no diagnóstico"');
-  });
-
-  function validateMandatory(){
-    for(const q of questions){
-      if(q.obligatoria && !answers[q.id]){
-        return false;
-      }
-    }
-    return true;
+  function startQuiz(){
+    current=0; selectionId=null; answers={};
+    api('/api/cuestionario/invitado/inicio',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({cuestionarioId:quiz.id})}).catch(e=>addLog('Log de inicio (no bloquea): '+e.message));
+    quizTitle.textContent=quiz.titulo;
+    renderQuestion();
+    showScreen('quiz');
+    addLog('INICIO del cuestionario "'+quiz.titulo+'" (invitado) — sesión temporal');
   }
 
-  function finalizeQuiz(){
-    if(forceEmpty){
-      const pend=questions.find(q=>q.obligatoria && !answers[q.id]) || questions[0];
-      answers[pend.id]='';
+  function renderQuestion(){
+    const q=quiz.preguntas[current];
+    selectionId=answers[q.id]??null;
+    qNum.textContent='Pregunta '+(current+1)+' de '+quiz.preguntas.length;
+    qBar.style.width=(current/(quiz.preguntas.length-1||1)*100)+'%';
+    qTitle.textContent=q.texto;
+    qOptions.innerHTML='';
+    q.opciones.forEach((o,i)=>{
+      const b=document.createElement('button');
+      b.type='button';
+      b.className='opt'+(o.id===selectionId?' selected':'');
+      b.textContent=(i+1)+'. '+o.texto;
+      b.addEventListener('click',()=>{ selectionId=o.id; clearError(); qOptions.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); });
+      qOptions.appendChild(b);
+    });
+    nextQ.textContent=current===quiz.preguntas.length-1?'Finalizar':'Siguiente →';
+    clearError();
+  }
+
+  async function finalizeQuiz(){
+    const payload={cuestionarioId:quiz.id,respuestas:Object.entries(answers).map(([preguntaId,opcionId])=>({preguntaId:+preguntaId,opcionId}))};
+    try{
+      const r=await api('/api/cuestionario/invitado/finalizar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      setDone(quiz.id);   // 100% respondido -> marcado como hecho en la sesión (cookies)
+      doneScore.textContent='Puntaje '+r.puntaje+' · Nivel '+(r.nivel||'');
+      $('viewResult').href='../PB-08/mockup-HU1-PB8.html?cuestionarioId='+quiz.id;
+      showScreen('done');
+      addLog('FINALIZACIÓN del cuestionario — 100% respondido, marcado como hecho en la sesión (cookie cuest_'+quiz.id+'), puntaje '+r.puntaje);
+      quiz=null;
+    }catch(e){
+      showError(e.message||'Debes seleccionar una respuesta para continuar');
+      addLog('VALIDACIÓN fallida al finalizar: '+e.message);
     }
-    if(!validateMandatory()){
-      showError();
-      addLog('VALIDACIÓN fallida: hay preguntas obligatorias sin responder — no se permite finalizar');
-      return;
-    }
-    addLog('FINALIZACIÓN del cuestionario (invitado) — respuestas guardadas temporalmente en la sesión: '+JSON.stringify(answers));
-    showScreen('done');
   }
 
   nextQ.addEventListener('click', ()=>{
-    const q=questions[current];
-    if(q.obligatoria && !selection){
-      showError();
-      addLog('BLOQUEO de avance: no se seleccionó respuesta en "'+q.text.slice(0,40)+'"');
-      return;
-    }
-    answers[q.id]=selection;
-    addLog('RESPUESTA guardada ('+(current+1)+'/'+questions.length+'): '+q.text.slice(0,34)+'... = '+selection);
-    if(current===questions.length-1){
-      finalizeQuiz();
-      return;
-    }
+    const q=quiz.preguntas[current];
+    if(selectionId==null){ showError('Debes seleccionar una respuesta para continuar'); addLog('BLOQUEO de avance: sin respuesta en pregunta '+(current+1)); return; }
+    answers[q.id]=selectionId;
+    addLog('RESPUESTA guardada ('+(current+1)+'/'+quiz.preguntas.length+')');
+    if(current===quiz.preguntas.length-1){ finalizeQuiz(); return; }
     current++;
     renderQuestion();
   });
 
-  document.getElementById('cancelQ').addEventListener('click', ()=>{
-    cancelModal.classList.add('open');
-    addLog('INTENTO de cancelar el cuestionario — se muestra confirmación');
-  });
-  document.getElementById('stayBtn').addEventListener('click', ()=>{
+  $('cancelQ').addEventListener('click', ()=>{ cancelModal.classList.add('open'); addLog('INTENTO de cancelar — se muestra confirmación'); });
+  $('stayBtn').addEventListener('click', ()=>{ cancelModal.classList.remove('open'); addLog('Confirmación: NO salir — continúa'); });
+  $('leaveBtn').addEventListener('click', ()=>{
     cancelModal.classList.remove('open');
-    addLog('Confirmación: NO salir — continúa en el cuestionario');
-  });
-  document.getElementById('leaveBtn').addEventListener('click', ()=>{
-    cancelModal.classList.remove('open');
-    current=0; selection=''; answers={}; forceChip.classList.remove('active'); forceEmpty=false;
-    exitToPanel();
+    current=0; selectionId=null; answers={}; quiz=null;
+    loadPending(); showScreen('panel');
     addLog('CONFIRMADO salir — respuestas descartadas, cuestionario NO marcado como completado');
   });
 
-  document.getElementById('viewResult').addEventListener('click', ()=>{
-    let sum=0;
-    questions.forEach(q=>{ sum+=(scoreMap[answers[q.id]]||0); });
-    const scoreEl=document.getElementById('resultScore'), tagEl=document.getElementById('resultTag'), txtEl=document.getElementById('resultText');
-    scoreEl.textContent=sum+' / '+(questions.filter(q=>!q.obligatoria).length? (questions.length*3)-0: questions.length*3);
-    if(sum<=4){ tagEl.className='result-tag bajo'; tagEl.textContent='Riesgo bajo'; txtEl.textContent='No se observan síntomas significativos. Sigue con tu monitoreo habitual.'; }
-    else if(sum<=9){ tagEl.className='result-tag medio'; tagEl.textContent='Riesgo medio'; txtEl.textContent='Se recomienda mantener un monitoreo periódico y revisar las recomendaciones básicas.'; }
-    else { tagEl.className='result-tag alto'; tagEl.textContent='Riesgo alto'; txtEl.textContent='Se recomienda buscar ayuda profesional o contactar las líneas de ayuda de tu país.'; }
-    resultModal.classList.add('open');
-    addLog('RESULTADO básico mostrado al invitado — puntaje '+sum+' (simulación para cálculo de riesgo)');
-  });
-  document.getElementById('resultBack').addEventListener('click', ()=>{
-    resultModal.classList.remove('open');
-    current=0; selection=''; answers={}; forceChip.classList.remove('active'); forceEmpty=false;
-    exitToPanel();
-  });
+  $('nextPendingBtn').addEventListener('click', ()=>{ loadPending(); showScreen('panel'); });
+  $('backPanelBtn').addEventListener('click', ()=>{ loadPending(); showScreen('panel'); });
+  $('panelExit').addEventListener('click', ()=>{ addLog('SALIDA del modo invitado — vuelve a la Landing'); showToast('Volviendo a la Landing (fuera de este mockup)'); });
 
-  document.getElementById('panelExit').addEventListener('click', ()=>{
-    addLog('SALIDA del modo invitado — vuelve a la Landing');
-    showToast('Volviendo a la Landing (fuera de este mockup)');
-  });
-  document.querySelectorAll('.mini-opts .tile').forEach(t=>{
-    t.addEventListener('click', ()=>{
-      showToast('Opción fuera del alcance de este mockup — ver PB-06');
-    });
-  });
-
-  obligChip.addEventListener('click', ()=>{
-    avisoObligatorio=!avisoObligatorio;
-    obligChip.classList.toggle('active', avisoObligatorio);
-    addLog(avisoObligatorio?'DEMO: aviso obligatorio ACTIVADO':'DEMO: aviso obligatorio DESACTIVADO (se inicia directo)');
-  });
-
-  forceChip.addEventListener('click', ()=>{
-    forceEmpty=!forceEmpty;
-    forceChip.classList.toggle('active', forceEmpty);
-    addLog(forceEmpty?'DEMO: simular pregunta obligatoria sin responder ACTIVADO':'DEMO: simular pregunta obligatoria sin responder DESACTIVADO');
-  });
-
-  resetQuiz.addEventListener('click', ()=>{
-    current=0; selection=''; answers={}; forceChip.classList.remove('active'); forceEmpty=false;
-    renderQuestion();
-    showScreen('quiz');
-    addLog('DEMO: cuestionario reiniciado');
-  });
-
-  addLog('Sistema listo — botón "Responder cuestionario" disponible en el panel de invitado');
+  loadPending();
+  addLog('Sistema listo — cuestionarios dinámicos desde el API con rotación por cookies');
 </script>
 </body>
 </html>
