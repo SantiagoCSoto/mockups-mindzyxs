@@ -34,6 +34,7 @@
   .cta-wrap{text-align:center;margin-top:18px}
   .btn-guest{width:100%;max-width:340px;height:48px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
   .btn-guest:hover{filter:brightness(1.05)}
+  .btn-guest:disabled{opacity:.5;cursor:not-allowed}
   .btn-secondary{height:40px;padding:0 20px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
   .btn-secondary:hover{border-color:var(--cyan);background:#F8FEFF}
   .mini-opts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
@@ -44,10 +45,12 @@
   .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
   .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
   .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
-  .chip.risk.active-bajo{background:#E8FFF1;color:#0E8F4B;border-color:#7FE0B0}
-  .chip.risk.active-medio{background:#FFF8E6;color:#8A6A00;border-color:#F3D48A}
-  .chip.risk.active-alto{background:#FFF1F3;color:var(--error);border-color:#FFBFCF}
   .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5}
+  .pending-box{text-align:center;margin-top:14px;padding:12px;border:1px dashed #DFDAEE;border-radius:12px}
+  .pending-box h3{font-size:14px;font-weight:700}
+  .pending-box p{font-size:11px;color:var(--muted);margin-top:4px}
+  .pending-box.error{border-color:#FFE0E6;background:#FFF7F8}
+  .pending-box.error p{color:var(--error)}
   .done-icon{width:56px;height:56px;border-radius:14px;background:#E8FFF1;color:var(--ok);display:grid;place-items:center;margin:0 auto 14px}
   .done{text-align:center;padding:36px 22px}
   .done h2{font-size:20px;font-weight:700}
@@ -67,13 +70,13 @@
   .alert-urgente b{font-size:12px;color:#C2274F;display:block;margin-bottom:3px}
   .alert-urgente p{font-size:12px;color:#8E2344;line-height:1.5}
   .result-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px}
-  .btn-help{width:100%;height:46px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 4px 10px rgba(94,188,196,0.25)}
+  .btn-help{display:inline-block;width:100%;min-height:46px;line-height:46px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 4px 10px rgba(94,188,196,0.25);text-decoration:none;text-align:center}
   .btn-help:hover{filter:brightness(1.05)}
   .btn-help.lineas{background:white;border:1px solid #DFDAEE;color:var(--text);box-shadow:none}
   .btn-help.lineas:hover{border-color:var(--cyan);background:#F8FEFF}
   .btn-help.lineas.urgente{background:linear-gradient(180deg,#E85D7A,#D6486A);color:white;border:none;box-shadow:0 4px 12px rgba(232,93,122,0.35);animation:pulse 1.6s infinite}
   .btn-help.lineas.urgente:hover{filter:brightness(1.05)}
-  .btn-help.volver{height:42px;background:white;border:1px solid #DFDAEE;color:var(--text);box-shadow:none}
+  .btn-help.volver{min-height:42px;background:white;border:1px solid #DFDAEE;color:var(--text);box-shadow:none}
   .btn-help.volver:hover{border-color:var(--cyan);background:#F8FEFF}
   @keyframes pulse{0%,100%{box-shadow:0 4px 12px rgba(232,93,122,0.35)}50%{box-shadow:0 4px 20px rgba(232,93,122,0.6)}}
   .panel-alert{display:none;gap:8px;align-items:flex-start;text-align:left;background:#FFF1F3;border:1px solid #FFD8E0;color:#B02A4E;font-size:12px;line-height:1.5;border-radius:12px;padding:12px 14px;margin-bottom:14px}
@@ -143,24 +146,24 @@
         <h2>Panel de invitado</h2>
         <p class="sub">Respuestas validadas en la sesión del invitado. Desde aquí puedes responder el cuestionario emocional.</p>
       </div>
+      <div class="pending-box" id="pendingBox"><p>Cargando cuestionarios disponibles…</p></div>
       <div class="cta-wrap">
-        <button class="btn-guest" id="panelQBtn">Responder cuestionario</button>
+        <button class="btn-guest" id="panelQBtn" disabled>Responder cuestionario</button>
       </div>
       <div style="text-align:center;margin-top:16px">
         <button class="btn-secondary" id="panelExit">Salir del modo invitado</button>
       </div>
     </div>
     <div class="card" style="margin-top:14px">
-      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
-      <p class="hint" style="text-align:left;margin-top:8px">Para probar el cálculo del riesgo, presiona <b>Responder cuestionario</b>, completa el cuestionario demo y al llegar a <b>Cuestionario completado</b> presiona <b>Ver resultado</b>.</p>
+      <span style="font-size:11px;font-weight:700;color:#5A5D72">API:</span>
+      <p class="hint"><b>POST</b> /api/riesgo/invitado/calcular con las respuestas de la sesión · <b>GET</b> /api/ayuda/lineas — Puntaje = promedio de escala 1–5 (1–2 Bajo, 3 Medio, 4–5 Alto).</p>
     </div>
   </div>
 
   <div class="screen" id="screenQuiz">
     <div class="card">
       <div class="quiz-head" style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px">
-        <span style="font-size:11px;font-weight:700;color:#6B5BCE;background:#F9F7FF;border:1px solid #EDE6FF;padding:5px 12px;border-radius:20px" id="qNum">Pregunta 1 de 6</span>
-        <span style="font-size:10px;font-weight:700;color:var(--muted);background:#F3F1FA;border:1px solid #E2DCF3;padding:4px 10px;border-radius:20px;display:none" id="qOptional">Opcional</span>
+        <span style="font-size:11px;font-weight:700;color:#6B5BCE;background:#F9F7FF;border:1px solid #EDE6FF;padding:5px 12px;border-radius:20px" id="qNum"></span>
       </div>
       <div style="height:8px;background:#F0EAF6;border-radius:20px;overflow:hidden;margin:10px 0 16px"><div style="height:100%;background:var(--cyan);border-radius:20px;transition:width .3s;width:0%" id="qBar"></div></div>
       <h2 id="qTitle" style="font-size:16px;font-weight:700;line-height:1.45"></h2>
@@ -171,6 +174,7 @@
         <button id="nextQ" style="flex:1;height:44px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer">Siguiente →</button>
       </div>
     </div>
+    <p class="hint">Todas las preguntas son obligatorias. En la última pregunta el botón cambia a <b>Finalizar</b>.</p>
   </div>
 
   <div class="screen" id="screenDone">
@@ -185,17 +189,11 @@
       </p>
       <button class="btn-guest" id="viewResult">Ver resultado</button>
       <div class="card" style="margin-top:18px;text-align:center;border-style:dashed;box-shadow:none">
-        <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo — simular respuestas en la sesión del invitado:</span>
+        <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo — estado de la sesión:</span>
         <div class="controls" style="justify-content:center">
-          <button class="chip risk active-bajo active" id="scBajo">Riesgo bajo (3)</button>
-          <button class="chip risk" id="scMedio">Riesgo medio (7)</button>
-          <button class="chip risk" id="scAlto">Riesgo alto (12)</button>
-        </div>
-        <div class="controls" style="justify-content:center">
-          <button class="chip active" id="obligChip">Aviso aclaratorio obligatorio antes del resultado</button>
           <button class="chip" id="noRespChip">Simular sesión sin respuestas (expirada)</button>
         </div>
-        <p class="hint">Selecciona un escenario para simular las respuestas guardadas. La clasificación usa la misma lógica de puntaje de HU1-PB7 (Nunca=0 … Casi siempre=3).</p>
+        <p class="hint">Limpia las respuestas de la sesión para ver el mensaje "No se encontraron respuestas para calcular el riesgo…".</p>
       </div>
     </div>
   </div>
@@ -214,7 +212,7 @@
       </div>
       <div class="result-expl" id="resExpl"></div>
       <div class="result-actions">
-        <button class="btn-help" id="btnRecom">Ver recomendaciones básicas</button>
+        <a class="btn-help" id="btnRecom" href="../PB-09/mockup-HU1-PB9.html">Ver recomendaciones básicas</a>
         <button class="btn-help lineas" id="btnLineas">Líneas de ayuda</button>
         <button class="btn-help volver" id="btnVolver">Volver al inicio (Invitado)</button>
       </div>
@@ -239,7 +237,7 @@
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
     </div>
     <h3>Mensaje aclaratorio</h3>
-    <div class="aviso-txt">
+    <div class="aviso-txt" id="avisoText">
       <b>Mindzyx</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
       Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.
       <br><br>
@@ -254,36 +252,26 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="recomModal" role="dialog" aria-modal="true" aria-labelledby="recomTitle">
-  <div class="modal">
-    <div class="modal-icon">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-4 12c.8.6 1.5 1.5 1.8 2.5h4.4c.3-1 1-1.9 1.8-2.5A7 7 0 0 0 12 2z"></path></svg>
-    </div>
-    <h3>Recomendaciones básicas</h3>
-    <div class="rec-list">
-      <div class="rec-item">💤 <b>Descansa:</b> intenta mantener horarios regulares de sueño y descanso.</div>
-      <div class="rec-item">🏃 <b>Muévete:</b> realiza actividad física ligera o paseos diarios.</div>
-      <div class="rec-item">🗣️ <b>Comunícate:</b> comparte cómo te sientes con alguien de confianza.</div>
-      <div class="rec-item">📖 <b>Aprende:</b> consulta material educativo sobre bienestar emocional.</div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-modal ok" id="recomOk">Entendido</button>
-    </div>
-  </div>
-</div>
-
 <div class="modal-overlay" id="lineasModal" role="dialog" aria-modal="true" aria-labelledby="lineasTitle">
   <div class="modal">
     <div class="modal-icon info">🆘</div>
     <h3>Líneas de ayuda</h3>
-    <p class="sub" style="font-size:11px">Ejemplo de líneas de emergencia y acompañamiento emocional (demo).</p>
-    <div class="modal-actions" style="flex-direction:column;gap:10px;margin-top:14px">
-      <div class="line-item">📞 <b>Línea de crisis emocional 24/7:</b> 0800-000-HELP</div>
-      <div class="line-item">🌐 <b>Chat de apoyo en línea:</b> chat.mindzyx-demo.com/apoyo</div>
-      <div class="line-item">🏥 <b>Urgencias:</b> acude al servicio de urgencias más cercano.</div>
-    </div>
+    <p class="sub" style="font-size:11px">Líneas de emergencia y acompañamiento emocional.</p>
+    <div class="modal-actions" style="flex-direction:column;gap:10px;margin-top:14px" id="lineasList"></div>
     <div class="modal-actions">
       <button class="btn-modal close" id="lineasClose">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="cancelModal" role="alertdialog" aria-modal="true" aria-labelledby="cancelTitle">
+  <div class="modal">
+    <div class="modal-icon err">!</div>
+    <h3 id="cancelTitle">¿Deseas salir del cuestionario?</h3>
+    <p class="sub">Se perderán tus respuestas</p>
+    <div class="modal-actions">
+      <button class="btn-modal close" id="stayBtn">No, continuar</button>
+      <button class="btn-modal danger" id="leaveBtn" style="flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer;background:var(--error);color:white">Sí, salir</button>
     </div>
   </div>
 </div>
@@ -291,245 +279,184 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const questions=[
-    {id:'q1',text:'¿Con qué frecuencia te has sentido triste o desanimado en las últimas dos semanas?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true},
-    {id:'q2',text:'¿Has tenido dificultades para dormir o te has sentido cansado(a)?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true},
-    {id:'q3',text:'¿Te ha costado concentrarte o tomar decisiones?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true},
-    {id:'q4',text:'¿Deseas recibir recomendaciones básicas al finalizar?',options:['Sí','No'],obligatoria:false},
-    {id:'q5',text:'¿Has sentido ansiedad o nerviosismo sin razón aparente?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true},
-    {id:'q6',text:'¿Has perdido interés o placer en actividades que antes disfrutabas?',options:['Nunca','A veces','A menudo','Casi siempre'],obligatoria:true}
-  ];
-  const scoreMap={'Nunca':0,'A veces':1,'A menudo':2,'Casi siempre':3,'Sí':0,'No':0};
-  const MAX_SCORE=15;
-  const demoScenarios={
-    bajo:{score:3,label:'Riesgo bajo'},
-    medio:{score:7,label:'Riesgo medio'},
-    alto:{score:12,label:'Riesgo alto'}
-  };
-  const explByLevel={
-    'bajo':'No se observan síntomas emocionales significativos en tus respuestas. Te invitamos a continuar con tu monitoreo habitual y registrar cómo te sientes periódicamente.',
-    'medio':'Se observan algunos síntomas emocionales que conviene vigilar. Te recomendamos mantener un monitoreo periódico y revisar las recomendaciones básicas para tu bienestar.',
-    'alto':'Se observan síntomas emocionales relevantes en tus respuestas. Es muy importante que busques ayuda profesional o te comuniques con una línea de ayuda de tu país.'
-  };
+  const API='http://localhost:5015';
+  const $=id=>document.getElementById(id);
+  const screens={panel:$('screenPanel'),quiz:$('screenQuiz'),done:$('screenDone'),result:$('screenResult')};
+  const toast=$('toast');
+  const pendingBox=$('pendingBox'), panelQBtn=$('panelQBtn'), panelAlert=$('panelAlert');
+  const avisoModal=$('avisoModal'), lineasModal=$('lineasModal'), cancelModal=$('cancelModal');
+  const qNum=$('qNum'), qBar=$('qBar'), qTitle=$('qTitle'), qOptions=$('qOptions'), qError=$('qError'), nextQ=$('nextQ');
+  const resLevel=$('resLevel'), resScore=$('resScore'), resExpl=$('resExpl'), alertEl=$('alertUrgente'), lineasBtn=$('btnLineas');
 
-  const screens={panel:document.getElementById('screenPanel'),quiz:document.getElementById('screenQuiz'),done:document.getElementById('screenDone'),result:document.getElementById('screenResult')};
-  const toast=document.getElementById('toast');
-  const obrigChips={bajo:document.getElementById('scBajo'),medio:document.getElementById('scMedio'),alto:document.getElementById('scAlto')};
-  const obligChip=document.getElementById('obligChip'), noRespChip=document.getElementById('noRespChip');
-  const panelAlert=document.getElementById('panelAlert');
-  const avisoModal=document.getElementById('avisoModal'), recomModal=document.getElementById('recomModal'), lineasModal=document.getElementById('lineasModal');
-  const qNum=document.getElementById('qNum'), qOptional=document.getElementById('qOptional'), qBar=document.getElementById('qBar');
-  const qTitle=document.getElementById('qTitle'), qOptions=document.getElementById('qOptions'), qError=document.getElementById('qError');
-  const nextQ=document.getElementById('nextQ');
-
-  let current=0;
-  let selection='';
-  let answers={};
-  let currentScenario='bajo';
-  let avisoObligatorio=true;
-  let simulateNoAnswers=false;
-  let pendingScore=null;
-  let pendingLevel=null;
+  let quiz=null, current=0, selectionId=null, answers={};
+  let avisoObligatorio=true, avisoCache=null, pendingLevel=null;
 
   function addLog(msg){ console.log('[HU1-PB8]', new Date().toLocaleTimeString(), msg); }
-  function showToast(msg){
-    toast.textContent=msg; toast.classList.add('show');
-    clearTimeout(showToast._t);
-    showToast._t=setTimeout(()=>toast.classList.remove('show'),2400);
-  }
-  function showScreen(name){
-    Object.keys(screens).forEach(k=>screens[k].classList.toggle('active', k===name));
-  }
+  function showToast(msg){ toast.textContent=msg; toast.classList.add('show'); clearTimeout(showToast._t); showToast._t=setTimeout(()=>toast.classList.remove('show'),2400); }
+  function showScreen(n){ Object.keys(screens).forEach(k=>screens[k].classList.toggle('active', k===n)); }
   function clearError(){ qError.style.display='none'; }
   function showError(){ qError.style.display='flex'; }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-  function renderQuestion(){
-    const q=questions[current];
-    selection=answers[q.id]||'';
-    qNum.textContent='Pregunta '+(current+1)+' de '+questions.length;
-    qOptional.style.display=q.obligatoria?'none':'inline-block';
-    qBar.style.width=((current)/(questions.length-1)*100)+'%';
-    qTitle.textContent=q.text;
-    qOptions.innerHTML='';
-    q.options.forEach((o,i)=>{
-      const b=document.createElement('button');
-      b.type='button';
-      b.style.cssText='padding:14px 16px;border:1px solid #DFDAEE;border-radius:12px;background:#FFF;font-size:13px;text-align:left;cursor:pointer;transition:.15s;font-family:inherit;color:'+(o===selection?'#2E2E33':'#2E2E33');
-      if(o===selection){ b.style.borderColor='var(--cyan)'; b.style.background='#E6F7F8'; b.style.fontWeight='600'; }
-      b.textContent=(i+1)+'. '+o;
-      b.addEventListener('click',()=>{
-        selection=o;
-        clearError();
-        qOptions.querySelectorAll('button').forEach(x=>{ x.style.borderColor='#DFDAEE'; x.style.background='#FFF'; x.style.fontWeight='400'; });
-        b.style.borderColor='var(--cyan)'; b.style.background='#E6F7F8'; b.style.fontWeight='600';
-      });
-      qOptions.appendChild(b);
-    });
-    const isLast=current===questions.length-1;
-    nextQ.textContent=isLast?'Finalizar':'Siguiente →';
-    clearError();
+  // --- sesión del invitado: respuestas en sessionStorage + hechos en cookies cuest_* ---
+  const SKEY='mindzyx_inv_answers';
+  function saveSession(cid,resp){ sessionStorage.setItem(SKEY,JSON.stringify({cuestionarioId:cid,respuestas:resp})); }
+  function readSession(){ try{ return JSON.parse(sessionStorage.getItem(SKEY)); }catch(_){ return null; } }
+  function clearSession(){ sessionStorage.removeItem(SKEY); }
+  function getDoneIds(){ return document.cookie.split(';').map(s=>s.trim()).filter(s=>s.startsWith('cuest_')).map(s=>s.split('=')[0].replace('cuest_','')).filter(v=>/^\d+$/.test(v)); }
+
+  async function api(path,opts){
+    const r=await fetch(API+path,opts);
+    if(!r.ok){ let m=''; try{ m=(await r.json()).error||''; }catch(_){} throw new Error(m||('HTTP '+r.status)); }
+    return r.status===204?null:r.json();
   }
 
-  function setScenario(name){
-    currentScenario=name;
-    Object.keys(obrigChips).forEach(k=>obrigChips[k].classList.remove('active'));
-    obrigChips[name].classList.add('active');
-    addLog('DEMO: escenario de respuestas = "'+demoScenarios[name].label+'" — sesión del invitado con puntaje simulado '+demoScenarios[name].score);
+  // --- cuestionario pendiente (rotación; ?cuestionarioId= tiene preferencia si sigue pendiente) ---
+  async function loadPending(){
+    pendingBox.classList.remove('error');
+    pendingBox.innerHTML='<p>Cargando cuestionarios disponibles…</p>';
+    panelQBtn.disabled=true;
+    try{
+      const params=new URLSearchParams(location.search);
+      const prefer=params.get('cuestionarioId');
+      let excl=getDoneIds();
+      if(prefer&&/^\d+$/.test(prefer)) excl=excl.filter(i=>i!==prefer);
+      const q=await api('/api/cuestionario/invitado'+(excl.length?'?excluidos='+encodeURIComponent(excl.join(',')):''));
+      if(!q||q.disponible===false){ quiz=null; pendingBox.innerHTML='<h3>Sin cuestionarios pendientes</h3><p>'+escapeHtml((q&&q.mensaje)||'No tienes cuestionarios pendientes por responder.')+'</p>'; return; }
+      quiz=q; avisoObligatorio=q.avisoObligatorio!==false;
+      pendingBox.innerHTML='<h3>'+escapeHtml(q.titulo)+'</h3><p>'+q.preguntas.length+' preguntas · todas obligatorias</p>';
+      panelQBtn.disabled=false;
+      addLog('Cuestionario pendiente cargado: "'+q.titulo+'"');
+    }catch(e){
+      quiz=null; pendingBox.classList.add('error');
+      pendingBox.innerHTML='<h3>No fue posible cargar el cuestionario</h3><p>Intente nuevamente. <a href="#" id="retryLoad">Reintentar</a></p>';
+      $('retryLoad').addEventListener('click',ev=>{ev.preventDefault();loadPending();});
+      addLog('ERROR de carga: '+e.message);
+    }
   }
 
-  function calculateRisk(score){
-    if(score<=4) return 'bajo';
-    if(score<=9) return 'medio';
-    return 'alto';
+  async function ensureAviso(){
+    if(avisoCache) return avisoCache;
+    try{
+      avisoCache=await api('/api/aviso');
+      $('avisoText').innerHTML='<b>'+escapeHtml(avisoCache.titulo)+'</b><br><br>'+escapeHtml(avisoCache.texto).replace(/\n/g,'<br>');
+    }catch(e){ addLog('Aviso por defecto (API no disponible)'); }
+    return avisoCache;
+  }
+  function logVisualizacion(res){
+    api('/api/aviso/visualizacion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({origen:'resultado-riesgo',resultado:res})}).catch(()=>{});
   }
 
-  function startQuiz(){
-    current=0; selection=''; answers={}; simulateNoAnswers=false; noRespChip.classList.remove('active');
-    renderQuestion();
-    showScreen('quiz');
+  panelQBtn.addEventListener('click', async ()=>{
+    if(!quiz) return;
     panelAlert.classList.remove('show');
-    addLog('INICIO del cuestionario emocional (invitado) — sesión temporal');
-  }
-
-  function showResult(score, level){
-    const levelEl=document.getElementById('resLevel');
-    const scoreEl=document.getElementById('resScore');
-    const explEl=document.getElementById('resExpl');
-    const alertEl=document.getElementById('alertUrgente');
-    const lineasBtn=document.getElementById('btnLineas');
-
-    levelEl.textContent=demoScenarios[level].label;
-    levelEl.className='result-level '+level;
-    scoreEl.textContent='Puntaje: '+score+' / '+MAX_SCORE+' (respuestas completas validadas en la sesión del invitado)';
-
-    explEl.textContent=explByLevel[level];
-
-    const isAlto=level==='alto';
-    alertEl.classList.toggle('show', isAlto);
-    lineasBtn.classList.toggle('urgente', isAlto);
-    lineasBtn.textContent=isAlto?'🚨 Líneas de ayuda (urgente)':'Líneas de ayuda';
-
-    showScreen('result');
-    addLog('VISUALIZACIÓN de la pantalla Resultado del riesgo (Invitado) — nivel "'+demoScenarios[level].label+'"');
-  }
-
-  document.getElementById('panelQBtn').addEventListener('click', ()=>{
+    if(avisoObligatorio){ await ensureAviso(); avisoModal.classList.add('open'); logVisualizacion('ok'); addLog('VISUALIZACIÓN del mensaje aclaratorio (antes del cuestionario)'); pendingAction=startQuiz; return; }
     startQuiz();
   });
+  let pendingAction=null;
+  $('avisoOk').addEventListener('click', ()=>{ avisoModal.classList.remove('open'); addLog('AVISO ACEPTADO — "Entendido"'); (pendingAction||(()=>{}))(); pendingAction=null; });
+  $('avisoCerrar').addEventListener('click', ()=>{ avisoModal.classList.remove('open'); pendingAction=null; addLog('AVISO CERRADO — no continúa'); });
+  $('footerAviso').addEventListener('click', async e=>{ e.preventDefault(); await ensureAviso(); avisoModal.classList.add('open'); logVisualizacion('ok'); });
 
-  document.getElementById('panelExit').addEventListener('click', ()=>{
-    addLog('SALIDA del modo invitado — vuelve a la Landing (fuera de este mockup)');
-    showToast('Volviendo a la Landing (fuera de este mockup)');
-  });
-
+  function startQuiz(){
+    current=0; selectionId=null; answers={};
+    api('/api/cuestionario/invitado/inicio',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cuestionarioId:quiz.id})}).catch(e=>addLog('Log de inicio (no bloquea): '+e.message));
+    renderQuestion(); showScreen('quiz');
+    addLog('INICIO del cuestionario "'+quiz.titulo+'"');
+  }
+  function renderQuestion(){
+    const q=quiz.preguntas[current];
+    selectionId=answers[q.id]??null;
+    qNum.textContent='Pregunta '+(current+1)+' de '+quiz.preguntas.length;
+    qBar.style.width=(current/(quiz.preguntas.length-1||1)*100)+'%';
+    qTitle.textContent=q.texto;
+    qOptions.innerHTML='';
+    q.opciones.forEach((o,i)=>{
+      const b=document.createElement('button');
+      b.type='button';
+      b.style.cssText='padding:14px 16px;border:1px solid #DFDAEE;border-radius:12px;background:#FFF;font-size:13px;text-align:left;cursor:pointer;font-family:inherit'+(o.id===selectionId?';border-color:var(--cyan);background:#E6F7F8;font-weight:600;box-shadow:0 0 0 1px var(--cyan)':'');
+      b.textContent=(i+1)+'. '+o.texto;
+      b.addEventListener('click',()=>{ selectionId=o.id; clearError(); renderQuestion(); });
+      qOptions.appendChild(b);
+    });
+    nextQ.textContent=current===quiz.preguntas.length-1?'Finalizar':'Siguiente →';
+    clearError();
+  }
+  async function finalizeQuiz(){
+    const payload={cuestionarioId:quiz.id,respuestas:Object.entries(answers).map(([preguntaId,opcionId])=>({preguntaId:+preguntaId,opcionId}))};
+    try{
+      await api('/api/cuestionario/invitado/finalizar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      document.cookie='cuest_'+quiz.id+'=1;max-age=31536000;path=/;SameSite=Lax';
+      saveSession(quiz.id,payload.respuestas);
+      showScreen('done');
+      addLog('FINALIZACIÓN 100% — respuestas en la sesión, cookie cuest_'+quiz.id);
+      quiz=null;
+    }catch(e){ qError.textContent=e.message||'Debes seleccionar una respuesta para continuar'; showError(); addLog('VALIDACIÓN fallida: '+e.message); }
+  }
   nextQ.addEventListener('click', ()=>{
-    const q=questions[current];
-    if(q.obligatoria && !selection){
-      showError();
-      addLog('BLOQUEO de avance: no se seleccionó respuesta en "'+q.text.slice(0,40)+'"');
+    const q=quiz.preguntas[current];
+    if(selectionId==null){ showError(); addLog('BLOQUEO de avance: sin respuesta'); return; }
+    answers[q.id]=selectionId;
+    if(current===quiz.preguntas.length-1){ finalizeQuiz(); return; }
+    current++; renderQuestion();
+  });
+
+  $('cancelQ').addEventListener('click', ()=>cancelModal.classList.add('open'));
+  $('stayBtn').addEventListener('click', ()=>cancelModal.classList.remove('open'));
+  $('leaveBtn').addEventListener('click', ()=>{ cancelModal.classList.remove('open'); current=0; selectionId=null; answers={}; quiz=null; loadPending(); showScreen('panel'); addLog('CONFIRMADO salir — descartadas, NO completado'); });
+
+  // --- Ver resultado: valida sesión, aviso si aplica, calcula ---
+  $('viewResult').addEventListener('click', async ()=>{
+    const s=readSession();
+    if(!s||!s.respuestas||!s.respuestas.length){
+      panelAlert.classList.add('show'); loadPending(); showScreen('panel');
+      addLog('SIN RESPUESTAS en la sesión (expirada o no finalizado) — redirige al panel/cuestionario');
+      showToast('No se encontraron respuestas para calcular el riesgo');
       return;
     }
-    answers[q.id]=selection;
-    addLog('RESPUESTA guardada ('+(current+1)+'/'+questions.length+'): '+q.text.slice(0,34)+'... = '+selection);
-    if(current===questions.length-1){
-      showDone();
-      return;
-    }
-    current++;
-    renderQuestion();
+    const doCalc=async ()=>{
+      try{
+        const r=await api('/api/riesgo/invitado/calcular',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(s)});
+        pendingLevel=r.nivel;
+        resLevel.textContent='Riesgo '+r.nivel;
+        resLevel.className='result-level '+r.nivel.toLowerCase();
+        resScore.textContent='Puntaje '+r.puntaje+' / 5';
+        resExpl.textContent=r.explicacion;
+        const alto=r.alerta&&r.alerta.mostrar;
+        alertEl.classList.toggle('show',!!alto);
+        lineasBtn.classList.toggle('urgente',!!alto);
+        lineasBtn.textContent=alto?'🚨 Líneas de ayuda (urgente)':'Líneas de ayuda';
+        $('btnRecom').href='../PB-09/mockup-HU1-PB9.html?nivel='+encodeURIComponent(r.nivel);
+        showScreen('result');
+        addLog('CÁLCULO del riesgo — puntaje '+r.puntaje+' → nivel "'+r.nivel+'"'+(alto?' — ALERTA de urgencia, Líneas resaltado':''));
+      }catch(e){
+        panelAlert.classList.add('show'); loadPending(); showScreen('panel');
+        addLog('ERROR al calcular: '+e.message+' — redirige al cuestionario');
+      }
+    };
+    if(avisoObligatorio){ await ensureAviso(); avisoModal.classList.add('open'); logVisualizacion('ok'); pendingAction=doCalc; addLog('VISUALIZACIÓN del mensaje aclaratorio (junto al resultado)'); }
+    else doCalc();
   });
 
-  function showDone(){
-    simulateNoAnswers=false; noRespChip.classList.remove('active');
-    showScreen('done');
-    addLog('FINALIZACIÓN del cuestionario (invitado) — respuestas guardadas temporalmente en la sesión');
-  }
-
-  document.getElementById('cancelQ').addEventListener('click', ()=>{
-    current=0; selection=''; answers={};
-    showScreen('panel');
-    addLog('CANCELACIÓN del cuestionario — vuelve al panel de invitado');
-  });
-
-  document.getElementById('viewResult').addEventListener('click', ()=>{
-    if(simulateNoAnswers){
-      panelAlert.classList.add('show');
-      showScreen('panel');
-      addLog('VALIDACIÓN fallida: no se encontraron respuestas completas en la sesión — mensaje mostrado y redirección al panel de invitado');
-      return;
-    }
-    addLog('VALIDACIÓN de respuestas completas en la sesión del invitado — OK (cuestionario finalizado)');
-    if(avisoObligatorio){
-      avisoModal.classList.add('open');
-      addLog('VISUALIZACIÓN del mensaje aclaratorio de no diagnóstico (obligatorio, antes del resultado)');
-      return;
-    }
-    processAndShowResult();
-  });
-
-  function processAndShowResult(){
-    const score=demoScenarios[currentScenario].score;
-    const level=calculateRisk(score);
-    pendingScore=score; pendingLevel=level;
-    addLog('CÁLCULO del nivel de riesgo emocional — respuestas procesadas, puntaje '+score+'/'+MAX_SCORE+' → nivel "'+demoScenarios[level].label+'"');
-    if(level==='alto'){
-      addLog('ALERTA de urgencia detectada (riesgo alto) — acceso a Líneas de ayuda resaltado');
-    }
-    showResult(score, level);
-  }
-
-  document.getElementById('avisoOk').addEventListener('click', ()=>{
-    avisoModal.classList.remove('open');
-    addLog('AVISO ACEPTADO — botón "Entendido"');
-    processAndShowResult();
-  });
-  document.getElementById('avisoCerrar').addEventListener('click', ()=>{
-    avisoModal.classList.remove('open');
-    addLog('AVISO CERRADO — no se muestra el resultado');
-  });
-  document.getElementById('footerAviso').addEventListener('click', (e)=>{
-    e.preventDefault();
-    avisoModal.classList.add('open');
-    addLog('VISUALIZACIÓN del mensaje aclaratorio por enlace "Aviso: no diagnóstico"');
-  });
-
-  document.getElementById('btnRecom').addEventListener('click', ()=>{
-    recomModal.classList.add('open');
-    addLog('VISUALIZACIÓN de recomendaciones básicas (invitado)');
-  });
-  document.getElementById('recomOk').addEventListener('click', ()=>{
-    recomModal.classList.remove('open');
-  });
-  document.getElementById('btnLineas').addEventListener('click', ()=>{
+  // --- Líneas de ayuda (API, solo activas) ---
+  lineasBtn.addEventListener('click', async ()=>{
+    const list=$('lineasList');
+    list.innerHTML='<div class="line-item">Cargando…</div>';
     lineasModal.classList.add('open');
-    addLog('VISUALIZACIÓN de líneas de ayuda (invitado)'+(pendingLevel==='alto'?' — acceso urgente resaltado':''));
+    try{
+      const ls=await api('/api/ayuda/lineas');
+      list.innerHTML=ls.length?ls.map(l=>'<div class="line-item">🆘 <b>'+escapeHtml(l.nombre)+'</b>'+(l.telefono?'<br>📞 '+escapeHtml(l.telefono):'')+(l.url?'<br>🌐 '+escapeHtml(l.url):'')+(l.horario?'<br>🕒 '+escapeHtml(l.horario):'')+(l.cobertura?'<br>📍 '+escapeHtml(l.cobertura):'')+'</div>').join(''):'<div class="line-item">No hay líneas de ayuda disponibles en este momento.</div>';
+      addLog('VISUALIZACIÓN de líneas de ayuda ('+ls.length+')'+(pendingLevel==='Alto'?' — acceso urgente resaltado':''));
+    }catch(e){ list.innerHTML='<div class="line-item">No fue posible cargar las líneas de ayuda. Intente nuevamente.</div>'; addLog('ERROR líneas: '+e.message); }
   });
-  document.getElementById('lineasClose').addEventListener('click', ()=>{
-    lineasModal.classList.remove('open');
-  });
-  document.getElementById('btnVolver').addEventListener('click', ()=>{
-    pendingScore=null; pendingLevel=null;
-    showScreen('panel');
-    addLog('NAVEGACIÓN: "Volver al inicio (Invitado)" — regresa al panel de invitado');
-  });
+  $('lineasClose').addEventListener('click', ()=>lineasModal.classList.remove('open'));
 
-  obrigChips.bajo.addEventListener('click', ()=>setScenario('bajo'));
-  obrigChips.medio.addEventListener('click', ()=>setScenario('medio'));
-  obrigChips.alto.addEventListener('click', ()=>setScenario('alto'));
+  $('noRespChip').addEventListener('click', ()=>{ clearSession(); panelAlert.classList.add('show'); loadPending(); showScreen('panel'); addLog('DEMO: sesión limpiada — próximo "Ver resultado" mostrará el mensaje de sin-respuestas'); });
+  $('btnVolver').addEventListener('click', ()=>{ loadPending(); showScreen('panel'); addLog('NAVEGACIÓN: "Volver al inicio (Invitado)"'); });
+  $('panelExit').addEventListener('click', ()=>{ addLog('SALIDA del modo invitado'); showToast('Volviendo a la Landing (fuera de este mockup)'); });
 
-  obligChip.addEventListener('click', ()=>{
-    avisoObligatorio=!avisoObligatorio;
-    obligChip.classList.toggle('active', avisoObligatorio);
-    addLog(avisoObligatorio?'DEMO: aviso aclaratorio obligatorio ANTES del resultado ACTIVADO':'DEMO: aviso aclaratorio antes del resultado DESACTIVADO');
-  });
-
-  noRespChip.addEventListener('click', ()=>{
-    simulateNoAnswers=!simulateNoAnswers;
-    noRespChip.classList.toggle('active', simulateNoAnswers);
-    addLog(simulateNoAnswers?'DEMO: sesión del invitado sin respuestas (expirada/no finalizada) ACTIVADA':'DEMO: sesión del invitado con respuestas RESTAURADA');
-  });
-
-  addLog('Sistema listo — flujo para calcular y mostrar el nivel de riesgo emocional del invitado');
+  loadPending();
+  addLog('Sistema listo — cálculo de riesgo por API (promedio 1–5) con alerta en Alto');
 </script>
 </body>
 </html>
