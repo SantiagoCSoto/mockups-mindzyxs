@@ -180,17 +180,8 @@
       </div>
     </div>
     <div class="card" style="margin-top:14px">
-      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
-      <p class="hint" style="text-align:left;margin-top:8px;margin-bottom:4px">Simular nivel de riesgo calculado en la sesión (para priorizar el orden):</p>
-      <div class="controls">
-        <button class="chip risk active-bajo active" id="rkNone">Sin riesgo en sesión</button>
-        <button class="chip risk" id="rkBajo">Riesgo bajo</button>
-        <button class="chip risk" id="rkMedio">Riesgo medio</button>
-        <button class="chip risk" id="rkAlto">Riesgo alto</button>
-      </div>
-      <div class="controls">
-        <button class="chip" id="noContentChip">Simular sin contenido cargado (admin)</button>
-      </div>
+      <span style="font-size:11px;font-weight:700;color:#5A5D72">API:</span>
+      <p class="hint" style="text-align:left;margin-top:8px">Lista por <b>GET</b> /api/recomendaciones/invitado?nivel=… (prioriza tu nivel, llega desde PB-08 con <b>?nivel=Bajo|Medio|Alto</b>) y detalle por <b>GET</b> /api/recomendaciones/invitado/{id}. Sin contenido del admin, se muestra el estado vacío.</p>
     </div>
   </div>
 
@@ -253,38 +244,14 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const recommendations=[
-    {
-      id:'respiracion', icon:'🌬️', title:'Respiración guiada',
-      dur:'Duración sugerida: 5 minutos',
-      intro:'Ejercicio simple de respiración consciente para reducir la tensión del momento.',
-      steps:['Siéntate o recuéstate en una posición cómoda y cierra los ojos si lo prefieres.','Inhala lentamente por la nariz contando hasta 4.','Sostén la respiración contando hasta 4.','Exhala por la boca contando hasta 6.','Repite el ciclo durante 5 minutos, llevando tu atención solo a la respiración.'],
-      instruc:'Realiza este ejercicio en un lugar tranquilo. Si sientes mareo, vuelve a la respiración normal y descansa. No reemplaza la supervisión de un profesional de la salud.'
-    },
-    {
-      id:'relajacion', icon:'💆', title:'Relajación muscular',
-      dur:'Duración sugerida: 10 minutos',
-      intro:'Técnica de tensión y distensión muscular para soltar la tensión acumulada.',
-      steps:['Acuéstate o siéntate cómodamente.','Tensa los músculos de los pies durante 5 segundos y luego suelta.','Sube por cada grupo muscular: piernas, abdomen, manos, brazos, hombros, cuello y rostro.','En cada zona tensa 5 segundos y relaja 10 segundos.','Termina respirando despacio durante 1 minuto.'],
-      instruc:'Evita tensar zonas con dolor o lesión. Si el dolor aumenta, detén el ejercicio. Es una práctica de autocuidado básico y no sustituye un tratamiento clínico.'
-    },
-    {
-      id:'pausa', icon:'🧘', title:'Pausa consciente',
-      dur:'Duración sugerida: 3 minutos',
-      intro:'Toma un momento para reconectar con el presente y calmar la mente.',
-      steps:['Detén cualquier actividad y deja a un lado distracciones.','Observa tu entorno: nombra 3 cosas que ves, 2 que escuchas y 1 que sientes.','Lleva tu atención a la respiración durante 1 minuto.','Pregúntate cómo te sientes en este momento, sin juzgar la respuesta.'],
-      instruc:'Puedes hacer esta pausa varias veces al día cuando te sientas abrumado. Es una herramienta de autocuidado básico, no un tratamiento clínico.'
-    },
-    {
-      id:'sueño', icon:'🌙', title:'Higiene del sueño',
-      dur:'Duración sugerida: 15 minutos (rutina nocturna)',
-      intro:'Hábitos simples para favorecer un descanso de mejor calidad.',
-      steps:['Define una hora fija para ir a dormir y para despertar.','30 minutos antes, apaga pantallas y luce baja.','Evita cafeína y comidas pesadas cerca de la hora de dormir.','Crea una rutina relajante: lectura breve, respiración suave o música tranquila.','Mantén el dormitorio oscuro, fresco y silencioso.'],
-      instruc:'Establece estos hábitos de forma progresiva. Si los problemas de sueño persisten, consulta a un profesional de la salud. Es contenido de autocuidado básico, no tratamiento clínico.'
-    }
-  ];
-  const riskPriority={'bajo':'respiracion','medio':'relajacion','alto':'sueño'};
-  const riskLabel={bajo:'Riesgo bajo',medio:'Riesgo medio',alto:'Riesgo alto'};
+  const API='http://localhost:5015';
+  // Nivel de la sesión (llega desde PB-08 con ?nivel=Bajo|Medio|Alto; sin nivel, orden estándar).
+  const _pn=new URLSearchParams(location.search).get('nivel');
+  let riskLevel=_pn?(_pn.charAt(0).toUpperCase()+_pn.slice(1).toLowerCase()):null;
+  if(!['Bajo','Medio','Alto'].includes(riskLevel)) riskLevel=null;
+  const riskLabel={Bajo:'Riesgo bajo',Medio:'Riesgo medio',Alto:'Riesgo alto'};
+  let recData=[];
+  let pendingRecId=null, avisoCache=null;
 
   const screens={panel:document.getElementById('screenPanel'),recom:document.getElementById('screenRecom'),detail:document.getElementById('screenDetail')};
   const toast=document.getElementById('toast');
@@ -292,11 +259,23 @@
   const priorityBadge=document.getElementById('priorityBadge');
   const avisoModal=document.getElementById('avisoModal');
 
-  let riskLevel=null;
-  let simulateNoContent=false;
-  let pendingRecId=null;
-  const riskChips={none:document.getElementById('rkNone'),bajo:document.getElementById('rkBajo'),medio:document.getElementById('rkMedio'),alto:document.getElementById('rkAlto')};
-  const riskActiveClass={none:'active-bajo',bajo:'active-bajo',medio:'active-medio',alto:'active-alto'};
+  function escapeHtml(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  async function api(path,opts){
+    const r=await fetch(API+path,opts);
+    if(!r.ok){ let m=''; try{ m=(await r.json()).error||''; }catch(_){} throw new Error(m||('HTTP '+r.status)); }
+    return r.status===204?null:r.json();
+  }
+  async function ensureAviso(){
+    if(avisoCache) return avisoCache;
+    try{
+      avisoCache=await api('/api/aviso');
+      document.querySelector('#avisoModal .aviso-txt').innerHTML='<b>'+escapeHtml(avisoCache.titulo)+'</b><br><br>'+escapeHtml(avisoCache.texto).replace(/\n/g,'<br>');
+    }catch(e){ addLog('Aviso por defecto (API no disponible)'); }
+    return avisoCache;
+  }
+  function logVisualizacion(res){
+    api('/api/aviso/visualizacion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({origen:'recomendaciones-invitado',resultado:res})}).catch(()=>{});
+  }
 
   function addLog(msg){ console.log('[HU1-PB9]', new Date().toLocaleTimeString(), msg); }
   function showToast(msg){
@@ -307,22 +286,34 @@
   function showScreen(name){
     Object.keys(screens).forEach(k=>screens[k].classList.toggle('active', k===name));
   }
-  function renderState(){
-    if(simulateNoContent){
+  async function loadList(){
+    recList.innerHTML='<p class="hint">Cargando recomendaciones…</p>';
+    try{
+      const d=await api('/api/recomendaciones/invitado'+(riskLevel?'?nivel='+encodeURIComponent(riskLevel):''));
+      if(!d||d.disponible===false){
+        recList.style.display='none';
+        emptyState.classList.add('show');
+        priorityBadge.classList.remove('show');
+        addLog('ESTADO VACÍO — el admin no ha cargado contenido');
+        return;
+      }
+      recData=d.recomendaciones||[];
+      if(d.nivel) riskLevel=d.nivel;
+      renderState();
+      addLog('CONSULTA de recomendaciones (invitado) — '+(riskLevel?('nivel '+riskLabel[riskLevel]+', orden priorizado'):'orden estándar'));
+    }catch(e){
       recList.style.display='none';
       emptyState.classList.add('show');
       priorityBadge.classList.remove('show');
-      return;
+      document.querySelector('#emptyState h3').textContent='No fue posible cargar las recomendaciones';
+      addLog('ERROR de carga: '+e.message);
     }
+  }
+  function renderState(){
     recList.style.display='flex';
     emptyState.classList.remove('show');
 
-    let ordered=[...recommendations];
-    let top=null;
-    if(riskLevel && riskPriority[riskLevel]){
-      const id=riskPriority[riskLevel];
-      top=ordered.find(r=>r.id===id);
-      if(top){ ordered=ordered.filter(r=>r.id!==id); ordered.unshift(top); }
+    if(riskLevel){
       priorityBadge.classList.add('show');
       priorityBadge.textContent='🎯 Organizadas según tu nivel de riesgo ('+riskLabel[riskLevel]+')';
     } else {
@@ -330,56 +321,50 @@
     }
 
     recList.innerHTML='';
-    ordered.forEach(r=>{
-      const isTop=(top && r.id===top.id);
+    recData.forEach(r=>{
       const item=document.createElement('div');
-      item.className='rec-item'+(isTop?' prio':'');
+      item.className='rec-item'+(r.prioritaria?' prio':'');
       item.innerHTML=
-        '<div class="rec-ico">'+r.icon+'</div>'+
+        '<div class="rec-ico">'+escapeHtml(r.icono||'💡')+'</div>'+
         '<div class="rec-info">'+
-          '<h4>'+r.title+'</h4>'+
-          '<p>'+r.dur+'</p>'+
-          (isTop?'<span class="prio-tag">Prioritaria para tu nivel</span>':'')+
+          '<h4>'+escapeHtml(r.titulo)+'</h4>'+
+          '<p>'+escapeHtml(r.intro||'')+'</p>'+
+          (r.prioritaria?'<span class="prio-tag">Prioritaria para tu nivel</span>':'')+
         '</div>'+
         '<button class="btn-ver" data-id="'+r.id+'">Ver / Abrir</button>';
       item.querySelector('.btn-ver').addEventListener('click',()=>openDetail(r.id));
       recList.appendChild(item);
     });
   }
-  function setRisk(key){
-    riskLevel=key==='none'?null:key;
-    Object.keys(riskChips).forEach(k=>{
-      riskChips[k].classList.remove('active');
-      riskChips[k].className='chip risk '+riskActiveClass[k];
-    });
-    riskChips[key].classList.add('active');
-    renderState();
-    addLog('DEMO: nivel de riesgo en la sesión = '+(riskLevel?riskLabel[riskLevel]:'sin nivel calculado')+' — orden de recomendaciones '+(riskLevel?'priorizado':'estándar'));
-  }
-  function openDetail(id){
-    if(simulateNoContent){ return; }
-    addLog('VISUALIZACIÓN del mensaje aclaratorio antes del detalle de "'+recommendations.find(r=>r.id===id).title+'" (aplica al contenido de autocuidado)');
+  async function openDetail(id){
+    addLog('VISUALIZACIÓN del mensaje aclaratorio antes del detalle (aplica al contenido de autocuidado)');
     pendingRecId=id;
+    await ensureAviso();
     avisoModal.classList.add('open');
+    logVisualizacion('ok');
   }
-  function showDetail(id){
-    const r=recommendations.find(x=>x.id===id);
-    document.getElementById('detIco').textContent=r.icon;
-    document.getElementById('detTitle').textContent=r.title;
-    document.getElementById('detDur').textContent=r.dur;
-    document.getElementById('detIntro').textContent=r.intro;
-    const steps=document.getElementById('detSteps');
-    steps.innerHTML='';
-    r.steps.forEach(s=>{ const li=document.createElement('li'); li.textContent=s; steps.appendChild(li); });
-    document.getElementById('detInstruc').textContent=r.instruc;
-    showScreen('detail');
-    addLog('VISUALIZACIÓN del detalle de "'+r.title+'" (pasos, duración sugerida e instrucciones)');
+  async function showDetail(id){
+    try{
+      const r=await api('/api/recomendaciones/invitado/'+id);
+      document.getElementById('detIco').textContent=r.icono||'💡';
+      document.getElementById('detTitle').textContent=r.titulo;
+      document.getElementById('detDur').textContent=r.duracion||'';
+      document.getElementById('detIntro').textContent=r.intro||'';
+      const steps=document.getElementById('detSteps');
+      steps.innerHTML='';
+      (r.pasos||[]).forEach(s=>{ const li=document.createElement('li'); li.textContent=s; steps.appendChild(li); });
+      document.getElementById('detInstruc').textContent=r.instrucciones||'';
+      showScreen('detail');
+      addLog('VISUALIZACIÓN del detalle de "'+r.titulo+'" (pasos, duración sugerida e instrucciones)');
+    }catch(e){
+      showToast(e.message||'Recomendación no disponible');
+      addLog('ERROR detalle: '+e.message);
+    }
   }
 
   document.getElementById('openRecom').addEventListener('click', ()=>{
-    renderState();
+    loadList();
     showScreen('recom');
-    addLog('CONSULTA de recomendaciones básicas (invitado) desde el Panel de invitado');
   });
   document.querySelectorAll('.mini-opts .tile[data-out]').forEach(t=>{
     t.addEventListener('click', ()=>{ showToast('Fuera del alcance de este mockup (ver PB-07 / PB-08)'); });
@@ -393,19 +378,21 @@
     addLog('NAVEGACIÓN: Volver desde Recomendaciones básicas — regresa al panel de invitado');
   });
 
-  document.getElementById('avisoOk').addEventListener('click', ()=>{
+  document.getElementById('avisoOk').addEventListener('click', async ()=>{
     avisoModal.classList.remove('open');
     addLog('AVISO ACEPTADO — botón "Entendido"');
-    if(pendingRecId){ showDetail(pendingRecId); pendingRecId=null; }
+    if(pendingRecId){ await showDetail(pendingRecId); pendingRecId=null; }
   });
   document.getElementById('avisoCerrar').addEventListener('click', ()=>{
     avisoModal.classList.remove('open');
     pendingRecId=null;
     addLog('AVISO CERRADO — no se muestra el detalle');
   });
-  document.getElementById('footerAviso').addEventListener('click', (e)=>{
+  document.getElementById('footerAviso').addEventListener('click', async (e)=>{
     e.preventDefault();
+    await ensureAviso();
     avisoModal.classList.add('open');
+    logVisualizacion('ok');
     addLog('VISUALIZACIÓN del mensaje aclaratorio por enlace "Aviso: no diagnóstico"');
   });
 
@@ -422,19 +409,8 @@
     addLog('NAVEGACIÓN: "Volver al inicio (Invitado)" desde estado vacío');
   });
 
-  riskChips.none.addEventListener('click', ()=>setRisk('none'));
-  riskChips.bajo.addEventListener('click', ()=>setRisk('bajo'));
-  riskChips.medio.addEventListener('click', ()=>setRisk('medio'));
-  riskChips.alto.addEventListener('click', ()=>setRisk('alto'));
-  document.getElementById('noContentChip').addEventListener('click', ()=>{
-    simulateNoContent=!simulateNoContent;
-    document.getElementById('noContentChip').classList.toggle('active', simulateNoContent);
-    renderState();
-    addLog(simulateNoContent?'DEMO: sin contenido cargado por el administrador — estado vacío mostrado':'DEMO: contenido del administrador restaurado');
-  });
-
-  renderState();
-  addLog('Sistema listo — consulta de recomendaciones básicas de autocuidado administrables habilitada');
+  loadList();
+  addLog('Sistema listo — recomendaciones dinámicas por API (priorizadas por nivel de la sesión)');
 </script>
 </body>
 </html>
