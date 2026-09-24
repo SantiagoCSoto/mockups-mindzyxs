@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU1-PB14 | Progreso emocional (Psicólogo)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B; --violet:#6B5BCE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
+  .logo-img{height:44px;width:auto;object-fit:contain}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none}
+  .nav a.active{color:var(--text);font-weight:600}
+  .psy-pill{font-size:11px;font-weight:700;color:#fff;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);padding:6px 12px;border-radius:20px;white-space:nowrap}
+  .wrap{width:100%;max-width:760px;margin:0 auto;padding:24px 16px 30px;flex:1}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .panel-head{text-align:center}
+  .panel-head .badge{ display:inline-block;font-size:11px;font-weight:700;color:var(--violet);background:#EDE7FF;padding:5px 12px;border-radius:20px;margin-bottom:8px}
+  .panel-head h2{font-size:20px;font-weight:700}
+  .panel-head p.sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .controls-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .field{flex:1;min-width:150px;display:flex;flex-direction:column;gap:6px}
+  .field label{font-size:11px;font-weight:700;color:#5A5D72;text-transform:uppercase;letter-spacing:.05em}
+  .field select,.field input{height:40px;border-radius:12px;border:1px solid #DFDAEE;padding:0 12px;font-family:inherit;font-size:13px;color:var(--text);background:#fff;outline:none}
+  .field select:focus,.field input:focus{border-color:var(--cyan)}
+  .btn-primary{height:40px;padding:0 20px;border-radius:20px;border:none;background:var(--cyan);color:#fff;font-weight:700;font-size:13px;cursor:pointer;align-self:flex-end}
+  .btn-primary:hover{background:var(--cyan-hover)}
+  .btn-secondary{height:40px;padding:0 18px;border-radius:20px;border:1px solid #DFDAEE;background:#fff;font-weight:600;font-size:13px;cursor:pointer}
+  .btn-secondary:hover{border-color:var(--cyan);background:#F8FEFF}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:#fff;font-size:11px;font-weight:600;cursor:pointer}
+  .chip.active{background:var(--cyan);color:#fff;border-color:var(--cyan)}
+  .chip.warn.active{background:var(--warning);border-color:var(--warning)}
+  .chip.err.active{background:var(--error);border-color:var(--error)}
+  .chart-box{margin-top:16px;border:1px solid #EDE8F0;border-radius:12px;padding:14px;background:#FDFDFF}
+  .chart-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+  .chart-top h3{font-size:14px;font-weight:700}
+  .chart-top span{font-size:11px;color:var(--muted)}
+  .legend{display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:baseline}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+  .stat{border:1px solid #EDE8F0;border-radius:12px;padding:10px 12px;background:#fff;text-align:center}
+  .stat .k{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--violet)}
+  .stat .v{font-size:18px;font-weight:700;margin-top:4px}
+  .stat .d{font-size:11px;color:var(--muted);margin-top:2px}
+  svg.chart{width:100%;height:auto;display:block;margin-top:8px}
+  .empty,.blocked{display:none;text-align:center;padding:28px 16px;border:1px dashed #DFDAEE;border-radius:12px;margin-top:16px;background:#FBFAFF}
+  .empty.show,.blocked.show{display:block}
+  .empty .ico,.blocked .ico{font-size:30px}
+  .empty h3,.blocked h3{font-size:15px;margin-top:8px}
+  .empty p,.blocked p{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
+  .empty .btn-secondary,.blocked .btn-secondary{margin-top:14px}
+  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2D2F36;color:#fff;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none;z-index:60;max-width:90vw;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:10px 0;margin-top:20px}
+  .footer-in{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12px}
+  .footer-in a{color:var(--muted);text-decoration:none}
+  @media(max-width:640px){
+    .header{padding:0 14px}
+    .nav{display:none}
+    .controls-row{flex-direction:column}
+    .btn-primary{align-self:stretch}
+  }
+</style>
+</head>
+<body>
+<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header">
+  <img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img">
+  <nav class="nav">
+    <a href="#">Inicio</a>
+    <a href="#" class="active">Progreso emocional</a>
+    <a href="#">Pacientes</a>
+    <a href="#">Ayuda</a>
+  </nav>
+  <span class="psy-pill">🧑‍⚕️ Panel del psicólogo</span>
+</header>
+
+<main class="wrap">
+  <div class="card">
+    <div class="panel-head">
+      <span class="badge">HU1-PB14 · Sprint 1</span>
+      <h2>Progreso emocional</h2>
+      <p class="sub">Evolución del estado emocional (1–5) de tus pacientes autorizados.</p>
+    </div>
+
+    <div class="controls-row">
+      <div class="field">
+        <label for="patientSel">Paciente autorizado</label>
+        <select id="patientSel">
+          <option value="camila">Camila Rojas — autorizada ✓</option>
+          <option value="juan">Juan Pérez — autorizado ✓</option>
+        </select>
+      </div>
+      <div class="field" style="min-width:130px">
+        <label for="dateFrom">Desde</label>
+        <input type="date" id="dateFrom" value="2026-09-01">
+      </div>
+      <div class="field" style="min-width:130px">
+        <label for="dateTo">Hasta</label>
+        <input type="date" id="dateTo" value="2026-09-07">
+      </div>
+      <button class="btn-primary" id="applyBtn">Aplicar</button>
+    </div>
+
+    <div class="chips">
+      <span style="font-size:11px;font-weight:700;color:#5A5D72;align-self:center">Demo:</span>
+      <button class="chip warn" id="chipNoData">Simular "sin datos"</button>
+      <button class="chip err" id="chipNoAuth">Simular paciente NO autorizado</button>
+    </div>
+
+    <div class="chart-box" id="chartBox">
+      <div class="chart-top">
+        <h3 id="chartTitle">Camila Rojas — última semana</h3>
+        <span id="chartRange">01/09 → 07/09 · 7 registros</span>
+      </div>
+      <div class="legend">
+        <span><i class="dot" style="background:#6ECFD4"></i>Estado emocional (1–5)</span>
+        <span><i class="dot" style="background:#E9E4F7"></i>1 = muy bajo · 5 = excelente</span>
+      </div>
+      <svg class="chart" id="chart" viewBox="0 0 620 280" role="img" aria-label="Gráfico de progreso emocional"></svg>
+      <div class="stats">
+        <div class="stat"><div class="k">Promedio</div><div class="v" id="statAvg">—</div><div class="d">estado 1–5</div></div>
+        <div class="stat"><div class="k">Tendencia</div><div class="v" id="statTrend">—</div><div class="d">vs. inicio del rango</div></div>
+        <div class="stat"><div class="k">Registros</div><div class="v" id="statCount">—</div><div class="d">en el rango elegido</div></div>
+      </div>
+    </div>
+
+    <div class="empty" id="emptyState">
+      <div class="ico">📊</div>
+      <h3>Sin datos suficientes</h3>
+      <p>No tienes registros suficientes para generar gráficos.<br>Se necesitan al menos 2 registros en el rango elegido.</p>
+      <button class="btn-secondary" id="verRegBtn">Ver registros</button>
+    </div>
+
+    <div class="blocked" id="blockedState">
+      <div class="ico">🔒</div>
+      <h3>Paciente no autorizado</h3>
+      <p>No tienes autorización para ver el progreso de este paciente.<br>Solicita su autorización para acceder a sus registros.</p>
+      <button class="btn-secondary" id="solBtn">Solicitar autorización</button>
+    </div>
+
+    <p class="hint">Demo: cambia de paciente o pulsa <b>Aplicar</b> para redibujar el gráfico. Los accesos y bloqueos se registran en la consola.</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Inicio</a><a href="#">Nosotros</a><a href="#">Ayuda</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const sel = document.getElementById('patientSel');
+  const dateFrom = document.getElementById('dateFrom');
+  const dateTo = document.getElementById('dateTo');
+  const chart = document.getElementById('chart');
+  const chartBox = document.getElementById('chartBox');
+  const chartTitle = document.getElementById('chartTitle');
+  const chartRange = document.getElementById('chartRange');
+  const emptyState = document.getElementById('emptyState');
+  const blockedState = document.getElementById('blockedState');
+  const toast = document.getElementById('toast');
+  const chipNoData = document.getElementById('chipNoData');
+  const chipNoAuth = document.getElementById('chipNoAuth');
+
+  // Datos simulados: estado 1-5 en el tiempo (7 puntos por paciente)
+  const DATA = {
+    camila: { nombre: 'Camila Rojas', fechas: ['01/09','02/09','03/09','04/09','05/09','06/09','07/09'], valores: [2,3,3,4,3,4,5] },
+    juan:   { nombre: 'Juan Pérez',   fechas: ['01/09','02/09','03/09','04/09','05/09','06/09','07/09'], valores: [4,4,3,2,3,2,3] }
+  };
+  let sinDatos = false, noAuth = false;
+
+  function addLog(m){ console.log('[HU1-PB14]', new Date().toLocaleTimeString(), m); }
+  function showToast(m){
+    toast.textContent = m; toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=>toast.classList.remove('show'), 2400);
+  }
+
+  // Dibuja ejes + cuadrícula + polilínea generada por JS desde arrays
+  function renderChart(){
+    const key = sel.value;
+    const p = DATA[key];
+
+    if (noAuth) {
+      chartBox.style.display = 'none'; emptyState.classList.remove('show');
+      blockedState.classList.add('show');
+      addLog('BLOQUEO: paciente NO autorizado — sin permiso para ver progreso');
+      showToast('🔒 Sin autorización para este paciente');
+      return;
+    }
+    blockedState.classList.remove('show');
+
+    const vals = sinDatos ? [] : p.valores.slice();
+    if (vals.length < 2) {
+      chartBox.style.display = 'none'; emptyState.classList.add('show');
+      addLog('SIN DATOS: "' + p.nombre + '" no tiene registros suficientes para generar gráficos');
+      return;
+    }
+    emptyState.classList.remove('show'); chartBox.style.display = 'block';
+
+    const W=620,H=280,PL=44,PR=16,PT=16,PB=44;
+    const n = vals.length, iw = W-PL-PR, ih = H-PT-PB;
+    const X = i => PL + (iw * i / (n-1));
+    const Y = v => PT + ih - ((v-1)/4)*ih;
+    const yLbl = {1:'1 · muy bajo',2:'2 · bajo',3:'3 · estable',4:'4 · bien',5:'5 · excelente'};
+
+    let s = '';
+    for (let v=1; v<=5; v++){
+      s += '<line x1="'+PL+'" y1="'+Y(v)+'" x2="'+(W-PR)+'" y2="'+Y(v)+'" stroke="'+(v===3?'#CFBFF0':'#EEEAF6')+'" stroke-width="'+(v===3?1.5:1)+'" stroke-dasharray="'+(v===3?'6 4':'0')+'"/>';
+      s += '<text x="'+(PL-8)+'" y="'+(Y(v)+4)+'" text-anchor="end" font-size="10" fill="#8E91A3">'+yLbl[v]+'</text>';
+    }
+    vals.forEach((v,i)=>{
+      s += '<text x="'+X(i)+'" y="'+(H-14)+'" text-anchor="middle" font-size="10" fill="#8E91A3">'+p.fechas[i]+'</text>';
+    });
+    const pts = vals.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ');
+    s += '<polyline points="'+pts+'" fill="none" stroke="#6ECFD4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>';
+    vals.forEach((v,i)=>{
+      s += '<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="5" fill="#fff" stroke="#6ECFD4" stroke-width="3"><title>'+p.fechas[i]+': '+v+'/5</title></circle>';
+      s += '<text x="'+X(i)+'" y="'+(Y(v)-11)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#2E2E33">'+v+'</text>';
+    });
+    chart.innerHTML = s;
+
+    chartTitle.textContent = p.nombre + ' — última semana';
+    chartRange.textContent = dateFrom.value + ' → ' + dateTo.value + ' · ' + n + ' registros';
+
+    // Estadísticas resumidas del rango (simuladas desde el mismo array)
+    const avg = (vals.reduce((a,b)=>a+b,0) / n).toFixed(1);
+    const diff = vals[n-1] - vals[0];
+    const trend = diff > 0 ? '↗ Mejorando' : (diff < 0 ? '↘ Bajando' : '→ Estable');
+    document.getElementById('statAvg').textContent = avg + ' / 5';
+    document.getElementById('statTrend').textContent = trend;
+    document.getElementById('statCount').textContent = n;
+    addLog('Gráfico dibujado: ' + p.nombre + ' (' + n + ' puntos, prom. ' + avg + ', ' + trend + ')');
+  }
+
+  sel.addEventListener('change', ()=>{
+    if (noAuth) return;
+    addLog('Paciente seleccionado: ' + DATA[sel.value].nombre + ' — gráfico actualizado');
+    showToast('Mostrando: ' + DATA[sel.value].nombre + ' ✓');
+    renderChart();
+  });
+  document.getElementById('applyBtn').addEventListener('click', ()=>{
+    if (dateFrom.value > dateTo.value) {
+      addLog('ERROR: rango de fechas inválido (' + dateFrom.value + ' > ' + dateTo.value + ')');
+      showToast('⚠️ Rango inválido: "Desde" mayor que "Hasta"');
+      return;
+    }
+    addLog('Filtro aplicado: ' + DATA[sel.value].nombre + ' [' + dateFrom.value + ' → ' + dateTo.value + '] — gráfico actualizado');
+    showToast('Filtro aplicado ✓');
+    renderChart();
+  });
+  chipNoData.addEventListener('click', ()=>{
+    sinDatos = !sinDatos; chipNoData.classList.toggle('active', sinDatos);
+    addLog(sinDatos ? 'DEMO: modo "sin datos" ACTIVADO' : 'DEMO: modo "sin datos" DESACTIVADO');
+    renderChart();
+  });
+  chipNoAuth.addEventListener('click', ()=>{
+    noAuth = !noAuth; chipNoAuth.classList.toggle('active', noAuth);
+    addLog(noAuth ? 'DEMO: paciente NO autorizado — acceso bloqueado' : 'DEMO: autorización restaurada');
+    renderChart();
+  });
+  document.getElementById('verRegBtn').addEventListener('click', ()=>{
+    addLog('Ir a "Ver registros" de ' + DATA[sel.value].nombre + ' (fuera de este mockup)');
+    showToast('Abriendo registros (fuera de este mockup)');
+  });
+  document.getElementById('solBtn').addEventListener('click', ()=>{
+    addLog('Solicitud de autorización enviada al paciente');
+    showToast('Solicitud de autorización enviada ✓');
+  });
+
+  renderChart();
+  addLog('Sistema listo — Progreso emocional del psicólogo (2 pacientes autorizados)');
+</script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU1-PB10 | Editar perfil (Paciente)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
+  .logo-img{height:44px;width:auto;object-fit:contain}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none}
+  .nav a.active{color:var(--text);font-weight:600}
+  .btn-ghost{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;color:var(--text);font-weight:600;font-size:12px;cursor:pointer}
+  .btn-primary{padding:7px 16px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:600;font-size:12px;cursor:pointer}
+  .role-pill{font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:6px 12px;border-radius:20px;white-space:nowrap}
+  .wrap{width:100%;max-width:760px;margin:0 auto;padding:24px 16px 30px;flex:1}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .hero{text-align:center;padding:28px 24px;margin-bottom:16px}
+  .hero h1{font-size:24px;font-weight:700}
+  .hero p{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .screen{display:none}
+  .screen.active{display:block}
+  .profile-top{display:flex;gap:16px;align-items:center}
+  .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(180deg,#6ECFD4,#6B5BCE);color:white;display:grid;place-items:center;font-size:24px;font-weight:700;flex-shrink:0}
+  .profile-top h2{font-size:20px;font-weight:700}
+  .profile-top p.sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .data-grid{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{background:#FBFAFF;border:1px solid #EDE8F0;border-radius:12px;padding:12px 14px}
+  .field.full{grid-column:1/-1}
+  .field label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6B5BCE}
+  .field .val{font-size:14px;font-weight:600;margin-top:4px}
+  .actions{display:flex;gap:10px;margin-top:18px}
+  .btn-edit{flex:1;height:44px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
+  .btn-edit:hover{filter:brightness(1.05)}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+  .form-group{display:flex;flex-direction:column;gap:6px}
+  .form-group.full{grid-column:1/-1}
+  .form-group label{font-size:12px;font-weight:600}
+  .form-group input,.form-group select{height:42px;border-radius:12px;border:1px solid #DFDAEE;padding:0 12px;font-size:13px;font-family:inherit;background:white;color:var(--text)}
+  .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(110,207,212,.18)}
+  .form-group input.invalid,.form-group select.invalid{border-color:var(--error)}
+  .err-msg{font-size:11px;color:var(--error);font-weight:600;display:none}
+  .err-msg.show{display:block}
+  .form-actions{display:flex;gap:10px;margin-top:18px}
+  .btn-save{flex:1;height:44px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:14px;cursor:pointer}
+  .btn-cancel{flex:1;height:44px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:700;font-size:14px;cursor:pointer}
+  .btn-cancel:hover{border-color:var(--cyan);background:#F8FEFF}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
+  .chip:hover{border-color:var(--cyan)}
+  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2D2F36;color:white;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none;z-index:60;max-width:90vw;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:10px 0;margin-top:20px}
+  .footer-in{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12px}
+  .footer-in a{color:var(--muted);text-decoration:none}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(440px,100%);background:white;border-radius:14px;padding:24px 22px;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-align:center;max-height:92vh;overflow:auto}
+  .modal-icon{width:52px;height:52px;border-radius:14px;background:#E6F7F8;color:#2AA5AC;display:grid;place-items:center;margin:0 auto 14px;font-size:24px}
+  .modal h3{font-size:16px;font-weight:700}
+  .modal p.sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .code-input{width:100%;height:48px;margin-top:16px;border-radius:12px;border:1px solid #DFDAEE;text-align:center;font-size:20px;font-weight:700;letter-spacing:.35em;font-family:inherit}
+  .code-input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(110,207,212,.18)}
+  .modal-actions{display:flex;gap:10px;margin-top:16px}
+  .btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-modal.ok{background:var(--cyan);color:white}
+  .btn-modal.ok:hover{background:var(--cyan-hover)}
+  .btn-modal.close{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  .link-btn{background:none;border:none;color:#5A45C9;font-weight:700;font-size:12px;cursor:pointer;margin-top:12px;text-decoration:underline}
+  @media(max-width:640px){
+    .header{padding:0 14px}
+    .nav{font-size:12px;gap:12px}
+    .data-grid,.form-grid{grid-template-columns:1fr}
+    .form-actions,.actions{flex-direction:column}
+  }
+</style>
+</head>
+<body>
+<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header">
+  <img src="../../Logo1.png" alt="Mindzyx Logo" class="logo-img" onerror="this.style.display='none'">
+  <nav class="nav"><a href="#">Inicio</a><a href="#" class="active">Perfil</a><a href="#">Ayuda</a></nav>
+  <div style="display:flex;gap:8px;align-items:center"><span class="role-pill">🧑 Paciente</span></div>
+</header>
+
+<main class="wrap">
+  <div class="card hero">
+    <h1>Editar perfil (Paciente)</h1>
+    <p>Visualiza y actualiza tus datos personales. Si cambias tu correo, deberás verificarlo con un código.</p>
+    <div style="margin-top:10px;font-size:11px;color:var(--muted)">HU1-PB10 — Sprint 1 • Mockup estático interactivo</div>
+  </div>
+
+  <!-- PANTALLA 1: VISTA -->
+  <div class="screen active" id="viewScreen">
+    <div class="card">
+      <div class="profile-top">
+        <div class="avatar" id="avatarIni">CR</div>
+        <div>
+          <h2 id="vNombre">Camila Rojas</h2>
+          <p class="sub" id="vCorreoSub">paciente@test.com • Paciente</p>
+        </div>
+      </div>
+      <div class="data-grid">
+        <div class="field"><label>Nombres</label><div class="val" id="vNombres">Camila</div></div>
+        <div class="field"><label>Apellidos</label><div class="val" id="vApellidos">Rojas</div></div>
+        <div class="field"><label>Edad</label><div class="val" id="vEdad">23 años</div></div>
+        <div class="field"><label>Género</label><div class="val" id="vGenero">Femenino</div></div>
+        <div class="field full"><label>Correo electrónico</label><div class="val" id="vCorreo">paciente@test.com</div></div>
+      </div>
+      <div class="actions"><button class="btn-edit" id="btnEditar">✏️ Editar</button></div>
+    </div>
+  </div>
+
+  <!-- PANTALLA 2: EDICIÓN -->
+  <div class="screen" id="editScreen">
+    <div class="card">
+      <div class="profile-top">
+        <div class="avatar">✏️</div>
+        <div><h2>Editar perfil</h2><p class="sub">Modifica tus datos y guarda los cambios.</p></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label for="inNombres">Nombres *</label><input id="inNombres" type="text" placeholder="Ej. Camila"><span class="err-msg" id="eNombres">El nombre es obligatorio.</span></div>
+        <div class="form-group"><label for="inApellidos">Apellidos *</label><input id="inApellidos" type="text" placeholder="Ej. Rojas"><span class="err-msg" id="eApellidos">El apellido es obligatorio.</span></div>
+        <div class="form-group"><label for="inEdad">Edad *</label><input id="inEdad" type="number" min="1" max="120" placeholder="Ej. 23"><span class="err-msg" id="eEdad">Ingresa una edad válida (1–120).</span></div>
+        <div class="form-group"><label for="inGenero">Género *</label>
+          <select id="inGenero"><option value="">Seleccionar…</option><option>Femenino</option><option>Masculino</option><option>No binario</option><option>Prefiero no decirlo</option></select>
+          <span class="err-msg" id="eGenero">Selecciona una opción.</span></div>
+        <div class="form-group full"><label for="inCorreo">Correo electrónico *</label><input id="inCorreo" type="email" placeholder="tucorreo@test.com"><span class="err-msg" id="eCorreo">Ingresa un correo válido.</span></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-cancel" id="btnCancelar">Cancelar</button>
+        <button class="btn-save" id="btnGuardar">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
+    <div class="controls">
+      <button class="chip" id="chipDup">Simular correo duplicado</button>
+      <button class="chip" id="chipNew">Simular cambio de correo</button>
+    </div>
+    <p class="hint">Código demo de verificación: <b>123456</b> • Correo existente demo: <b>admin@test.com</b>. Todo se simula en JS, sin fetch. Revisa la consola (addLog).</p>
+  </div>
+</main>
+
+<footer class="footer"><div class="footer-in"><a href="#">Inicio</a><a href="#">Nosotros</a><a href="#">Ayuda</a></div></footer>
+
+<!-- MODAL VERIFICACIÓN -->
+<div class="modal-overlay" id="codeModal" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
+  <div class="modal">
+    <div class="modal-icon">✉️</div>
+    <h3 id="codeTitle">Verifica tu nuevo correo</h3>
+    <p class="sub" id="codeSub">Enviamos un código de 6 dígitos a <b id="codeEmail">—</b>. Ingrésalo para confirmar el cambio. (Demo: <b>123456</b>)</p>
+    <input class="code-input" id="codeInput" maxlength="6" inputmode="numeric" placeholder="••••••">
+    <span class="err-msg" id="eCode" style="margin-top:8px">Código incorrecto. Verifica e intenta nuevamente</span>
+    <div class="modal-actions">
+      <button class="btn-modal close" id="btnCodeCancel">Cancelar</button>
+      <button class="btn-modal ok" id="btnVerify">Verificar</button>
+    </div>
+    <button class="link-btn" id="btnResend">Reenviar código</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const viewScreen=document.getElementById('viewScreen'), editScreen=document.getElementById('editScreen');
+  const toast=document.getElementById('toast');
+  const codeModal=document.getElementById('codeModal'), codeInput=document.getElementById('codeInput'), codeEmail=document.getElementById('codeEmail');
+  const CURRENT={nombres:'Camila',apellidos:'Rojas',edad:'23',genero:'Femenino',correo:'paciente@test.com'};
+  const EXISTENTES=['admin@test.com','psico@test.com'];
+  const DEMO_CODE='123456';
+  let pending=null;
+
+  function addLog(tag,msg){ console.log(tag, new Date().toLocaleTimeString(), msg); }
+  function showToast(m){ toast.textContent=m; toast.classList.add('show'); clearTimeout(showToast._t); showToast._t=setTimeout(()=>toast.classList.remove('show'),2600); }
+  function show(which){ viewScreen.classList.toggle('active',which==='view'); editScreen.classList.toggle('active',which==='edit'); }
+  function setErr(input,el,on,msg){ input.classList.toggle('invalid',on); el.classList.toggle('show',on); if(msg) el.textContent=msg; }
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  function fillForm(){ document.getElementById('inNombres').value=CURRENT.nombres; document.getElementById('inApellidos').value=CURRENT.apellidos; document.getElementById('inEdad').value=CURRENT.edad; document.getElementById('inGenero').value=CURRENT.genero; document.getElementById('inCorreo').value=CURRENT.correo; }
+  function renderView(){
+    document.getElementById('vNombres').textContent=CURRENT.nombres;
+    document.getElementById('vApellidos').textContent=CURRENT.apellidos;
+    document.getElementById('vEdad').textContent=CURRENT.edad+' años';
+    document.getElementById('vGenero').textContent=CURRENT.genero;
+    document.getElementById('vCorreo').textContent=CURRENT.correo;
+    document.getElementById('vCorreoSub').textContent=CURRENT.correo+' • Paciente';
+    document.getElementById('vNombre').textContent=CURRENT.nombres+' '+CURRENT.apellidos;
+    document.getElementById('avatarIni').textContent=(CURRENT.nombres[0]||'C')+((CURRENT.apellidos[0])||'R');
+  }
+
+  document.getElementById('btnEditar').addEventListener('click',()=>{
+    fillForm(); show('edit');
+    addLog('[HU1-PB10]','EDITAR iniciado — modo edición activado');
+  });
+  document.getElementById('btnCancelar').addEventListener('click',()=>{
+    fillForm(); ['eNombres','eApellidos','eEdad','eGenero','eCorreo'].forEach(id=>document.getElementById(id).classList.remove('show'));
+    show('view'); pending=null;
+    addLog('[HU1-PB10]','CANCELAR — cambios descartados, vuelve a vista');
+    showToast('Cambios descartados');
+  });
+
+  document.getElementById('btnGuardar').addEventListener('click',()=>{
+    const nom=document.getElementById('inNombres'), ape=document.getElementById('inApellidos'), eda=document.getElementById('inEdad'), gen=document.getElementById('inGenero'), cor=document.getElementById('inCorreo');
+    const vNom=nom.value.trim(), vApe=ape.value.trim(), vEda=eda.value.trim(), vGen=gen.value, vCor=cor.value.trim().toLowerCase();
+    let ok=true;
+    if(!vNom){ setErr(nom,document.getElementById('eNombres'),true,'El nombre es obligatorio.'); ok=false; } else setErr(nom,document.getElementById('eNombres'),false);
+    if(!vApe){ setErr(ape,document.getElementById('eApellidos'),true,'El apellido es obligatorio.'); ok=false; } else setErr(ape,document.getElementById('eApellidos'),false);
+    const edadNum=Number(vEda);
+    if(!vEda||!Number.isInteger(edadNum)||edadNum<1||edadNum>120){ setErr(eda,document.getElementById('eEdad'),true); ok=false; } else setErr(eda,document.getElementById('eEdad'),false);
+    if(!vGen){ setErr(gen,document.getElementById('eGenero'),true); ok=false; } else setErr(gen,document.getElementById('eGenero'),false);
+    if(!vCor||!validEmail(vCor)){ setErr(cor,document.getElementById('eCorreo'),true,'Ingresa un correo válido.'); ok=false; }
+    else if(vCor!==CURRENT.correo.toLowerCase()&&EXISTENTES.includes(vCor)){ setErr(cor,document.getElementById('eCorreo'),true,'El correo ya se encuentra registrado'); addLog('[HU1-PB10]','ERROR correo duplicado: '+vCor); ok=false; }
+    else setErr(cor,document.getElementById('eCorreo'),false);
+    if(!ok){ addLog('[HU1-PB10]','VALIDACIÓN fallida en Guardar cambios'); return; }
+
+    pending={nombres:vNom,apellidos:vApe,edad:String(edadNum),genero:vGen,correo:vCor};
+    if(vCor===CURRENT.correo.toLowerCase()){
+      Object.assign(CURRENT,pending); renderView(); show('view'); pending=null;
+      addLog('[HU1-PB10]','ÉXITO Perfil actualizado correctamente (sin cambio de correo)');
+      showToast('Perfil actualizado correctamente ✓');
+    } else {
+      codeEmail.textContent=vCor; codeInput.value=''; document.getElementById('eCode').classList.remove('show');
+      codeModal.classList.add('open');
+      addLog('[HU1-PB10]','CAMBIO DE CORREO detectado — código de verificación enviado a '+vCor+' (demo 123456)');
+    }
+  });
+
+  document.getElementById('btnVerify').addEventListener('click',()=>{
+    const code=codeInput.value.trim();
+    addLog('[HU1-PB10]','INTENTO verificar código: '+code);
+    if(code===DEMO_CODE){
+      Object.assign(CURRENT,pending); renderView(); show('view');
+      codeModal.classList.remove('open'); pending=null;
+      addLog('[HU1-PB10]','ÉXITO Perfil actualizado correctamente (correo verificado)');
+      showToast('Perfil actualizado correctamente ✓');
+    } else {
+      document.getElementById('eCode').classList.add('show');
+      addLog('[HU1-PB10]','ERROR Código incorrecto. Verifica e intenta nuevamente');
+    }
+  });
+  document.getElementById('btnResend').addEventListener('click',()=>{
+    addLog('[HU1-PB10]','REENVIAR código a '+(pending?pending.correo:'?'));
+    showToast('Código reenviado ✓');
+  });
+  document.getElementById('btnCodeCancel').addEventListener('click',()=>{
+    codeModal.classList.remove('open');
+    addLog('[HU1-PB10]','VERIFICACIÓN cancelada — correo no cambiado');
+  });
+  codeModal.addEventListener('click',(e)=>{ if(e.target===codeModal){ codeModal.classList.remove('open'); addLog('[HU1-PB10]','VERIFICACIÓN cerrada por overlay'); } });
+
+  document.getElementById('chipDup').addEventListener('click',()=>{
+    if(!editScreen.classList.contains('active')){ fillForm(); show('edit'); }
+    document.getElementById('inCorreo').value='admin@test.com';
+    addLog('[HU1-PB10]','DEMO simular correo duplicado → admin@test.com');
+    showToast('Demo: correo duplicado cargado');
+  });
+  document.getElementById('chipNew').addEventListener('click',()=>{
+    if(!editScreen.classList.contains('active')){ fillForm(); show('edit'); }
+    document.getElementById('inCorreo').value='nuevo.correo@test.com';
+    addLog('[HU1-PB10]','DEMO simular cambio de correo → nuevo.correo@test.com');
+    showToast('Demo: correo nuevo cargado');
+  });
+
+  renderView();
+  addLog('[HU1-PB10]','Sistema listo — perfil Camila Rojas visible');
+</script>
+</body>
+</html>

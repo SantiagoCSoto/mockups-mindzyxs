@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU1-PB31 | Chat psicólogo-paciente</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B; --lilac:#6B5BCE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
+  .logo-img{height:44px;width:auto;object-fit:contain}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none}
+  .nav a.active{color:var(--text);font-weight:600}
+  .btn-ghost{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;color:var(--text);font-weight:600;font-size:12px;cursor:pointer}
+  .btn-primary{padding:7px 16px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:600;font-size:12px;cursor:pointer}
+  .role-pill{font-size:11px;font-weight:700;color:var(--lilac);background:#EDE7FF;padding:6px 12px;border-radius:20px;white-space:nowrap}
+  .wrap{width:100%;max-width:960px;margin:0 auto;padding:24px 16px 30px;flex:1}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.06);padding:22px 20px}
+  .hero{text-align:center;padding:26px 22px;margin-bottom:14px}
+  .hero h1{font-size:22px;font-weight:700}
+  .hero p{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .hero .meta{margin-top:10px;font-size:11px;color:var(--muted)}
+  .tabs{display:flex;gap:8px;margin-bottom:14px}
+  .tab{flex:1;height:42px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-weight:700;font-size:13px;cursor:pointer;color:var(--muted)}
+  .tab.active{background:var(--cyan);border-color:var(--cyan);color:white}
+  .badge{background:var(--error);color:white;font-size:10px;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:6px}
+  .tab.active .badge{background:white;color:var(--error)}
+  .layout{display:grid;grid-template-columns:280px 1fr;gap:14px}
+  .conv-list{display:flex;flex-direction:column;gap:10px}
+  .conv{border:1px solid #EDE8F0;border-radius:12px;padding:12px;text-align:left;background:white;cursor:pointer;width:100%}
+  .conv.active{border-color:var(--cyan);background:#F4FEFF;box-shadow:0 2px 10px rgba(110,207,212,.18)}
+  .conv-top{display:flex;align-items:center;gap:10px}
+  .avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:18px;font-weight:700;flex-shrink:0}
+  .av-ana{background:#E6F7F8;color:#2A9AA0}
+  .av-cami{background:#EDE7FF;color:var(--lilac)}
+  .av-new{background:#FFF3E2;color:#C47B1A}
+  .conv-top b{font-size:13px;display:block}
+  .conv-top small{font-size:11px;color:var(--muted)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block;margin-right:4px}
+  .conv-preview{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.45;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .chat{border:1px solid #EDE8F0;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-height:420px;background:white}
+  .chat-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid #F0EAF6;background:#FBFAFF}
+  .chat-head .who{display:flex;align-items:center;gap:10px}
+  .chat-head b{font-size:13px}
+  .chat-head small{font-size:11px;color:var(--muted);display:block}
+  .btn-block{padding:7px 14px;border-radius:20px;border:1px solid #F5C2CE;background:#FFF1F3;color:var(--error);font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap}
+  .btn-block:hover{background:#FFE3E9}
+  .btn-block:disabled{opacity:.5;cursor:not-allowed}
+  .msgs{flex:1;padding:16px 14px;display:flex;flex-direction:column;gap:10px;background:#FFF;max-height:340px;overflow-y:auto}
+  .day{font-size:10px;font-weight:700;color:var(--muted);text-align:center;background:#F3F1FA;border-radius:20px;padding:4px 12px;align-self:center}
+  .msg{max-width:78%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.5}
+  .msg small{display:block;font-size:10px;margin-top:6px;opacity:.75}
+  .msg.in{background:#F3F1FA;border-bottom-left-radius:4px;align-self:flex-start}
+  .msg.in small{color:var(--muted)}
+  .msg.out{background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;border-bottom-right-radius:4px;align-self:flex-end}
+  .msg.out small{color:rgba(255,255,255,.85)}
+  .typing{font-size:11px;color:var(--muted);font-style:italic;display:none;padding:0 14px 6px}
+  .typing.show{display:block}
+  .blocked-banner{display:none;background:#FFF1F3;border-top:1px solid #F5C2CE;color:#A63A52;font-size:12px;font-weight:600;text-align:center;padding:12px;line-height:1.5}
+  .blocked-banner.show{display:block}
+  .blocked-banner button{margin-top:8px;padding:6px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;font-size:11px;font-weight:700;cursor:pointer}
+  .composer{display:flex;gap:8px;padding:12px 14px;border-top:1px solid #F0EAF6;background:#FCFCFF}
+  .composer input{flex:1;height:42px;border-radius:20px;border:1px solid #DFDAEE;padding:0 14px;font-size:13px;font-family:inherit;outline:none}
+  .composer input:focus{border-color:var(--cyan)}
+  .composer input:disabled{background:#F3F1FA;color:#B9B1D8}
+  .btn-send{height:42px;padding:0 20px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-send:hover{background:var(--cyan-hover)}
+  .btn-send:disabled{opacity:.5;cursor:not-allowed}
+  .req-card{border:1px dashed #CFBFF0;background:#FBFAFF;border-radius:12px;padding:16px;margin-top:12px}
+  .req-card h3{font-size:14px}
+  .req-card p{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
+  .req-actions{display:flex;gap:10px;margin-top:14px}
+  .btn-accept{flex:1;height:40px;border-radius:20px;border:none;background:var(--ok);color:white;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-reject{flex:1;height:40px;border-radius:20px;border:1px solid #F5C2CE;background:white;color:var(--error);font-weight:700;font-size:13px;cursor:pointer}
+  .empty{font-size:12px;color:var(--muted);text-align:center;padding:18px;line-height:1.6}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
+  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
+  .chip.warn.active{background:var(--error);border-color:var(--error)}
+  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2D2F36;color:white;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none;z-index:60;max-width:90%;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(440px,100%);background:white;border-radius:14px;padding:24px 22px;box-shadow:0 10px 30px rgba(0,0,0,.15);text-align:center;max-height:92vh;overflow:auto}
+  .modal-icon{width:52px;height:52px;border-radius:14px;background:#FFF1F3;color:var(--error);display:grid;place-items:center;margin:0 auto 14px;font-size:24px}
+  .modal-icon.ok{background:#E8FFF1;color:var(--ok)}
+  .modal h3{font-size:16px;font-weight:700}
+  .modal p.sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6;text-align:left}
+  .modal-actions{display:flex;gap:10px;margin-top:20px}
+  .btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-modal.ok{background:var(--cyan);color:white}
+  .btn-modal.danger{background:var(--error);color:white}
+  .btn-modal.close{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:10px 0;margin-top:20px}
+  .footer-in{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12px}
+  .footer-in a{color:var(--muted);text-decoration:none}
+  @media(max-width:760px){
+    .header{padding:0 14px}
+    .nav{font-size:12px;gap:12px}
+    .layout{grid-template-columns:1fr}
+    .msgs{max-height:300px}
+  }
+</style>
+</head>
+<body>
+<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header">
+  <div class="logo"><img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img"></div>
+  <nav class="nav"><a href="#">Inicio</a><a href="#" class="active">Chat de soporte</a><a href="#">Ayuda</a></nav>
+  <span class="role-pill" id="rolePill">👩 Ver como Paciente</span>
+</header>
+
+<main class="wrap">
+  <div class="card hero">
+    <h1>💬 Chat psicólogo-paciente</h1>
+    <p>Conversaciones ordenadas por fecha y hora, con remitente y contenido. Todo es simulado en este mockup (sin fetch).</p>
+    <div class="meta">HU1-PB31 — Sprint 3 • Chat de soporte</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tabChat">💬 Conversaciones</button>
+    <button class="tab" id="tabReq">📩 Solicitudes <span class="badge" id="reqBadge">1</span></button>
+  </div>
+
+  <!-- PANEL CHAT -->
+  <div class="card" id="panelChat">
+    <div class="layout">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--lilac);margin-bottom:8px">CONVERSACIONES ACTIVAS (<span id="convCount">2</span>)</div>
+        <div class="conv-list" id="convList"></div>
+      </div>
+      <div class="chat">
+        <div class="chat-head">
+          <div class="who">
+            <div class="avatar av-ana" id="chatAvatar">AT</div>
+            <div><b id="chatName">Dra. Ana Torres</b><small id="chatStatus"><span class="dot"></span>En línea • Psicóloga</small></div>
+          </div>
+          <button class="btn-block" id="blockBtn">⛔ Bloquear psicólogo</button>
+        </div>
+        <div class="msgs" id="msgs"></div>
+        <div class="typing" id="typing">Escribiendo…</div>
+        <div class="blocked-banner" id="blockedBanner">
+          🚫 Has bloqueado a este psicólogo. No puedes enviar ni recibir mensajes.<br>
+          <button id="unblockBtn">Desbloquear (demo)</button>
+        </div>
+        <div class="composer">
+          <input id="msgInput" type="text" placeholder="Escribe un mensaje…" maxlength="300" autocomplete="off">
+          <button class="btn-send" id="sendBtn">Enviar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL SOLICITUDES -->
+  <div class="card" id="panelReq" style="display:none">
+    <div style="font-size:11px;font-weight:700;color:var(--lilac)">SOLICITUDES DE CHAT</div>
+    <div id="reqList"></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
+    <div class="controls">
+      <button class="chip active" id="rolePacChip">Ver como Paciente</button>
+      <button class="chip" id="rolePsiChip">Ver como Psicólogo</button>
+      <button class="chip warn" id="unauthChip">Abrir paciente no autorizado</button>
+    </div>
+    <p class="hint">El eco del otro lado responde a los 2s. Los bloqueos, solicitudes, mensajes, aceptaciones y rechazos se registran en la consola con <b>addLog('[HU1-PB31]', …)</b>.</p>
+  </div>
+</main>
+
+<footer class="footer"><div class="footer-in"><a href="#">Inicio</a><a href="#">Nosotros</a><a href="#">Ayuda</a></div></footer>
+
+<div class="modal-overlay" id="blockModal" role="alertdialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-icon">⛔</div>
+    <h3 id="blockTitle">Bloquear psicólogo</h3>
+    <p class="sub" id="blockText">Al bloquear, no podrás enviar ni recibir mensajes de este contacto. Podrás desbloquearlo más tarde desde este mismo chat (demo). ¿Deseas continuar?</p>
+    <div class="modal-actions">
+      <button class="btn-modal close" id="blockCancel">Cancelar</button>
+      <button class="btn-modal danger" id="blockConfirm">Bloquear</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="authModal" role="alertdialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-icon">🔒</div>
+    <h3>No autorizado</h3>
+    <p class="sub">No tienes autorización para ver la conversación de <b>Paciente Diego Fuentes</b>. Solo puedes acceder a tus conversaciones vinculadas y aceptadas. Solicita autorización al psicólogo o al paciente para continuar.</p>
+    <div class="modal-actions"><button class="btn-modal ok" id="authOk">Entendido</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const convList = $('convList'), msgs = $('msgs'), msgInput = $('msgInput'), sendBtn = $('sendBtn');
+  const blockBtn = $('blockBtn'), blockedBanner = $('blockedBanner'), typing = $('typing');
+  const toast = $('toast'), reqBadge = $('reqBadge'), reqList = $('reqList'), convCount = $('convCount');
+  const blockModal = $('blockModal'), authModal = $('authModal');
+  const rolePill = $('rolePill'), rolePacChip = $('rolePacChip'), rolePsiChip = $('rolePsiChip');
+
+  let role = 'paciente'; // 'paciente' | 'psicologo'
+  let activeId = 'ana';
+  let blocked = {}; // id -> true
+
+  const convs = {
+    ana: { id:'ana', name:'Dra. Ana Torres', short:'AT', av:'av-ana', sub:'Psicóloga', online:true,
+      messages:[
+        { from:'Dra. Ana Torres', side:'in', text:'Hola, ¿cómo te has sentido esta semana?', time:'23/09/2026 10:02' },
+        { from:'Tú (Paciente)', side:'out', text:'Hola doctora, un poco ansiosa por el trabajo.', time:'23/09/2026 10:05' },
+        { from:'Dra. Ana Torres', side:'in', text:'Entiendo. ¿Quieres contarme qué situación te generó más ansiedad?', time:'23/09/2026 10:07' }
+      ]},
+    camila: { id:'camila', name:'Paciente Camila Rojas', short:'CR', av:'av-cami', sub:'Paciente', online:true,
+      messages:[
+        { from:'Paciente Camila Rojas', side:'in', text:'Doctora, anoche me costó dormir.', time:'24/09/2026 08:40' },
+        { from:'Tú (Psicóloga)', side:'out', text:'Hola Camila, lamento eso. ¿Probaste la respiración que practicamos?', time:'24/09/2026 08:45' },
+        { from:'Paciente Camila Rojas', side:'in', text:'Sí, me ayudó un poco. Hoy me siento mejor.', time:'24/09/2026 08:52' }
+      ]}
+  };
+
+  let requests = [
+    { id:'req1', name:'Paciente Valentina Paredes', short:'VP', text:'Hola, me gustaría iniciar un chat de apoyo contigo.', time:'24/09/2026 09:15' }
+  ];
+
+  function addLog(tag, msg){ console.log(tag, new Date().toLocaleString('es-ES'), msg); }
+  function showToast(msg){
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+  function nowStr(){
+    const d = new Date();
+    return d.toLocaleDateString('es-ES') + ' ' + d.toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'});
+  }
+  function otherName(c){
+    if (c.id === 'ana') return 'Dra. Ana Torres';
+    if (c.id === 'camila') return 'Paciente Camila Rojas';
+    return c.name;
+  }
+  function myLabel(){
+    return role === 'paciente' ? 'Tú (Paciente)' : 'Tú (Psicóloga)';
+  }
+
+  function renderConvs(){
+    convList.innerHTML = '';
+    const ids = Object.keys(convs);
+    convCount.textContent = ids.length;
+    ids.forEach(id => {
+      const c = convs[id];
+      const last = c.messages[c.messages.length - 1];
+      const b = document.createElement('button');
+      b.className = 'conv' + (id === activeId ? ' active' : '');
+      b.innerHTML = '<div class="conv-top"><div class="avatar ' + c.av + '">' + c.short + '</div>' +
+        '<div><b>' + c.name + '</b><small>' + (c.online ? '<span class="dot"></span>En línea' : 'Desconectado') + ' • ' + c.sub + '</small></div></div>' +
+        '<div class="conv-preview">' + (last ? last.from + ': ' + last.text : 'Sin mensajes') + '</div>';
+      b.addEventListener('click', () => openConv(id));
+      convList.appendChild(b);
+    });
+  }
+
+  function renderChat(){
+    const c = convs[activeId];
+    if (!c) return;
+    $('chatName').textContent = c.name;
+    $('chatStatus').innerHTML = (c.online ? '<span class="dot"></span>En línea' : 'Desconectado') + ' • ' + c.sub;
+    $('chatAvatar').textContent = c.short;
+    $('chatAvatar').className = 'avatar ' + c.av;
+    const isBlocked = !!blocked[activeId];
+    blockedBanner.classList.toggle('show', isBlocked);
+    msgInput.disabled = isBlocked;
+    sendBtn.disabled = isBlocked;
+    blockBtn.disabled = isBlocked;
+    blockBtn.textContent = role === 'paciente' ? '⛔ Bloquear psicólogo' : '⛔ Bloquear paciente';
+    msgs.innerHTML = '';
+    let lastDay = '';
+    const sorted = [...c.messages].sort((a, b) => a.time.localeCompare(b.time));
+    sorted.forEach(m => {
+      const day = m.time.split(' ')[0];
+      if (day !== lastDay) {
+        lastDay = day;
+        const d = document.createElement('div');
+        d.className = 'day'; d.textContent = day;
+        msgs.appendChild(d);
+      }
+      const div = document.createElement('div');
+      div.className = 'msg ' + m.side;
+      div.innerHTML = '<b style="font-size:11px">' + m.from + '</b><div>' + m.text + '</div><small>' + m.time + '</small>';
+      msgs.appendChild(div);
+    });
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function openConv(id){
+    if (!convs[id]) return;
+    activeId = id;
+    renderConvs(); renderChat();
+    addLog('[HU1-PB31]', 'CONVERSACIÓN abierta: ' + convs[id].name + ' (rol: ' + role + ')');
+  }
+
+  function sendMessage(){
+    const c = convs[activeId];
+    if (blocked[activeId]) {
+      addLog('[HU1-PB31]', 'ENVÍO BLOQUEADO: chat con ' + c.name + ' está bloqueado');
+      showToast('🚫 Has bloqueado a este contacto. No puedes enviar mensajes.');
+      return;
+    }
+    const text = msgInput.value.trim();
+    if (!text) { showToast('Escribe un mensaje primero'); return; }
+    const m = { from: myLabel(), side: 'out', text: text, time: nowStr() };
+    c.messages.push(m);
+    msgInput.value = '';
+    renderChat(); renderConvs();
+    addLog('[HU1-PB31]', 'MENSAJE enviado a ' + c.name + ': "' + text + '" [' + m.time + ']');
+    typing.classList.add('show');
+    setTimeout(() => {
+      typing.classList.remove('show');
+      if (blocked[activeId]) return; // no eco si se bloqueó en esos 2s
+      const echo = { from: otherName(c), side: 'in', text: 'Gracias por tu mensaje: "' + text + '" (respuesta simulada).', time: nowStr() };
+      c.messages.push(echo);
+      renderChat(); renderConvs();
+      addLog('[HU1-PB31]', 'MENSAJE recibido de ' + echo.from + ': "' + echo.text + '" [' + echo.time + ']');
+    }, 2000);
+  }
+
+  function renderReqs(){
+    reqBadge.style.display = requests.length ? 'inline-block' : 'none';
+    reqBadge.textContent = requests.length;
+    reqList.innerHTML = '';
+    if (!requests.length) {
+      reqList.innerHTML = '<div class="empty">No tienes solicitudes pendientes. 🎉<br>Cuando alguien quiera chatear contigo, aparecerá aquí.</div>';
+      return;
+    }
+    requests.forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'req-card';
+      div.innerHTML = '<div class="conv-top"><div class="avatar av-new">' + r.short + '</div>' +
+        '<div><h3>' + r.name + '</h3><p style="margin:0">Solicitud • ' + r.time + '</p></div></div>' +
+        '<p>“' + r.text + '”</p>' +
+        '<div class="req-actions"><button class="btn-accept">Aceptar</button><button class="btn-reject">Rechazar</button></div>';
+      div.querySelector('.btn-accept').addEventListener('click', () => acceptReq(r.id));
+      div.querySelector('.btn-reject').addEventListener('click', () => rejectReq(r.id));
+      reqList.appendChild(div);
+    });
+  }
+
+  function acceptReq(id){
+    const r = requests.find(x => x.id === id);
+    if (!r) return;
+    requests = requests.filter(x => x.id !== id);
+    const nid = 'valen';
+    convs[nid] = { id: nid, name: r.name, short: r.short, av: 'av-new', sub: 'Paciente', online: true,
+      messages: [{ from: r.name, side: 'in', text: r.text, time: r.time }] };
+    activeId = nid;
+    renderReqs(); renderConvs(); renderChat();
+    setTab(false);
+    addLog('[HU1-PB31]', 'SOLICITUD ACEPTADA: ' + r.name + ' — conversación creada y abierta');
+    showToast('Conversación con ' + r.name + ' iniciada ✓');
+  }
+
+  function rejectReq(id){
+    const r = requests.find(x => x.id === id);
+    if (!r) return;
+    requests = requests.filter(x => x.id !== id);
+    renderReqs();
+    addLog('[HU1-PB31]', 'SOLICITUD RECHAZADA: ' + r.name + ' — solicitud eliminada');
+    showToast('Solicitud de ' + r.name + ' rechazada');
+  }
+
+  function setTab(isReq){
+    $('tabChat').classList.toggle('active', !isReq);
+    $('tabReq').classList.toggle('active', isReq);
+    $('panelChat').style.display = isReq ? 'none' : 'block';
+    $('panelReq').style.display = isReq ? 'block' : 'none';
+    if (isReq) addLog('[HU1-PB31]', 'APARTADO Solicitudes visualizado (' + requests.length + ' pendiente/s)');
+  }
+
+  function setRole(nr){
+    role = nr;
+    const isPac = role === 'paciente';
+    rolePacChip.classList.toggle('active', isPac);
+    rolePsiChip.classList.toggle('active', !isPac);
+    rolePill.textContent = isPac ? '👩 Ver como Paciente' : '🧠 Ver como Psicólogo';
+    activeId = isPac ? 'ana' : 'camila';
+    if (!convs[activeId]) activeId = Object.keys(convs)[0];
+    renderConvs(); renderChat();
+    addLog('[HU1-PB31]', 'ROL demo cambiado a: ' + (isPac ? 'Paciente' : 'Psicólogo') + ' — chat activo: ' + convs[activeId].name);
+    showToast(isPac ? 'Viendo como Paciente' : 'Viendo como Psicólogo');
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  msgInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+  blockBtn.addEventListener('click', () => {
+    const c = convs[activeId];
+    $('blockTitle').textContent = role === 'paciente' ? 'Bloquear psicólogo' : 'Bloquear paciente';
+    $('blockText').textContent = 'Al bloquear a ' + c.name + ', no podrás enviar ni recibir mensajes. Se mostrará el aviso "Has bloqueado a este psicólogo" (demo reversible). ¿Deseas continuar?';
+    blockModal.classList.add('open');
+    addLog('[HU1-PB31]', 'INTENTO de bloqueo a ' + c.name + ' — modal de confirmación abierto');
+  });
+  $('blockCancel').addEventListener('click', () => {
+    blockModal.classList.remove('open');
+    addLog('[HU1-PB31]', 'BLOQUEO cancelado por el usuario');
+  });
+  $('blockConfirm').addEventListener('click', () => {
+    blockModal.classList.remove('open');
+    blocked[activeId] = true;
+    renderChat();
+    addLog('[HU1-PB31]', 'BLOQUEO confirmado: ' + convs[activeId].name + ' bloqueado — aviso "Has bloqueado a este psicólogo" visible, input deshabilitado');
+    showToast('Contacto bloqueado ⛔');
+  });
+  $('unblockBtn').addEventListener('click', () => {
+    delete blocked[activeId];
+    renderChat();
+    addLog('[HU1-PB31]', 'DESBLOQUEO (demo): ' + convs[activeId].name + ' — envío habilitado de nuevo');
+    showToast('Contacto desbloqueado ✓');
+  });
+
+  $('tabChat').addEventListener('click', () => setTab(false));
+  $('tabReq').addEventListener('click', () => setTab(true));
+  rolePacChip.addEventListener('click', () => setRole('paciente'));
+  rolePsiChip.addEventListener('click', () => setRole('psicologo'));
+
+  $('unauthChip').addEventListener('click', () => {
+    authModal.classList.add('open');
+    addLog('[HU1-PB31]', 'ACCESO DENEGADO: intento de abrir conversación de paciente no autorizado (Diego Fuentes) — falta de autorización');
+  });
+  $('authOk').addEventListener('click', () => authModal.classList.remove('open'));
+
+  renderConvs(); renderChat(); renderReqs();
+  addLog('[HU1-PB31]', 'Sistema listo — 2 conversaciones activas, 1 solicitud pendiente, rol inicial: Paciente');
+</script>
+</body>
+</html>

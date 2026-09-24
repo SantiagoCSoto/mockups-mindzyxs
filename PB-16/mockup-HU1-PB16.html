@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU1-PB16 | Alerta de riesgo alto</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
+  .logo{display:flex;align-items:center}
+  .logo-img{height:44px;width:auto;object-fit:contain}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none}
+  .nav a.active{color:var(--text);font-weight:600}
+  .btn-ghost{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;color:var(--text);font-weight:600;font-size:12px;cursor:pointer}
+  .btn-primary{padding:7px 16px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:600;font-size:12px;cursor:pointer}
+  .risk-pill{font-size:11px;font-weight:700;color:#fff;background:var(--error);padding:6px 12px;border-radius:20px;white-space:nowrap}
+  .wrap{width:100%;max-width:760px;margin:0 auto;padding:24px 16px 30px;flex:1}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .hero{text-align:center;padding:30px 24px;margin-bottom:16px}
+  .hero h1{font-size:24px;font-weight:700}
+  .hero p{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .hero .tag{margin-top:10px;font-size:11px;color:var(--muted)}
+  .panel-head{text-align:center}
+  .panel-head h2{font-size:19px;font-weight:700}
+  .panel-head p.sub{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.6}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px;justify-content:center}
+  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
+  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
+  .chip.danger.active{background:var(--error);border-color:var(--error)}
+  .chip.okchip.active{background:var(--ok);border-color:var(--ok)}
+  .q{border:1px solid #EDE8F0;border-radius:12px;padding:14px;margin-top:12px;background:#FDFCFF}
+  .q h3{font-size:13px;font-weight:700}
+  .q p{font-size:11px;color:var(--muted);margin-top:2px}
+  .scale{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+  .opt{border:1px solid #DFDAEE;border-radius:10px;background:#fff;padding:8px 4px;text-align:center;cursor:pointer;font-size:11px;font-weight:600;transition:.15s}
+  .opt small{display:block;font-weight:400;color:var(--muted);font-size:10px;margin-top:2px}
+  .opt input{display:none}
+  .opt.sel{border-color:var(--cyan);background:#EAFBFC;box-shadow:0 0 0 1px var(--cyan)}
+  .actions{display:flex;gap:10px;margin-top:16px}
+  .btn-finish{flex:1;height:46px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
+  .btn-finish:hover{filter:brightness(1.05)}
+  .btn-reset{height:46px;padding:0 18px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
+  .result{display:none;margin-top:14px;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.6}
+  .result.show{display:block}
+  .result.low{background:#E8FFF1;border:1px solid #BDEDCB;color:#0E7A45}
+  .result.high{background:#FFF1F3;border:1px solid #F5B9C6;color:#A92B45}
+  .continue-box{display:none;margin-top:12px;text-align:center}
+  .continue-box.show{display:block}
+  .btn-continue{height:42px;padding:0 22px;border-radius:20px;border:none;background:var(--ok);color:white;font-weight:700;font-size:13px;cursor:pointer}
+  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2D2F36;color:white;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none;z-index:60;max-width:90vw;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:10px 0;margin-top:20px}
+  .footer-in{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12px}
+  .footer-in a{color:var(--muted);text-decoration:none}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(480px,100%);background:white;border-radius:14px;padding:24px 22px;box-shadow:0 10px 30px rgba(0,0,0,0.18);text-align:center;max-height:92vh;overflow:auto}
+  .modal-icon{width:56px;height:56px;border-radius:16px;background:#FFF1F3;color:var(--error);display:grid;place-items:center;margin:0 auto 14px;font-size:26px}
+  .modal-icon.info{background:#E6F7F8;color:#2A9AA0}
+  .modal h3{font-size:17px;font-weight:700}
+  .modal .alert-msg{font-size:13px;color:var(--text);line-height:1.65;margin-top:10px;background:#FFF1F3;border:1px solid #F5B9C6;border-radius:10px;padding:10px 12px}
+  .modal p.sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .lines-list{text-align:left;margin-top:12px;font-size:13px;line-height:2;background:#F9F7FF;border:1px solid #E2DCF3;border-radius:10px;padding:12px 14px}
+  .lines-list b{color:var(--text)}
+  .modal-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+  .btn-modal{width:100%;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-modal.danger{background:var(--error);color:white}
+  .btn-modal.danger:hover{filter:brightness(1.07)}
+  .btn-modal.mid{background:var(--cyan);color:white}
+  .btn-modal.mid:hover{background:var(--cyan-hover)}
+  .btn-modal.close{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  @media(max-width:640px){
+    .header{padding:0 14px}
+    .nav{font-size:12px;gap:12px}
+    .scale{grid-template-columns:repeat(2,1fr)}
+    .actions{flex-direction:column}
+    .btn-reset{width:100%}
+    .hero h1{font-size:20px}
+  }
+</style>
+</head>
+<body>
+<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header">
+  <div class="logo"><img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img"></div>
+  <nav class="nav">
+    <a href="#">Inicio</a>
+    <a href="#" class="active">Cuestionario</a>
+    <a href="#">Ayuda</a>
+  </nav>
+  <span class="risk-pill">⚠ HU1-PB16 · Riesgo alto</span>
+</header>
+
+<main class="wrap">
+  <div class="card hero">
+    <h1>Chequeo de bienestar</h1>
+    <p>Responde este mini-cuestionario demo. Al finalizar se calcula un riesgo simulado: si es <b>ALTO</b> verás una alerta visible con ayuda inmediata.</p>
+    <div class="tag">HU1-PB16 — Sprint 1 • Alerta de riesgo alto</div>
+  </div>
+
+  <div class="card">
+    <div class="panel-head">
+      <h2>Mini-cuestionario (demo)</h2>
+      <p class="sub">3 preguntas en escala 0–3. Pulsa <b>Finalizar</b> para generar el riesgo simulado.</p>
+    </div>
+
+    <div class="controls" role="group" aria-label="Forzar riesgo">
+      <button class="chip active" id="chipAuto">Automático (por puntaje)</button>
+      <button class="chip okchip" id="chipLow">Forzar riesgo Bajo</button>
+      <button class="chip danger" id="chipHigh">Forzar riesgo Alto</button>
+    </div>
+
+    <div class="q" data-q="1">
+      <h3>1. ¿Con qué frecuencia te has sentido desanimado/a?</h3>
+      <p>Últimos 7 días · simulado</p>
+      <div class="scale">
+        <label class="opt"><input type="radio" name="q1" value="0">0 · Nunca<small>Sin molestia</small></label>
+        <label class="opt"><input type="radio" name="q1" value="1">1 · A veces<small>Leve</small></label>
+        <label class="opt"><input type="radio" name="q1" value="2">2 · Frecuente<small>Moderado</small></label>
+        <label class="opt"><input type="radio" name="q1" value="3">3 · Siempre<small>Intenso</small></label>
+      </div>
+    </div>
+
+    <div class="q" data-q="2">
+      <h3>2. ¿Dificultad para dormir o concentrarte?</h3>
+      <p>Últimos 7 días · simulado</p>
+      <div class="scale">
+        <label class="opt"><input type="radio" name="q2" value="0">0 · Nunca<small>Sin molestia</small></label>
+        <label class="opt"><input type="radio" name="q2" value="1">1 · A veces<small>Leve</small></label>
+        <label class="opt"><input type="radio" name="q2" value="2">2 · Frecuente<small>Moderado</small></label>
+        <label class="opt"><input type="radio" name="q2" value="3">3 · Siempre<small>Intenso</small></label>
+      </div>
+    </div>
+
+    <div class="q" data-q="3">
+      <h3>3. ¿Pensamientos de hacerte daño o sentirte en peligro?</h3>
+      <p>Pregunta sensible · simulado</p>
+      <div class="scale">
+        <label class="opt"><input type="radio" name="q3" value="0">0 · Nunca<small>Sin molestia</small></label>
+        <label class="opt"><input type="radio" name="q3" value="1">1 · A veces<small>Leve</small></label>
+        <label class="opt"><input type="radio" name="q3" value="2">2 · Frecuente<small>Moderado</small></label>
+        <label class="opt"><input type="radio" name="q3" value="3">3 · Siempre<small>Intenso</small></label>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-finish" id="finishBtn">Finalizar y calcular riesgo</button>
+      <button class="btn-reset" id="resetBtn">Reiniciar</button>
+    </div>
+
+    <div class="result low" id="lowBox">✅ <b>Riesgo bajo.</b> Puedes continuar con normalidad. Este resultado es simulado y no es un diagnóstico.</div>
+    <div class="result high" id="highBox">⚠️ <b>Riesgo alto generado.</b> Se mostró la alerta visible con opciones de ayuda.</div>
+
+    <div class="continue-box" id="continueBox">
+      <p class="hint" style="margin-bottom:10px">Has confirmado la alerta y puedes continuar de forma segura.</p>
+      <button class="btn-continue" id="continueBtn">Continuar →</button>
+    </div>
+
+    <p class="hint">Demo: usa los chips para <b>forzar Bajo</b> (no muestra alerta, sigue normal) o <b>forzar Alto</b> (muestra la alerta). Todo es simulado, sin fetch. Revisa la consola para los logs.</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Inicio</a><a href="#">Nosotros</a><a href="#">Ayuda</a>
+  </div>
+</footer>
+
+<!-- Modal alerta riesgo alto -->
+<div class="modal-overlay" id="riskModal" role="alertdialog" aria-modal="true" aria-labelledby="riskTitle">
+  <div class="modal">
+    <div class="modal-icon">⚠️</div>
+    <h3 id="riskTitle">Riesgo alto detectado</h3>
+    <div class="alert-msg"><b>Riesgo alto detectado. Busca ayuda profesional. Si te sientes en peligro, contacta una línea de ayuda.</b></div>
+    <p class="sub">Mindzyx no realiza diagnósticos. Elige una opción para continuar. Tu seguridad es lo primero.</p>
+    <div class="modal-actions">
+      <button class="btn-modal danger" id="btnLines">📞 Líneas de ayuda</button>
+      <button class="btn-modal mid" id="btnRecs">💡 Ver recomendaciones</button>
+      <button class="btn-modal close" id="btnOk">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal líneas de ayuda -->
+<div class="modal-overlay" id="linesModal" role="dialog" aria-modal="true" aria-labelledby="linesTitle">
+  <div class="modal">
+    <div class="modal-icon info">📞</div>
+    <h3 id="linesTitle">Líneas de ayuda</h3>
+    <p class="sub">Si estás en peligro, contacta de inmediato:</p>
+    <div class="lines-list">
+      📱 <b>106</b> — Línea de ayuda / crisis<br>
+      🚨 <b>192</b> — Emergencias / ambulancia<br>
+      ☎️ <b>123</b> — Línea de emergencias nacional
+    </div>
+    <p class="sub">Llamadas simuladas en este mockup. Busca ayuda profesional cercana.</p>
+    <div class="modal-actions">
+      <button class="btn-modal mid" id="linesOk">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const toast = document.getElementById('toast');
+  const finishBtn = document.getElementById('finishBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const lowBox = document.getElementById('lowBox');
+  const highBox = document.getElementById('highBox');
+  const continueBox = document.getElementById('continueBox');
+  const continueBtn = document.getElementById('continueBtn');
+  const riskModal = document.getElementById('riskModal');
+  const linesModal = document.getElementById('linesModal');
+  const chipAuto = document.getElementById('chipAuto');
+  const chipLow = document.getElementById('chipLow');
+  const chipHigh = document.getElementById('chipHigh');
+
+  let forced = 'auto';
+  let lastRisk = null;
+
+  function addLog(msg){ console.log('[HU1-PB16]', new Date().toLocaleTimeString(), msg); }
+  function showToast(msg){
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=>toast.classList.remove('show'), 2500);
+  }
+  function setChips(){
+    chipAuto.classList.toggle('active', forced === 'auto');
+    chipLow.classList.toggle('active', forced === 'low');
+    chipHigh.classList.toggle('active', forced === 'high');
+  }
+  chipAuto.addEventListener('click', ()=>{ forced='auto'; setChips(); addLog('DEMO: modo automático (riesgo según puntaje, umbral >= 6 = ALTO)'); showToast('Modo automático ✓'); });
+  chipLow.addEventListener('click', ()=>{ forced='low'; setChips(); addLog('DEMO: forzar riesgo BAJO activado — NO mostrará alerta'); showToast('Forzando riesgo Bajo'); });
+  chipHigh.addEventListener('click', ()=>{ forced='high'; setChips(); addLog('DEMO: forzar riesgo ALTO activado — mostrará la alerta'); showToast('Forzando riesgo Alto'); });
+
+  document.querySelectorAll('.opt input').forEach(r=>{
+    r.addEventListener('change', ()=>{
+      const group = r.closest('.scale');
+      group.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+      r.closest('.opt').classList.add('sel');
+    });
+  });
+
+  function getScore(){
+    let total = 0, answered = 0;
+    ['q1','q2','q3'].forEach(n=>{
+      const c = document.querySelector('input[name="'+n+'"]:checked');
+      if(c){ total += parseInt(c.value,10); answered++; }
+    });
+    return { total, answered };
+  }
+
+  finishBtn.addEventListener('click', ()=>{
+    const { total, answered } = getScore();
+    if(answered < 3){ addLog('FINALIZAR bloqueado — faltan '+(3-answered)+' pregunta(s) por responder'); showToast('Responde las 3 preguntas primero'); return; }
+    let risk;
+    if(forced === 'low') risk = 'BAJO';
+    else if(forced === 'high') risk = 'ALTO';
+    else risk = total >= 6 ? 'ALTO' : 'BAJO';
+    lastRisk = risk;
+    addLog('GENERACIÓN de riesgo simulado: puntaje='+total+'/9, modo='+forced+', resultado='+risk);
+    lowBox.classList.remove('show'); highBox.classList.remove('show'); continueBox.classList.remove('show');
+    if(risk === 'BAJO'){
+      lowBox.classList.add('show');
+      addLog('RIESGO BAJO — NO se muestra alerta, flujo continúa normal');
+      showToast('Riesgo bajo: continúa con normalidad ✓');
+    } else {
+      highBox.classList.add('show');
+      riskModal.classList.add('open');
+      addLog('VISUALIZACIÓN de alerta de riesgo ALTO (modal visible con mensaje + 3 botones)');
+      showToast('⚠️ Riesgo alto detectado');
+    }
+  });
+
+  document.getElementById('btnLines').addEventListener('click', ()=>{
+    linesModal.classList.add('open');
+    addLog('ACCIÓN elegida en alerta: "Líneas de ayuda" — se abre modal con 106 / 192 / 123');
+  });
+  document.getElementById('btnRecs').addEventListener('click', ()=>{
+    addLog('ACCIÓN elegida en alerta: "Ver recomendaciones" — se muestra toast');
+    showToast('💡 Recomendaciones: respira, habla con alguien de confianza y busca ayuda profesional');
+  });
+  document.getElementById('btnOk').addEventListener('click', ()=>{
+    riskModal.classList.remove('open');
+    continueBox.classList.add('show');
+    addLog('ACCIÓN elegida en alerta: "Entendido" — cierra alerta y permite continuar');
+    showToast('Entendido ✓ puedes continuar');
+  });
+  document.getElementById('linesOk').addEventListener('click', ()=>{
+    linesModal.classList.remove('open');
+    addLog('Líneas de ayuda cerradas (106/192/123 visualizadas)');
+  });
+  linesModal.addEventListener('click', (e)=>{ if(e.target===linesModal) linesModal.classList.remove('open'); });
+
+  continueBtn.addEventListener('click', ()=>{
+    addLog('CONTINUAR después de alerta confirmada — riesgo='+lastRisk);
+    showToast('Continuando… (demo) ✓');
+  });
+  resetBtn.addEventListener('click', ()=>{
+    document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
+    document.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+    lowBox.classList.remove('show'); highBox.classList.remove('show'); continueBox.classList.remove('show');
+    lastRisk = null;
+    addLog('Cuestionario reiniciado');
+    showToast('Cuestionario reiniciado');
+  });
+
+  addLog('Sistema listo — mini-cuestionario de 3 preguntas + alerta de riesgo alto disponible');
+</script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU1-PB12 | Registrar estado emocional</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
+  .logo{display:flex;align-items:center;font-weight:700;font-size:18px}
+  .logo span{color:var(--cyan)}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none}
+  .nav a.active{color:var(--text);font-weight:600}
+  .btn-ghost{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;color:var(--text);font-weight:600;font-size:12px;cursor:pointer}
+  .btn-primary{padding:7px 16px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:600;font-size:12px;cursor:pointer}
+  .user-pill{font-size:11px;font-weight:700;color:#0E6B70;background:#E6F7F8;padding:6px 12px;border-radius:20px;white-space:nowrap}
+  .wrap{width:100%;max-width:760px;margin:0 auto;padding:24px 16px 30px;flex:1}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .screen{display:none}
+  .screen.active{display:block}
+  .panel-head{text-align:center}
+  .panel-head h2{font-size:20px;font-weight:700}
+  .panel-head p.sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .btn-main{width:100%;max-width:340px;height:48px;margin:18px auto 0;display:block;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
+  .btn-main:hover{filter:brightness(1.05)}
+  .btn-secondary{width:100%;max-width:340px;height:40px;margin-top:8px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
+  .btn-secondary:hover{border-color:var(--cyan);background:#F8FEFF}
+  .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+  .pill{border:1px solid #DFDAEE;border-radius:12px;padding:12px 6px;background:#FFF;text-align:center;cursor:pointer;transition:.15s}
+  .pill:hover{border-color:var(--cyan);background:#F8FEFF}
+  .pill.selected{border-color:var(--cyan);background:#E6F7F8;box-shadow:0 2px 8px rgba(110,207,212,.35)}
+  .pill .emoji{font-size:24px}
+  .pill .num{font-size:13px;font-weight:700;margin-top:6px}
+  .pill .lbl{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3}
+  .field-label{font-size:12px;font-weight:700;margin-top:18px;display:block}
+  .field-hint{font-size:11px;color:var(--muted);margin-top:4px}
+  textarea{width:100%;min-height:90px;margin-top:8px;border:1px solid #DFDAEE;border-radius:12px;padding:10px 12px;font-family:inherit;font-size:13px;resize:vertical}
+  textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(110,207,212,.2)}
+  .actions{display:flex;gap:10px;margin-top:18px}
+  .btn-save{flex:1;height:44px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:14px;cursor:pointer}
+  .btn-save:hover{background:var(--cyan-hover)}
+  .btn-cancel{flex:1;height:44px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
+  .err-msg{display:none;font-size:12px;color:var(--error);background:#FFF1F3;border:1px solid #FBD3DC;padding:8px 12px;border-radius:10px;margin-top:12px}
+  .err-msg.show{display:block}
+  .saved{border:1px solid #C9F0F2;background:#F2FCFD;border-radius:12px;padding:14px;margin-top:14px;display:none}
+  .saved.show{display:block}
+  .saved h3{font-size:13px;font-weight:700}
+  .saved p{font-size:12px;color:var(--text);margin-top:6px;line-height:1.5}
+  .saved small{font-size:11px;color:var(--muted)}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
+  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
+  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2D2F36;color:white;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none;z-index:60}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:10px 0;margin-top:20px}
+  .footer-in{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12px}
+  .footer-in a{color:var(--muted);text-decoration:none}
+  @media(max-width:760px){
+    .header{padding:0 14px}
+    .nav{font-size:12px;gap:12px}
+    .scale{grid-template-columns:repeat(5,1fr);gap:6px}
+    .pill .emoji{font-size:20px}
+    .actions{flex-direction:column}
+  }
+</style>
+</head>
+<body>
+<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header">
+  <div class="logo">Mindzy<span>x</span></div>
+  <nav class="nav">
+    <a href="#" class="active">Inicio</a>
+    <a href="#">Nosotros</a>
+    <a href="#">Ayuda</a>
+  </nav>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span class="user-pill">😊 Paciente</span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- PANEL -->
+  <div class="screen active" id="panelScreen">
+    <div class="card">
+      <div class="panel-head">
+        <h2>Mi panel</h2>
+        <p class="sub">HU1-PB12 · Sprint 1 — Registra cómo te sientes hoy.</p>
+      </div>
+      <button class="btn-main" id="goRegister">＋ Registrar estado emocional</button>
+      <div class="saved" id="savedCard">
+        <h3>Último registro guardado</h3>
+        <p id="savedText"></p>
+        <small id="savedDate"></small>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
+      <div class="controls">
+        <button class="chip" id="chipView">Ver registro guardado</button>
+        <button class="chip" id="chipClear">Limpiar selección</button>
+      </div>
+      <p class="hint">Sin selección, <b>Guardar</b> muestra "Debes seleccionar un estado emocional para guardar" y no guarda. Con selección válida se asigna fecha/hora actual y vuelve al panel con "Registro guardado correctamente". Todo se simula con JS + console.log.</p>
+    </div>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div class="screen" id="formScreen">
+    <div class="card">
+      <div class="panel-head">
+        <h2>Registrar estado emocional</h2>
+        <p class="sub">¿Cómo te sientes ahora? La fecha y hora se asignan automáticamente al guardar.</p>
+      </div>
+      <label class="field-label">¿Cómo te sientes? *</label>
+      <div class="scale" id="scale">
+        <div class="pill" data-val="1"><div class="emoji">😞</div><div class="num">1</div><div class="lbl">Muy mal</div></div>
+        <div class="pill" data-val="2"><div class="emoji">🙁</div><div class="num">2</div><div class="lbl">Mal</div></div>
+        <div class="pill" data-val="3"><div class="emoji">😐</div><div class="num">3</div><div class="lbl">Regular</div></div>
+        <div class="pill" data-val="4"><div class="emoji">🙂</div><div class="num">4</div><div class="lbl">Bien</div></div>
+        <div class="pill" data-val="5"><div class="emoji">😄</div><div class="num">5</div><div class="lbl">Excelente</div></div>
+      </div>
+      <label class="field-label" for="notes">Notas</label>
+      <p class="field-hint">¿Quieres agregar una nota? (opcional)</p>
+      <textarea id="notes" placeholder="¿Quieres agregar una nota? (opcional)"></textarea>
+      <div class="err-msg" id="errMsg">Debes seleccionar un estado emocional para guardar</div>
+      <div class="actions">
+        <button class="btn-cancel" id="btnCancel">Cancelar / Volver</button>
+        <button class="btn-save" id="btnSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Inicio</a><a href="#">Nosotros</a><a href="#">Ayuda</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const panelScreen=document.getElementById('panelScreen'), formScreen=document.getElementById('formScreen');
+  const toast=document.getElementById('toast'), errMsg=document.getElementById('errMsg');
+  const notes=document.getElementById('notes'), savedCard=document.getElementById('savedCard');
+  const savedText=document.getElementById('savedText'), savedDate=document.getElementById('savedDate');
+  const pills=document.querySelectorAll('#scale .pill');
+  const labels={1:'Muy mal',2:'Mal',3:'Regular',4:'Bien',5:'Excelente'};
+  const emojis={1:'😞',2:'🙁',3:'😐',4:'🙂',5:'😄'};
+  let selected=null, lastRecord=null;
+
+  function addLog(tag,msg){ console.log(tag, new Date().toLocaleTimeString(), msg); }
+  function showToast(msg){
+    toast.textContent=msg; toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t=setTimeout(()=>toast.classList.remove('show'),2400);
+  }
+  function showScreen(form){
+    panelScreen.classList.toggle('active',!form);
+    formScreen.classList.toggle('active',form);
+  }
+  function clearSelection(){
+    selected=null;
+    pills.forEach(p=>p.classList.remove('selected'));
+    errMsg.classList.remove('show');
+  }
+
+  pills.forEach(p=>{
+    p.addEventListener('click',()=>{
+      pills.forEach(x=>x.classList.remove('selected'));
+      p.classList.add('selected');
+      selected=parseInt(p.dataset.val,10);
+      errMsg.classList.remove('show');
+      addLog('[HU1-PB12]','ESTADO SELECCIONADO: '+selected+' ('+labels[selected]+')');
+    });
+  });
+
+  document.getElementById('goRegister').addEventListener('click',()=>{
+    clearSelection(); notes.value='';
+    showScreen(true);
+    addLog('[HU1-PB12]','APERTURA pantalla "Registrar estado emocional"');
+  });
+
+  document.getElementById('btnCancel').addEventListener('click',()=>{
+    addLog('[HU1-PB12]','CANCELADO por el usuario — vuelve al panel sin guardar');
+    showScreen(false);
+    showToast('Registro cancelado');
+  });
+
+  document.getElementById('btnSave').addEventListener('click',()=>{
+    if(!selected){
+      errMsg.classList.add('show');
+      addLog('[HU1-PB12]','ERROR: intento de guardar sin selección — "Debes seleccionar un estado emocional para guardar"');
+      return;
+    }
+    const now=new Date();
+    const fechaHora=now.toLocaleDateString('es-ES')+' '+now.toLocaleTimeString('es-ES');
+    const nota=notes.value.trim();
+    lastRecord={valor:selected,etiqueta:labels[selected],emoji:emojis[selected],nota:nota,fechaHora:fechaHora};
+    savedText.textContent=lastRecord.emoji+' '+selected+' — '+lastRecord.etiqueta+(nota?' · "'+nota+'"':' · Sin nota');
+    savedDate.textContent='Registrado el '+fechaHora+' (fecha/hora automática)';
+    savedCard.classList.add('show');
+    addLog('[HU1-PB12]','REGISTRO GUARDADO: '+selected+' ('+labels[selected]+') | nota="'+(nota||'—')+'" | fechaHora='+fechaHora);
+    showScreen(false);
+    showToast('Registro guardado correctamente ✓');
+  });
+
+  document.getElementById('chipView').addEventListener('click',()=>{
+    if(!lastRecord){
+      addLog('[HU1-PB12]','DEMO ver registro: aún no hay registro guardado');
+      showToast('Aún no hay registro guardado');
+      return;
+    }
+    savedCard.classList.add('show');
+    showScreen(false);
+    addLog('[HU1-PB12]','DEMO ver registro guardado: '+lastRecord.valor+' ('+lastRecord.etiqueta+') | '+lastRecord.fechaHora);
+    showToast('Registro: '+lastRecord.emoji+' '+lastRecord.etiqueta+' · '+lastRecord.fechaHora);
+  });
+
+  document.getElementById('chipClear').addEventListener('click',()=>{
+    clearSelection(); notes.value='';
+    addLog('[HU1-PB12]','DEMO: selección limpiada');
+    showToast('Selección limpiada');
+  });
+
+  addLog('[HU1-PB12]','Sistema listo — pantalla "Registrar estado emocional" disponible');
+</script>
+</body>
+</html>

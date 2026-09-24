@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindzyx — HU1-PB15 | Recordatorios (Paciente)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
+  .blob{position:absolute;border-radius:50%;opacity:0.6}
+  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+  .header{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
+  .logo{display:flex;align-items:center}
+  .logo-img{height:44px;width:auto;object-fit:contain}
+  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none}
+  .nav a.active{color:var(--text);font-weight:600}
+  .btn-ghost{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;color:var(--text);font-weight:600;font-size:12px;cursor:pointer}
+  .user-pill{font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:6px 12px;border-radius:20px;white-space:nowrap}
+  .wrap{width:100%;max-width:760px;margin:0 auto;padding:24px 16px 30px;flex:1}
+  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .panel-head{text-align:center}
+  .panel-head .badge{ display:inline-block;font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:5px 12px;border-radius:20px;margin-bottom:8px}
+  .panel-head h2{font-size:20px;font-weight:700}
+  .panel-head p.sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .current{display:flex;align-items:center;gap:12px;background:#F9F7FF;border:1px solid #E6E1F2;border-radius:12px;padding:12px 14px;margin-top:16px}
+  .current .ico{width:42px;height:42px;border-radius:12px;background:#E6F7F8;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+  .current h3{font-size:13px;font-weight:700}
+  .current p{font-size:12px;color:var(--muted);margin-top:2px}
+  .status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:4px}
+  .status-dot.off{background:#C9C9D4}
+  .row-between{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
+  .row-between label{font-size:13px;font-weight:700}
+  .row-between small{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:2px}
+  .switch{position:relative;width:48px;height:26px;flex-shrink:0}
+  .switch input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:#D9D9E3;border-radius:999px;cursor:pointer;transition:.2s}
+  .slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:white;border-radius:50%;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+  .switch input:checked + .slider{background:var(--cyan)}
+  .switch input:checked + .slider:before{transform:translateX(22px)}
+  .section-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6B5BCE;background:#F9F7FF;padding:6px 10px;border-radius:20px;display:inline-block;margin-top:20px}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .chip{padding:8px 16px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:12px;font-weight:600;cursor:pointer}
+  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
+  .field{margin-top:12px}
+  .field label{font-size:12px;font-weight:600;display:block;margin-bottom:6px}
+  .field input[type="time"]{width:100%;max-width:220px;height:42px;border-radius:12px;border:1px solid #DFDAEE;padding:0 12px;font-family:inherit;font-size:14px;color:var(--text);background:white}
+  .field input[type="time"]:focus{outline:none;border-color:var(--cyan)}
+  .days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:12px}
+  .day{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:600;border:1px solid #DFDAEE;border-radius:10px;padding:10px 4px;cursor:pointer;background:white;user-select:none}
+  .day input{accent-color:var(--cyan);width:16px;height:16px;cursor:pointer}
+  .day.sel{border-color:var(--cyan);background:#F2FCFD}
+  .msg{font-size:12px;font-weight:600;margin-top:14px;padding:10px 12px;border-radius:10px;display:none;line-height:1.5}
+  .msg.err{display:block;color:var(--error);background:#FFF1F3;border:1px solid #FBD3DC}
+  .msg.ok{display:block;color:#0E8A4D;background:#E8FFF1;border:1px solid #BDE9CF}
+  .actions{display:flex;gap:10px;margin-top:18px}
+  .btn{flex:1;height:44px;border-radius:20px;font-weight:700;font-size:13px;cursor:pointer;border:none}
+  .btn.save{background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;box-shadow:0 4px 12px rgba(94,188,196,.35)}
+  .btn.save:hover{filter:brightness(1.05)}
+  .btn.cancel{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  .btn.cancel:hover{border-color:var(--cyan);background:#F8FEFF}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2D2F36;color:white;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none;z-index:60;max-width:90vw;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:10px 0;margin-top:20px}
+  .footer-in{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12px}
+  .footer-in a{color:var(--muted);text-decoration:none}
+  .footer-in a.aviso{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 16px;border-radius:20px;font-size:12px}
+  @media(max-width:760px){
+    .header{padding:0 14px}
+    .nav{font-size:12px;gap:12px}
+    .days{grid-template-columns:repeat(4,1fr)}
+    .actions{flex-direction:column}
+  }
+</style>
+</head>
+<body>
+<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header">
+  <div class="logo"><img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img"></div>
+  <nav class="nav">
+    <a href="#">Inicio</a>
+    <a href="#" class="active">Recordatorios</a>
+    <a href="#">Ayuda</a>
+  </nav>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span class="user-pill">🧠 Paciente</span>
+    <button class="btn-ghost" id="backBtn">← Volver</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="card">
+    <div class="panel-head">
+      <span class="badge">⏰ HU1-PB15 • Paciente</span>
+      <h2>Recordatorios</h2>
+      <p class="sub">Configura avisos para tu registro emocional diario o semanal.</p>
+    </div>
+
+    <div class="current" id="currentBox">
+      <div class="ico">🔔</div>
+      <div>
+        <h3>Configuración actual</h3>
+        <p id="currentText"><span class="status-dot" id="statusDot"></span>Diaria 08:00 • Activa</p>
+      </div>
+    </div>
+
+    <div class="row-between">
+      <label>Recordatorios activados<small>Desactívalos si no quieres recibir avisos.</small></label>
+      <label class="switch" title="Activar / desactivar">
+        <input type="checkbox" id="toggleActive" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <span class="section-title">Frecuencia</span>
+    <div class="controls" role="group" aria-label="Frecuencia">
+      <button class="chip active" id="chipDiaria">Diaria</button>
+      <button class="chip" id="chipSemanal">Semanal</button>
+      <button class="chip" id="chipClear" title="Demo: limpiar selección">Limpiar (demo)</button>
+    </div>
+
+    <div class="field">
+      <label for="horaInput">Hora del recordatorio</label>
+      <input type="time" id="horaInput" value="08:00">
+    </div>
+
+    <div id="daysBlock" style="display:none">
+      <span class="section-title">Días de la semana</span>
+      <div class="days" id="daysGrid">
+        <label class="day"><input type="checkbox" value="Lun">Lun</label>
+        <label class="day"><input type="checkbox" value="Mar">Mar</label>
+        <label class="day"><input type="checkbox" value="Mié">Mié</label>
+        <label class="day"><input type="checkbox" value="Jue">Jue</label>
+        <label class="day"><input type="checkbox" value="Vie">Vie</label>
+        <label class="day"><input type="checkbox" value="Sáb">Sáb</label>
+        <label class="day"><input type="checkbox" value="Dom">Dom</label>
+      </div>
+    </div>
+
+    <div class="msg" id="msgBox" role="alert"></div>
+
+    <div class="actions">
+      <button class="btn save" id="saveBtn">Guardar</button>
+      <button class="btn cancel" id="cancelBtn">Cancelar / Volver</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
+    <div class="controls">
+      <button class="chip active" id="demoAviso">🔔 Simular aviso programado</button>
+      <button class="chip" id="demoSinDatos">Simular sin frecuencia ni hora</button>
+    </div>
+    <p class="hint">Todo es simulado con JS + <b>console.log</b> (sin fetch). Abre la consola para ver los logs <b>[HU1-PB15]</b>. Si guardas sin frecuencia u hora verás: “Debes seleccionar frecuencia y hora”.</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Inicio</a>
+    <a href="#">Nosotros</a>
+    <a href="#">Ayuda</a>
+    <a href="#" class="aviso">⚠️ Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const toast = document.getElementById('toast');
+  const msgBox = document.getElementById('msgBox');
+  const toggleActive = document.getElementById('toggleActive');
+  const chipDiaria = document.getElementById('chipDiaria');
+  const chipSemanal = document.getElementById('chipSemanal');
+  const chipClear = document.getElementById('chipClear');
+  const horaInput = document.getElementById('horaInput');
+  const daysBlock = document.getElementById('daysGrid') ? document.getElementById('daysBlock') : null;
+  const daysWrap = document.getElementById('daysBlock');
+  const currentText = document.getElementById('currentText');
+  const statusDot = document.getElementById('statusDot');
+
+  // Estado guardado (simulado) + borrador del formulario
+  let saved = { activa: true, freq: 'Diaria', hora: '08:00', dias: [] };
+  let draft = { ...saved, dias: [...saved.dias] };
+
+  function addLog(){ console.log.apply(console, ['[HU1-PB15]'].concat([].slice.call(arguments))); }
+  function showToast(msg){
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+  function showMsg(type, text){
+    msgBox.className = 'msg' + (type ? ' ' + type : '');
+    msgBox.textContent = text || '';
+    if(!type) msgBox.style.display = 'none';
+  }
+  function fmtConfig(c){
+    const st = c.activa ? 'Activa' : 'Desactivada';
+    let base = (c.freq || '—') + ' ' + (c.hora || '—') + ' • ' + st;
+    if(c.freq === 'Semanal' && c.dias.length) base += ' (' + c.dias.join(', ') + ')';
+    return base;
+  }
+  function render(){
+    currentText.innerHTML = '<span class="status-dot' + (draft.activa && saved.activa ? '' : ' off') + '" id="statusDot"></span>' + fmtConfig(saved);
+    toggleActive.checked = draft.activa;
+    chipDiaria.classList.toggle('active', draft.freq === 'Diaria');
+    chipSemanal.classList.toggle('active', draft.freq === 'Semanal');
+    horaInput.value = draft.hora || '';
+    daysWrap.style.display = draft.freq === 'Semanal' ? 'block' : 'none';
+    document.querySelectorAll('#daysGrid .day').forEach(l => {
+      const cb = l.querySelector('input');
+      const on = draft.dias.includes(cb.value);
+      cb.checked = on;
+      l.classList.toggle('sel', on);
+    });
+  }
+  function setFreq(f){
+    draft.freq = f;
+    addLog('Frecuencia seleccionada:', f || '(ninguna)');
+    showMsg('', '');
+    render();
+  }
+
+  chipDiaria.addEventListener('click', () => setFreq('Diaria'));
+  chipSemanal.addEventListener('click', () => setFreq('Semanal'));
+  chipClear.addEventListener('click', () => {
+    draft.freq = null; draft.hora = '';
+    addLog('DEMO: selección limpiada (sin frecuencia ni hora)');
+    showMsg('', '');
+    render();
+  });
+  toggleActive.addEventListener('change', () => {
+    draft.activa = toggleActive.checked;
+    addLog('Toggle recordatorios:', draft.activa ? 'ACTIVADO' : 'DESACTIVADO');
+  });
+  horaInput.addEventListener('change', () => {
+    draft.hora = horaInput.value;
+    addLog('Hora seleccionada:', draft.hora || '(vacía)');
+  });
+  document.querySelectorAll('#daysGrid input').forEach(cb => {
+    cb.addEventListener('change', () => {
+      draft.dias = Array.from(document.querySelectorAll('#daysGrid input:checked')).map(x => x.value);
+      addLog('Días seleccionados:', draft.dias.join(', ') || '(ninguno)');
+      render();
+    });
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', () => {
+    draft.hora = horaInput.value;
+    if(!draft.freq || !draft.hora){
+      addLog('ERROR validación: falta frecuencia u hora. No se guarda.');
+      showMsg('err', 'Debes seleccionar frecuencia y hora');
+      showToast('Debes seleccionar frecuencia y hora');
+      return;
+    }
+    saved = { activa: draft.activa, freq: draft.freq, hora: draft.hora, dias: [...draft.dias] };
+    addLog('GUARDADO:', JSON.stringify(saved));
+    showMsg('ok', 'Recordatorios configurados correctamente');
+    showToast('Recordatorios configurados correctamente ✓');
+    render();
+  });
+
+  function volver(){
+    draft = { ...saved, dias: [...saved.dias] };
+    render();
+    showMsg('', '');
+    addLog('CANCELAR: cambios descartados, vuelve a la configuración guardada:', JSON.stringify(saved));
+    showToast('Cambios descartados');
+  }
+  document.getElementById('cancelBtn').addEventListener('click', volver);
+  document.getElementById('backBtn').addEventListener('click', volver);
+
+  document.getElementById('demoAviso').addEventListener('click', () => {
+    addLog('AVISO programado disparado (simulado).');
+    showToast('🔔 Es hora de tu registro emocional');
+  });
+  document.getElementById('demoSinDatos').addEventListener('click', () => {
+    draft.freq = null; draft.hora = '';
+    render();
+    addLog('DEMO: estado sin frecuencia ni hora — presiona Guardar para ver el error.');
+    showToast('Selección limpiada: presiona Guardar');
+  });
+
+  render();
+  addLog('Sistema listo — pantalla Recordatorios (Diaria 08:00, activa).');
+</script>
+</body>
+</html>
