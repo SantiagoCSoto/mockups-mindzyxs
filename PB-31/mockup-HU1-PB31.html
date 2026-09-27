@@ -78,6 +78,12 @@
   .msg.out small{color:rgba(255,255,255,.85)}
   .typing{font-size:11px;color:var(--muted);font-style:italic;display:none;padding:0 14px 6px}
   .typing.show{display:block}
+  .day-sticky{position:sticky;top:0;z-index:5;align-self:center;font-size:11px;font-weight:700;color:#5A5D72;background:#EDE7FF;border-radius:999px;padding:5px 14px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:4px}
+  .ticks{font-size:12px;margin-left:5px;color:#0E7490}
+  .ticks.t0{color:#B9B1D8}
+  .ticks.t1{color:#0E7490}
+  .ticks.t2b{color:#0369A1}
+  .ticks-legend{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
   .blocked-banner{display:none;background:#FFF1F3;border-top:1px solid #F5C2CE;color:#A63A52;font-size:12px;font-weight:600;text-align:center;padding:12px;line-height:1.5}
   .blocked-banner.show{display:block}
   .blocked-banner button{margin-top:8px;padding:6px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
@@ -99,6 +105,10 @@
   .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text)}
   .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
   .chip.warn.active{background:var(--error);border-color:var(--error)}
+  .result-tag{display:inline-block;font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;margin-top:8px}
+  .result-tag.bajo{background:#E8FFF1;color:#0E8F4B}
+  .result-tag.medio{background:#FFF8E6;color:#8A6A00}
+  .result-tag.alto{background:#FFF1F3;color:var(--error)}
   .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
   .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
   .footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
@@ -152,15 +162,15 @@
       <li><a href="#">Ayuda</a></li>
     </ul>
   </nav>
-  <div class="header-right">
-    <span class="role-pill" id="rolePill">👩 Ver como Paciente</span>
-  </div>
+    <div class="header-right">
+      <span class="role-pill" id="rolePill">👩 Paciente</span>
+    </div>
 </header>
 
 <main class="wrap">
   <div class="card hero">
     <h1>💬 Chat psicólogo-paciente</h1>
-    <p>Conversaciones ordenadas por fecha y hora, con remitente y contenido. Todo es simulado en este mockup (sin fetch).</p>
+    <p>Conversaciones ordenadas por fecha y hora, con remitente y contenido.</p>
     <div class="meta">HU1-PB31 — Sprint 3 • Chat de soporte</div>
   </div>
 
@@ -184,11 +194,12 @@
           </div>
           <button class="btn-block" id="blockBtn">⛔ Bloquear psicólogo</button>
         </div>
+        <div class="day-sticky">Hoy</div>
         <div class="msgs" id="msgs"></div>
         <div class="typing" id="typing">Escribiendo…</div>
         <div class="blocked-banner" id="blockedBanner">
-          🚫 Has bloqueado a este psicólogo. No puedes enviar ni recibir mensajes.<br>
-          <button id="unblockBtn">Desbloquear (demo)</button>
+          <span id="blockedText">🚫 Has bloqueado a este contacto. No puedes enviar ni recibir mensajes.</span><br>
+          <button id="unblockBtn">Desbloquear</button>
         </div>
         <div class="composer">
           <input id="msgInput" type="text" placeholder="Escribe un mensaje…" maxlength="300" autocomplete="off">
@@ -202,16 +213,31 @@
   <div class="card" id="panelReq" style="display:none">
     <div style="font-size:11px;font-weight:700;color:var(--lilac)">SOLICITUDES DE CHAT</div>
     <div id="reqList"></div>
+    <div id="searchBox" style="display:none">
+      <div style="font-size:11px;font-weight:700;color:var(--lilac);margin-top:16px">BUSCAR PACIENTE</div>
+      <div class="controls">
+        <input id="searchPaciente" type="text" maxlength="60" placeholder="Nombre o correo (opcional)" style="flex:2;height:38px;border-radius:12px;border:1px solid #DFDAEE;padding:0 12px;font-family:inherit;font-size:12px">
+        <select id="filterNivel" style="flex:1;height:38px;border-radius:12px;border:1px solid #DFDAEE;font-family:inherit;font-size:12px">
+          <option value="">Nivel: cualquiera</option>
+          <option value="Bajo">Riesgo bajo</option>
+          <option value="Medio">Riesgo medio</option>
+          <option value="Alto">Riesgo alto</option>
+        </select>
+        <button class="chip" id="btnBuscar">Buscar</button>
+      </div>
+      <div id="searchResults"></div>
+    </div>
   </div>
 
   <div class="card" style="margin-top:14px">
-    <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
+    <span style="font-size:11px;font-weight:700;color:#5A5D72">Simulación:</span>
     <div class="controls">
       <button class="chip active" id="rolePacChip">Ver como Paciente</button>
       <button class="chip" id="rolePsiChip">Ver como Psicólogo</button>
       <button class="chip warn" id="unauthChip">Abrir paciente no autorizado</button>
+      <button class="chip" id="readChip">Simular lectura del otro lado</button>
     </div>
-    <p class="hint">El eco del otro lado responde a los 2s. Los bloqueos, solicitudes, mensajes, aceptaciones y rechazos se registran en la consola con <b>addLog('[HU1-PB31]', …)</b>.</p>
+    <p class="hint">El eco del otro lado responde a los 2s. Los bloqueos, solicitudes, mensajes, aceptaciones y rechazos se registran en la consola.</p>
   </div>
 </main>
 
@@ -287,7 +313,7 @@
     return c.name;
   }
   function myLabel(){
-    return role === 'paciente' ? 'Tú (Paciente)' : 'Tú (Psicóloga)';
+    return role === 'paciente' ? 'Usted (Paciente)' : 'Usted (Psicólogo)';
   }
 
   function renderConvs(){
@@ -315,28 +341,37 @@
     $('chatAvatar').textContent = c.short;
     $('chatAvatar').className = 'avatar ' + c.av;
     const isBlocked = !!blocked[activeId];
+    const bloqueoYo = isBlocked && blocked[activeId] === 'yo';
     blockedBanner.classList.toggle('show', isBlocked);
+    $('blockedText').textContent = bloqueoYo
+      ? '🚫 Usted bloqueó a este contacto. No puede escribirle.'
+      : '🚫 Usted fue bloqueado por este usuario. No puede escribir en este chat.';
+    $('unblockBtn').style.display = bloqueoYo ? '' : 'none';
     msgInput.disabled = isBlocked;
     sendBtn.disabled = isBlocked;
     blockBtn.disabled = isBlocked;
     blockBtn.textContent = role === 'paciente' ? '⛔ Bloquear psicólogo' : '⛔ Bloquear paciente';
     msgs.innerHTML = '';
-    let lastDay = '';
+    renderTicksLegend();
     const sorted = [...c.messages].sort((a, b) => a.time.localeCompare(b.time));
     sorted.forEach(m => {
-      const day = m.time.split(' ')[0];
-      if (day !== lastDay) {
-        lastDay = day;
-        const d = document.createElement('div');
-        d.className = 'day'; d.textContent = day;
-        msgs.appendChild(d);
-      }
       const div = document.createElement('div');
       div.className = 'msg ' + m.side;
-      div.innerHTML = '<b style="font-size:11px">' + m.from + '</b><div>' + m.text + '</div><small>' + m.time + '</small>';
+      const ticks = m.side === 'out' ? `<span class="ticks ${m.leida ? 't2b' : (m.entregada ? 't1' : 't0')}" data-mid="${m.mid || ''}">${m.leida ? '●' : (m.entregada ? 'ⓜ' : '○')}</span>` : '';
+      div.innerHTML = '<b style="font-size:11px">' + m.from + '</b><div>' + m.text + '</div><small>' + m.time + ticks + '</small>';
       msgs.appendChild(div);
     });
     msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  let midSeq = 0;
+  function renderTicksLegend(){
+    if ($('ticksLegend')) return;
+    const p = document.createElement('p');
+    p.className = 'ticks-legend';
+    p.id = 'ticksLegend';
+    p.innerHTML = '○ enviada &nbsp;·&nbsp; ⓜ entregada &nbsp;·&nbsp; <span style="color:#0369A1">●</span> leída';
+    msgs.parentNode.insertBefore(p, msgs.nextSibling);
   }
 
   function openConv(id){
@@ -354,8 +389,8 @@
       return;
     }
     const text = msgInput.value.trim();
-    if (!text) { showToast('Escribe un mensaje primero'); return; }
-    const m = { from: myLabel(), side: 'out', text: text, time: nowStr() };
+    if (!text) { showToast('Escriba un mensaje primero'); return; }
+    const m = { mid: 'm' + (++midSeq), from: myLabel(), side: 'out', text: text, time: nowStr(), entregada: false, leida: false };
     c.messages.push(m);
     msgInput.value = '';
     renderChat(); renderConvs();
@@ -364,6 +399,7 @@
     setTimeout(() => {
       typing.classList.remove('show');
       if (blocked[activeId]) return; // no eco si se bloqueó en esos 2s
+      m.entregada = true; // simulación: entregado al otro lado
       const echo = { from: otherName(c), side: 'in', text: 'Gracias por tu mensaje: "' + text + '" (respuesta simulada).', time: nowStr() };
       c.messages.push(echo);
       renderChat(); renderConvs();
@@ -428,12 +464,46 @@
     const isPac = role === 'paciente';
     rolePacChip.classList.toggle('active', isPac);
     rolePsiChip.classList.toggle('active', !isPac);
-    rolePill.textContent = isPac ? '👩 Ver como Paciente' : '🧠 Ver como Psicólogo';
+    rolePill.textContent = isPac ? '👩 Paciente' : '🧠 Psicólogo';
+    $('searchBox').style.display = isPac ? 'none' : 'block';
     activeId = isPac ? 'ana' : 'camila';
     if (!convs[activeId]) activeId = Object.keys(convs)[0];
     renderConvs(); renderChat();
-    addLog('[HU1-PB31]', 'ROL demo cambiado a: ' + (isPac ? 'Paciente' : 'Psicólogo') + ' — chat activo: ' + convs[activeId].name);
-    showToast(isPac ? 'Viendo como Paciente' : 'Viendo como Psicólogo');
+    addLog('[HU1-PB31]', 'ROL cambiado a: ' + (isPac ? 'Paciente' : 'Psicólogo') + ' — chat activo: ' + convs[activeId].name);
+    showToast(isPac ? 'Vista de Paciente' : 'Vista de Psicólogo');
+  }
+
+  const fakePacientes = [
+    { nombre: 'Camila Rojas', correo: 'camila@test.com', nivel: 'Medio', puntaje: 3, cuest: 2, psi: 1 },
+    { nombre: 'Diego Fuentes', correo: 'diego@test.com', nivel: 'Alto', puntaje: 4, cuest: 3, psi: 0 },
+    { nombre: 'Laura Méndez', correo: 'laura@test.com', nivel: null, puntaje: null, cuest: 0, psi: 0 }
+  ];
+
+  function buscarMock(){
+    const q = $('searchPaciente').value.trim().toLowerCase();
+    const nivel = $('filterNivel').value;
+    if (!q && !nivel) { showToast('Seleccione al menos un filtro antes de buscar.'); return; }
+    const box = $('searchResults');
+    const res = fakePacientes.filter(p =>
+      (!q || p.nombre.toLowerCase().includes(q) || p.correo.includes(q)) &&
+      (!nivel || p.nivel === nivel));
+    if (!res.length) { box.innerHTML = '<p class="hint">Sin coincidencias.</p>'; return; }
+    box.innerHTML = '';
+    res.forEach(p => {
+      const tag = p.nivel
+        ? `<span class="result-tag ${p.nivel.toLowerCase()}">Riesgo ${p.nivel} · ${p.puntaje}</span>`
+        : '<span class="result-tag">Sin datos</span>';
+      const div = document.createElement('div');
+      div.className = 'req-card';
+      div.innerHTML = `<div class="conv-top"><div class="avatar av-new">${p.nombre.split(' ').map(w => w[0]).join('').slice(0, 2)}</div>` +
+        `<div><h3>${p.nombre}</h3><p style="margin:0">${p.correo}</p>${tag}<p style="margin:4px 0 0">${p.cuest} cuestionario(s) · ${p.psi} psicólogo(s)</p></div></div>` +
+        `<div class="req-actions"><button class="btn-accept">Ofrecer</button></div>`;
+      div.querySelector('button').addEventListener('click', () => {
+        showToast('Solicitud enviada a ' + p.nombre);
+        addLog('[HU1-PB31]', 'SOLICITUD ofrecida a: ' + p.nombre + ' (nivel ' + (p.nivel || 'sin datos') + ')');
+      });
+      box.appendChild(div);
+    });
   }
 
   sendBtn.addEventListener('click', sendMessage);
@@ -442,7 +512,7 @@
   blockBtn.addEventListener('click', () => {
     const c = convs[activeId];
     $('blockTitle').textContent = role === 'paciente' ? 'Bloquear psicólogo' : 'Bloquear paciente';
-    $('blockText').textContent = 'Al bloquear a ' + c.name + ', no podrás enviar ni recibir mensajes. Se mostrará el aviso "Has bloqueado a este psicólogo" (demo reversible). ¿Deseas continuar?';
+    $('blockText').textContent = 'Al bloquear a ' + c.name + ', no podrás enviar ni recibir mensajes. Podrás desbloquearlo más tarde desde este mismo chat. ¿Deseas continuar?';
     blockModal.classList.add('open');
     addLog('[HU1-PB31]', 'INTENTO de bloqueo a ' + c.name + ' — modal de confirmación abierto');
   });
@@ -452,20 +522,30 @@
   });
   $('blockConfirm').addEventListener('click', () => {
     blockModal.classList.remove('open');
-    blocked[activeId] = true;
+    blocked[activeId] = 'yo';
     renderChat();
-    addLog('[HU1-PB31]', 'BLOQUEO confirmado: ' + convs[activeId].name + ' bloqueado — aviso "Has bloqueado a este psicólogo" visible, input deshabilitado');
+    addLog('[HU1-PB31]', 'BLOQUEO confirmado: ' + convs[activeId].name + ' bloqueado por usted — aviso visible solo para quien bloqueó, input deshabilitado');
     showToast('Contacto bloqueado ⛔');
   });
   $('unblockBtn').addEventListener('click', () => {
     delete blocked[activeId];
     renderChat();
-    addLog('[HU1-PB31]', 'DESBLOQUEO (demo): ' + convs[activeId].name + ' — envío habilitado de nuevo');
+    addLog('[HU1-PB31]', 'DESBLOQUEO: ' + convs[activeId].name + ' — envío habilitado de nuevo');
     showToast('Contacto desbloqueado ✓');
   });
 
   $('tabChat').addEventListener('click', () => setTab(false));
   $('tabReq').addEventListener('click', () => setTab(true));
+  $('btnBuscar').addEventListener('click', buscarMock);
+  $('searchPaciente').addEventListener('keydown', (e) => { if (e.key === 'Enter') buscarMock(); });
+  $('readChip').addEventListener('click', () => {
+    const c = convs[activeId];
+    if (!c) return;
+    c.messages.forEach(m => { if (m.side === 'out') m.leida = true; });
+    renderChat();
+    addLog('[HU1-PB31]', 'LECTURA simulada del otro lado — bolitas propias en azul (●)');
+    showToast('El otro lado leyó los mensajes ✓✓');
+  });
   rolePacChip.addEventListener('click', () => setRole('paciente'));
   rolePsiChip.addEventListener('click', () => setRole('psicologo'));
 
