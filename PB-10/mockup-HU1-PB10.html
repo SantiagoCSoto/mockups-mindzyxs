@@ -136,7 +136,7 @@
       <div class="data-grid">
         <div class="field"><label>Nombres</label><div class="val" id="vNombres">Camila</div></div>
         <div class="field"><label>Apellidos</label><div class="val" id="vApellidos">Rojas</div></div>
-        <div class="field"><label>Edad</label><div class="val" id="vEdad">23 años</div></div>
+        <div class="field"><label>Fecha de nacimiento</label><div class="val" id="vEdad">10/05/2002 (23 años)</div></div>
         <div class="field"><label>Género</label><div class="val" id="vGenero">Femenino</div></div>
         <div class="field full"><label>Correo electrónico</label><div class="val" id="vCorreo">paciente@test.com</div></div>
       </div>
@@ -154,7 +154,7 @@
       <div class="form-grid">
         <div class="form-group"><label for="inNombres">Nombres *</label><input id="inNombres" type="text" placeholder="Ej. Camila"><span class="err-msg" id="eNombres">El nombre es obligatorio.</span></div>
         <div class="form-group"><label for="inApellidos">Apellidos *</label><input id="inApellidos" type="text" placeholder="Ej. Rojas"><span class="err-msg" id="eApellidos">El apellido es obligatorio.</span></div>
-        <div class="form-group"><label for="inEdad">Edad *</label><input id="inEdad" type="number" min="1" max="120" placeholder="Ej. 23"><span class="err-msg" id="eEdad">Ingresa una edad válida (1–120).</span></div>
+        <div class="form-group"><label for="inEdad">Fecha de nacimiento *</label><input id="inEdad" type="date" max="2026-09-26"><span class="err-msg" id="eEdad">Ingresa una fecha válida.</span></div>
         <div class="form-group"><label for="inGenero">Género *</label>
           <select id="inGenero"><option value="">Seleccionar…</option><option>Femenino</option><option>Masculino</option><option>No binario</option><option>Prefiero no decirlo</option></select>
           <span class="err-msg" id="eGenero">Selecciona una opción.</span></div>
@@ -208,7 +208,7 @@
   const viewScreen=document.getElementById('viewScreen'), editScreen=document.getElementById('editScreen');
   const toast=document.getElementById('toast');
   const codeModal=document.getElementById('codeModal'), codeInput=document.getElementById('codeInput'), codeEmail=document.getElementById('codeEmail');
-  const CURRENT={nombres:'Camila',apellidos:'Rojas',edad:'23',genero:'Femenino',correo:'paciente@test.com'};
+  const CURRENT={nombres:'Camila',apellidos:'Rojas',fechaNac:'2002-05-10',genero:'Femenino',correo:'paciente@test.com'};
   const EXISTENTES=['admin@test.com','psico@test.com'];
   const DEMO_CODE='123456';
   let pending=null;
@@ -219,11 +219,13 @@
   function setErr(input,el,on,msg){ input.classList.toggle('invalid',on); el.classList.toggle('show',on); if(msg) el.textContent=msg; }
   function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
 
-  function fillForm(){ document.getElementById('inNombres').value=CURRENT.nombres; document.getElementById('inApellidos').value=CURRENT.apellidos; document.getElementById('inEdad').value=CURRENT.edad; document.getElementById('inGenero').value=CURRENT.genero; document.getElementById('inCorreo').value=CURRENT.correo; }
+  function edadDesde(f){ const n=new Date(f+'T00:00:00'), h=new Date(); let e=h.getFullYear()-n.getFullYear(); const m=h.getMonth()-n.getMonth(); if(m<0||(m===0&&h.getDate()<n.getDate())) e--; return e; }
+  function fmtFecha(f){ const p=f.split('-'); return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:f; }
+  function fillForm(){ document.getElementById('inNombres').value=CURRENT.nombres; document.getElementById('inApellidos').value=CURRENT.apellidos; document.getElementById('inEdad').value=CURRENT.fechaNac; document.getElementById('inGenero').value=CURRENT.genero; document.getElementById('inCorreo').value=CURRENT.correo; }
   function renderView(){
     document.getElementById('vNombres').textContent=CURRENT.nombres;
     document.getElementById('vApellidos').textContent=CURRENT.apellidos;
-    document.getElementById('vEdad').textContent=CURRENT.edad+' años';
+    document.getElementById('vEdad').textContent=`${fmtFecha(CURRENT.fechaNac)} (${edadDesde(CURRENT.fechaNac)} años)`;
     document.getElementById('vGenero').textContent=CURRENT.genero;
     document.getElementById('vCorreo').textContent=CURRENT.correo;
     document.getElementById('vCorreoSub').textContent=CURRENT.correo+' • Paciente';
@@ -248,15 +250,18 @@
     let ok=true;
     if(!vNom){ setErr(nom,document.getElementById('eNombres'),true,'El nombre es obligatorio.'); ok=false; } else setErr(nom,document.getElementById('eNombres'),false);
     if(!vApe){ setErr(ape,document.getElementById('eApellidos'),true,'El apellido es obligatorio.'); ok=false; } else setErr(ape,document.getElementById('eApellidos'),false);
-    const edadNum=Number(vEda);
-    if(!vEda||!Number.isInteger(edadNum)||edadNum<1||edadNum>120){ setErr(eda,document.getElementById('eEdad'),true); ok=false; } else setErr(eda,document.getElementById('eEdad'),false);
+    const vEda=eda.value;
+    const fnEda=vEda?new Date(vEda+'T00:00:00'):null;
+    if(!vEda||isNaN(fnEda)||fnEda>new Date()){ setErr(eda,document.getElementById('eEdad'),true,'Ingresa una fecha válida.'); ok=false; }
+    else if(edadDesde(vEda)<14){ setErr(eda,document.getElementById('eEdad'),true,'Ingresa una edad válida.'); ok=false; }
+    else setErr(eda,document.getElementById('eEdad'),false);
     if(!vGen){ setErr(gen,document.getElementById('eGenero'),true); ok=false; } else setErr(gen,document.getElementById('eGenero'),false);
     if(!vCor||!validEmail(vCor)){ setErr(cor,document.getElementById('eCorreo'),true,'Ingresa un correo válido.'); ok=false; }
     else if(vCor!==CURRENT.correo.toLowerCase()&&EXISTENTES.includes(vCor)){ setErr(cor,document.getElementById('eCorreo'),true,'El correo ya se encuentra registrado'); addLog('[HU1-PB10]','ERROR correo duplicado: '+vCor); ok=false; }
     else setErr(cor,document.getElementById('eCorreo'),false);
     if(!ok){ addLog('[HU1-PB10]','VALIDACIÓN fallida en Guardar cambios'); return; }
 
-    pending={nombres:vNom,apellidos:vApe,edad:String(edadNum),genero:vGen,correo:vCor};
+    pending={nombres:vNom,apellidos:vApe,fechaNac:vEda,genero:vGen,correo:vCor};
     if(vCor===CURRENT.correo.toLowerCase()){
       Object.assign(CURRENT,pending); renderView(); show('view'); pending=null;
       addLog('[HU1-PB10]','ÉXITO Perfil actualizado correctamente (sin cambio de correo)');
