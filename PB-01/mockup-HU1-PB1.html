@@ -212,11 +212,11 @@
           </div>
         </div>
         <div class="field">
-          <label>Subir tarjeta profesional <span class="req">*</span></label>
+          <label for="fileInput">Subir tarjeta profesional <span class="req">*</span></label>
           <div class="upload">
             <button type="button" class="upload-btn" id="uploadBtn">↗ Seleccionar archivo</button>
             <span class="file-name" id="fileName">Ningún archivo seleccionado</span>
-            <input type="file" id="fileInput" hidden accept=".pdf">
+            <input type="file" id="fileInput" hidden accept=".pdf" aria-describedby="fileErrorText">
           </div>
           <span class="hint">Formatos permitidos: PDF — Tamaño máximo 5MB</span>
           <div class="error-msg" id="fileError" style="margin-top:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 8v5M12 16h.01M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="#E85D7A" stroke-width="1.7" stroke-linecap="round"/></svg> <span id="fileErrorText">La tarjeta profesional es obligatoria</span></div>
