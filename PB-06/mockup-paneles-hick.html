@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mock — Panel paciente reagrupado (Hick)</title>
+  <style>
+    :root {
+      --primario-fuerte: #0E7490; --primario: #6ECFD4; --apoyo: #6B5BCE;
+      --apoyo-suave: #EDE7FF; --tinta: #1E293B; --mudo: #64748B; --borde: #DFDAEE;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #F8FAFC; color: var(--tinta); margin: 0; padding: 24px 16px; }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    .card { background: #fff; border: 1px solid var(--borde); border-radius: 14px; padding: 24px; margin-bottom: 16px; }
+    h1 { font-size: 22px; margin: 0 0 4px; }
+    .sub { color: var(--mudo); font-size: 13px; margin: 0 0 4px; }
+    h2.seccion { font-size: 12px; text-transform: uppercase; letter-spacing: .6px; color: var(--mudo); margin: 20px 0 10px; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+    .tile { border: 1px solid var(--borde); border-radius: 12px; padding: 16px; display: flex; gap: 12px; align-items: center; background: #fff; }
+    .tile small { display: block; color: var(--mudo); font-size: 12px; }
+    .tile b { font-size: 14px; }
+    .ico { width: 42px; height: 42px; border-radius: 10px; background: var(--apoyo-suave); display: grid; place-items: center; font-size: 20px; flex-shrink: 0; }
+    .btn { margin-left: auto; flex-shrink: 0; border: none; border-radius: 18px; padding: 9px 20px; font-weight: 700; font-size: 12.5px; cursor: pointer; font-family: inherit; }
+    .btn-primary { background: var(--primario-fuerte); color: #fff; min-height: 44px; }
+    .btn-sec { background: #fff; color: var(--tinta); border: 1.5px solid var(--borde); min-height: 44px; }
+    .nota { background: var(--apoyo-suave); border-radius: 10px; padding: 10px 14px; font-size: 12.5px; color: var(--tinta); margin-top: 16px; }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--primario-fuerte); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="card">
+      <h1>Mi panel</h1>
+      <p class="sub">Tus acciones frecuentes primero; cuenta y ayuda después.</p>
+
+      <h2 class="seccion">Lo frecuente</h2>
+      <div class="grid">
+        <div class="tile"><div class="ico">🌿</div><div><b>Responder cuestionario</b><small>Cuestionario de bienestar</small></div><button class="btn btn-primary" type="button">Entrar</button></div>
+        <div class="tile"><div class="ico">📝</div><div><b>Registrar estado</b><small>Cómo te sientes hoy</small></div><button class="btn btn-sec" type="button">Entrar</button></div>
+        <div class="tile"><div class="ico">🧠</div><div><b>Historial emocional</b><small>Tus registros</small></div><button class="btn btn-sec" type="button">Abrir</button></div>
+        <div class="tile"><div class="ico">💬</div><div><b>Chat de apoyo</b><small>Habla con tu psicólogo</small></div><button class="btn btn-sec" type="button">Abrir</button></div>
+      </div>
+
+      <h2 class="seccion">Mi cuenta y ayuda</h2>
+      <div class="grid">
+        <div class="tile"><div class="ico">👤</div><div><b>Mi perfil</b><small>Tus datos y correo</small></div><button class="btn btn-sec" type="button">Abrir</button></div>
+        <div class="tile"><div class="ico">⏰</div><div><b>Recordatorios</b><small>Tus avisos</small></div><button class="btn btn-sec" type="button">Abrir</button></div>
+        <div class="tile"><div class="ico">🧑‍⚕️</div><div><b>Psicólogos</b><small>Directorio y especialidades</small></div><button class="btn btn-sec" type="button">Abrir</button></div>
+        <div class="tile"><div class="ico">🆘</div><div><b>Líneas de ayuda</b><small>Emergencia y apoyo</small></div><button class="btn btn-sec" type="button">Abrir</button></div>
+      </div>
+
+      <div class="nota"><b>Ley de Hick:</b> 9 decisiones del mismo peso → 4 frecuentes (1 primario destacado) + 4 secundarias agrupadas. Aviso y Cerrar sesión salen de la grilla (enlace en header/footer). Un solo <b>h1</b> jerarquiza.</div>
+    </div>
+  </main>
+</body>
+</html>

@@ -83,7 +83,8 @@
   .btn-secondary{width:100%;max-width:340px;height:40px;margin-top:8px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
   .btn-secondary:hover{border-color:var(--cyan);background:#F8FEFF}
   .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
-  .pill{border:1px solid #DFDAEE;border-radius:12px;padding:12px 6px;background:#FFF;text-align:center;cursor:pointer;transition:.15s}
+  .pill{border:1px solid #DFDAEE;border-radius:12px;padding:12px 6px;background:#FFF;text-align:center;cursor:pointer;transition:.15s;font-family:inherit;color:inherit;}
+  .pill:focus-visible{outline:3px solid #0E7490;outline-offset:2px;}
   .pill:hover{border-color:var(--cyan);background:#F8FEFF}
   .pill.selected{border-color:var(--cyan);background:#E6F7F8;box-shadow:0 2px 8px rgba(110,207,212,.35)}
   .pill .emoji{font-size:24px}
@@ -181,12 +182,12 @@
         <p class="sub">¿Cómo te sientes ahora? La fecha y hora se asignan automáticamente al guardar.</p>
       </div>
       <label class="field-label">¿Cómo te sientes? *</label>
-      <div class="scale" id="scale">
-        <div class="pill" data-val="1"><div class="emoji">😞</div><div class="num">1</div><div class="lbl">Muy mal</div></div>
-        <div class="pill" data-val="2"><div class="emoji">🙁</div><div class="num">2</div><div class="lbl">Mal</div></div>
-        <div class="pill" data-val="3"><div class="emoji">😐</div><div class="num">3</div><div class="lbl">Regular</div></div>
-        <div class="pill" data-val="4"><div class="emoji">🙂</div><div class="num">4</div><div class="lbl">Bien</div></div>
-        <div class="pill" data-val="5"><div class="emoji">😄</div><div class="num">5</div><div class="lbl">Excelente</div></div>
+      <div class="scale" id="scale" role="radiogroup" aria-label="Estado emocional del 1 al 5">
+        <button type="button" class="pill" data-val="1" role="radio" aria-checked="false"><div class="emoji">😞</div><div class="num">1</div><div class="lbl">Muy mal</div></button>
+        <button type="button" class="pill" data-val="2" role="radio" aria-checked="false"><div class="emoji">🙁</div><div class="num">2</div><div class="lbl">Mal</div></button>
+        <button type="button" class="pill" data-val="3" role="radio" aria-checked="false"><div class="emoji">😐</div><div class="num">3</div><div class="lbl">Regular</div></button>
+        <button type="button" class="pill" data-val="4" role="radio" aria-checked="false"><div class="emoji">🙂</div><div class="num">4</div><div class="lbl">Bien</div></button>
+        <button type="button" class="pill" data-val="5" role="radio" aria-checked="false"><div class="emoji">😄</div><div class="num">5</div><div class="lbl">Excelente</div></button>
       </div>
       <label class="field-label" for="notes">Notas</label>
       <p class="field-hint">¿Quieres agregar una nota? (opcional)</p>
@@ -236,14 +237,15 @@
   }
   function clearSelection(){
     selected=null;
-    pills.forEach(p=>p.classList.remove('selected'));
+    pills.forEach(p=>{ p.classList.remove('selected'); p.setAttribute('aria-checked','false'); });
     errMsg.classList.remove('show');
   }
 
   pills.forEach(p=>{
     p.addEventListener('click',()=>{
-      pills.forEach(x=>x.classList.remove('selected'));
+      pills.forEach(x=>{ x.classList.remove('selected'); x.setAttribute('aria-checked','false'); });
       p.classList.add('selected');
+      p.setAttribute('aria-checked','true');
       selected=parseInt(p.dataset.val,10);
       errMsg.classList.remove('show');
       addLog('[HU1-PB12]','ESTADO SELECCIONADO: '+selected+' ('+labels[selected]+')');
