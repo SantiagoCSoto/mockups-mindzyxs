@@ -27,15 +27,17 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;col
 .dash-invitado{margin-top:16px}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .grid-avail{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.psi-card{border:1px solid #DFDAEE;border-radius:14px;padding:18px;background:#fff;display:flex;flex-direction:column;gap:10px}
-.psi-top{display:flex;gap:12px;align-items:center}
-.psi-avatar{width:48px;height:48px;border-radius:50%;background:#EDE7FF;color:var(--violet);display:grid;place-items:center;font-weight:700}
-.psi-top b{font-size:14px;display:block}
-.psi-top small{font-size:11.5px;color:var(--muted)}
-.chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip-esp{font-size:11px;font-weight:600;background:#F3F1FA;color:#5A5D72;border:1px solid #E6E1F2;padding:4px 10px;border-radius:20px}
-.psi-count{font-size:12px;color:var(--muted)}
-.btn-tile{height:38px;border-radius:20px;border:none;background:var(--cyan);color:#fff;font-weight:700;font-size:12.5px;cursor:pointer}
+.dir-item{border:1px solid #DFDAEE;border-radius:12px;padding:12px 14px;margin-top:10px;background:#fff}
+.dir-top{display:flex;gap:10px;align-items:center}
+.dir-avatar{width:42px;height:42px;border-radius:50%;background:#EDE7FF;color:#4A38B0;display:grid;place-items:center;font-weight:700;font-size:14px;flex-shrink:0}
+.dir-top h3{font-size:14px}
+.esp-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.esp-chips span{font-size:11px;font-weight:600;background:#EDE7FF;color:#4A38B0;padding:4px 10px;border-radius:20px}
+.esp-none{font-size:12px;color:var(--muted);margin-top:8px}
+.count-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:4px;background:#E6F7F8;color:#0E7490}
+.dir-item .btn{margin-top:10px;min-height:44px}
+.btn{font-family:inherit;cursor:pointer}
+.btn-tile{width:100%;height:38px;border-radius:20px;border:none;background:var(--cyan);color:#fff;font-weight:700;font-size:12.5px;cursor:pointer}
 .btn-tile:hover{background:var(--cyan-hover)}
 .empty{text-align:center;padding:24px;border:1px dashed #DFDAEE;border-radius:12px;background:#FBFAFF;font-size:12.5px;color:var(--muted);margin-top:12px}
 .footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
@@ -75,7 +77,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;col
       <p class="sub">Conozca sus especialidades y pacientes asignados para ver cuál se ajusta mejor a Usted.</p>
     </div>
     <div class="dash-invitado" id="dashDirectorio">
-      <div class="grid grid-avail" id="dirGrid"></div>
+      <div id="dirGrid"></div>
       <div class="empty" id="dirEmpty" style="display:none;">
         <p>No hay psicólogos disponibles en este momento.</p>
       </div>
@@ -109,19 +111,18 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;col
     if(psicologosDemo.length===0){dirEmpty.style.display='block';return;}
     dirEmpty.style.display='none';
     psicologosDemo.forEach(function(p){
-      var art=document.createElement('article');art.className='psi-card';
-      var top=document.createElement('div');top.className='psi-top';
-      var av=document.createElement('div');av.className='psi-avatar';av.textContent=p.iniciales;
+      var art=document.createElement('article');art.className='dir-item';
+      var top=document.createElement('div');top.className='dir-top';
+      var av=document.createElement('div');av.className='dir-avatar';av.setAttribute('aria-hidden','true');av.textContent=p.iniciales;
       var info=document.createElement('div');
-      var b=document.createElement('b');b.textContent=p.nombre;
-      var sm=document.createElement('small');sm.textContent=p.pacientes+' pacientes asignados';
-      info.appendChild(b);info.appendChild(sm);top.appendChild(av);top.appendChild(info);
-      var chips=document.createElement('div');chips.className='chips';
-      p.especialidades.forEach(function(e){var s=document.createElement('span');s.className='chip-esp';s.textContent=e;chips.appendChild(s);});
-      var count=document.createElement('div');count.className='psi-count';count.textContent='Especialidades: '+p.especialidades.join(', ')+' · '+p.pacientes+' pacientes asignados';
-      var btn=document.createElement('button');btn.type='button';btn.className='btn-tile';btn.textContent='Solicitar chat';
-      btn.addEventListener('click',function(){showToast('Solicitud enviada a '+p.nombre+' (demo)');console.log('[directorio] solicitud a',p.nombre);});
-      art.appendChild(top);art.appendChild(chips);art.appendChild(count);art.appendChild(btn);
+      var b=document.createElement('h3');b.textContent=p.nombre;
+      var tag=document.createElement('span');tag.className='count-tag';tag.textContent=p.pacientes+' paciente(s) asignado(s)';
+      info.appendChild(b);info.appendChild(tag);top.appendChild(av);top.appendChild(info);
+      var chips=document.createElement('div');chips.className='esp-chips';
+      p.especialidades.forEach(function(e){var s=document.createElement('span');s.textContent=e;chips.appendChild(s);});
+      var btn=document.createElement('button');btn.type='button';btn.className='btn btn-tile';btn.textContent='Solicitar chat';
+      btn.addEventListener('click',function(){btn.disabled=true;showToast('Solicitud enviada a '+p.nombre+' (demo)');btn.textContent='Solicitada';console.log('[directorio] solicitud a',p.nombre);});
+      art.appendChild(top);art.appendChild(chips);art.appendChild(btn);
       dirGrid.appendChild(art);
     });
   }
