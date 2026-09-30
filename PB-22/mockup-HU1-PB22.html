@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="../Logo1.png">
-<title>Directorio de psicólogos - Mindzyxs</title>
+<title>Buscar psicólogo en el chat - Mindzyxs</title>
 <style>
-:root{--cyan:#6ECFD4;--cyan-hover:#5ABCC2;--text:#1E293B;--muted:#64748B;--violet:#6B5BCE}
+:root{--cyan:#6ECFD4;--cyan-fuerte:#0E7490;--text:#1E293B;--muted:#64748B;--violet:#6B5BCE}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
@@ -18,35 +18,33 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;col
 .logo-container .logo-img{height:38px;width:auto;border-radius:8px}
 .main-nav ul{display:flex;list-style:none;gap:24px}
 .main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
-.btn-logout{background:#EB5771;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer}
+.btn-logout{background:#E85D7A;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
 .wrap{width:100%;max-width:900px;margin:0 auto;padding:28px 20px 40px;flex:1}
-.btn-volver-landing{background:#fff;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px}
 .card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px}
-.panel-head h1{font-size:22px}
-.panel-head .sub{font-size:12.5px;color:var(--muted);margin-top:4px}
-.dash-invitado{margin-top:16px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.grid-avail{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card h1{font-size:20px}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.list-title{font-size:12px;font-weight:700;color:var(--muted);margin-top:16px}
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.filters input,.filters select{height:38px;border:1px solid #DFDAEE;border-radius:12px;padding:0 12px;font-family:inherit;font-size:12px;background:#fff;color:var(--text)}
+.filters .btn{grid-column:1/-1}
+.btn{font-family:inherit;cursor:pointer;border-radius:18px;padding:9px 20px;min-height:44px;font-weight:700;font-size:12.5px;border:none;background:var(--cyan-fuerte);color:#fff;width:100%}
+.btn:disabled{opacity:.6;cursor:default}
 .dir-item{border:1px solid #DFDAEE;border-radius:12px;padding:12px 14px;margin-top:10px;background:#fff}
 .dir-top{display:flex;gap:10px;align-items:center}
 .dir-avatar{width:42px;height:42px;border-radius:50%;background:#EDE7FF;color:#4A38B0;display:grid;place-items:center;font-weight:700;font-size:14px;flex-shrink:0}
 .dir-top h3{font-size:14px}
+.count-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:4px;background:#E6F7F8;color:#0E7490}
 .esp-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .esp-chips span{font-size:11px;font-weight:600;background:#EDE7FF;color:#4A38B0;padding:4px 10px;border-radius:20px}
-.esp-none{font-size:12px;color:var(--muted);margin-top:8px}
-.count-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:4px;background:#E6F7F8;color:#0E7490}
-.dir-item .btn{margin-top:10px;min-height:44px}
-.btn{font-family:inherit;cursor:pointer}
-.btn-tile{width:100%;height:38px;border-radius:20px;border:none;background:var(--cyan);color:#fff;font-weight:700;font-size:12.5px;cursor:pointer}
-.btn-tile:hover{background:var(--cyan-hover)}
-.empty{text-align:center;padding:24px;border:1px dashed #DFDAEE;border-radius:12px;background:#FBFAFF;font-size:12.5px;color:var(--muted);margin-top:12px}
+.dir-item .btn{margin-top:10px}
+.hint{font-size:12px;color:var(--muted);margin-top:8px}
 .footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
 .footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
 .footer-in a{color:var(--muted);text-decoration:none}
 .aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;text-decoration:none}
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10000;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:680px){.main-nav{display:none}.grid,.grid-avail{grid-template-columns:1fr}}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--cyan-fuerte);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -70,25 +68,27 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;col
 </header>
 
 <main class="wrap">
-  <a href="#" id="btnVolver" class="btn-volver-landing">&larr; Volver al panel</a>
-  <section class="card section-sensibles">
-    <div class="panel-head">
-      <h1>Directorio de psicólogos</h1>
-      <p class="sub">Conozca sus especialidades y pacientes asignados para ver cuál se ajusta mejor a Usted.</p>
+  <section class="card">
+    <h1>Chat — Buscar psicólogo</h1>
+    <p class="sub">Espejo del buscador del psicólogo: nombre, especialidad y pacientes asignados.</p>
+    <div class="list-title">BUSCAR PSICÓLOGO</div>
+    <div class="filters">
+      <input type="text" id="searchPsi" maxlength="60" placeholder="Nombre (opcional)" aria-label="Buscar psicólogo por nombre">
+      <select id="filterEspecialidad" aria-label="Especialidad">
+        <option value="">Especialidad: cualquiera</option>
+      </select>
+      <button type="button" class="btn" id="btnBuscarPsi">Buscar</button>
     </div>
-    <div class="dash-invitado" id="dashDirectorio">
-      <div id="dirGrid"></div>
-      <div class="empty" id="dirEmpty" style="display:none;">
-        <p>No hay psicólogos disponibles en este momento.</p>
-      </div>
-    </div>
+    <div id="searchPsiResults"></div>
   </section>
 </main>
 
 <footer class="footer">
   <div class="footer-in">
-    <a href="#">Privacidad</a><a href="#">Cookies</a><a href="#">Términos</a>
-    <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span>ℹ️</span> Aviso: no diagnóstico</a>
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso"><span>ℹ️</span> Aviso: no diagnóstico</a>
   </div>
 </footer>
 
@@ -96,40 +96,45 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;col
 
 <script>
 (function(){
-  var dirGrid=document.getElementById('dirGrid');
-  var dirEmpty=document.getElementById('dirEmpty');
+  var esp=['Psicología clínica','Psicología de la salud','Neuropsicología','Psicología familiar'];
+  var sel=document.getElementById('filterEspecialidad');
+  esp.forEach(function(e){var o=document.createElement('option');o.value=e;o.textContent=e;sel.appendChild(o);});
+  var demo=[
+    {nombre:'Dra. Ana Torres',esp:['Psicología clínica'],pac:12,ini:'AT'},
+    {nombre:'Dr. Luis Herrera',esp:['Neuropsicología'],pac:8,ini:'LH'}
+  ];
+  var box=document.getElementById('searchPsiResults');
   var toast=document.getElementById('toast');
   function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(function(){toast.classList.remove('show');},2400);}
-
-  var psicologosDemo=[
-    {nombre:'Dra. Ana Torres',especialidades:['Ansiedad','Autoestima'],pacientes:12,iniciales:'AT'},
-    {nombre:'Dr. Luis Herrera',especialidades:['Depresión','Estrés'],pacientes:8,iniciales:'LH'}
-  ];
-
-  function render(){
-    dirGrid.innerHTML='';
-    if(psicologosDemo.length===0){dirEmpty.style.display='block';return;}
-    dirEmpty.style.display='none';
-    psicologosDemo.forEach(function(p){
-      var art=document.createElement('article');art.className='dir-item';
-      var top=document.createElement('div');top.className='dir-top';
-      var av=document.createElement('div');av.className='dir-avatar';av.setAttribute('aria-hidden','true');av.textContent=p.iniciales;
-      var info=document.createElement('div');
-      var b=document.createElement('h3');b.textContent=p.nombre;
-      var tag=document.createElement('span');tag.className='count-tag';tag.textContent=p.pacientes+' paciente(s) asignado(s)';
-      info.appendChild(b);info.appendChild(tag);top.appendChild(av);top.appendChild(info);
-      var chips=document.createElement('div');chips.className='esp-chips';
-      p.especialidades.forEach(function(e){var s=document.createElement('span');s.textContent=e;chips.appendChild(s);});
-      var btn=document.createElement('button');btn.type='button';btn.className='btn btn-tile';btn.textContent='Solicitar chat';
-      btn.addEventListener('click',function(){btn.disabled=true;showToast('Solicitud enviada a '+p.nombre+' (demo)');btn.textContent='Solicitada';console.log('[directorio] solicitud a',p.nombre);});
-      art.appendChild(top);art.appendChild(chips);art.appendChild(btn);
-      dirGrid.appendChild(art);
-    });
-  }
-  render();
-  document.getElementById('btn-logout').addEventListener('click',function(){showToast('Sesión cerrada (demo)');});
-  document.getElementById('btnVolver').addEventListener('click',function(e){e.preventDefault();showToast('Volviendo al panel (demo)');});
-  document.getElementById('footerAviso').addEventListener('click',function(e){e.preventDefault();showToast('Aviso: Mindzyxs no realiza diagnósticos');});
+  document.getElementById('btnBuscarPsi').addEventListener('click',function(){
+    var q=document.getElementById('searchPsi').value.trim().toLowerCase();
+    var f=sel.value;
+    box.innerHTML='<p class="hint">Buscando…</p>';
+    setTimeout(function(){
+      var items=demo.filter(function(p){
+        return (!q||p.nombre.toLowerCase().indexOf(q)>=0)&&(!f||p.esp.indexOf(f)>=0);
+      });
+      box.innerHTML='';
+      if(!items.length){box.innerHTML='<p class="hint">Sin coincidencias.</p>';return;}
+      items.forEach(function(p){
+        var art=document.createElement('article');art.className='dir-item';
+        var top=document.createElement('div');top.className='dir-top';
+        var av=document.createElement('div');av.className='dir-avatar';av.setAttribute('aria-hidden','true');av.textContent=p.ini;
+        var info=document.createElement('div');
+        var h=document.createElement('h3');h.textContent=p.nombre;
+        var tag=document.createElement('span');tag.className='count-tag';tag.textContent=p.pac+' paciente(s) asignado(s)';
+        info.appendChild(h);info.appendChild(tag);top.appendChild(av);top.appendChild(info);
+        var chips=document.createElement('div');chips.className='esp-chips';
+        p.esp.forEach(function(e){var s=document.createElement('span');s.textContent=e;chips.appendChild(s);});
+        var btn=document.createElement('button');btn.type='button';btn.className='btn';btn.textContent='Solicitar chat';
+        btn.addEventListener('click',function(){btn.disabled=true;btn.textContent='Solicitada';showToast('Solicitud enviada a '+p.nombre+' (demo)');});
+        art.appendChild(top);art.appendChild(chips);art.appendChild(btn);
+        box.appendChild(art);
+      });
+    },400);
+  });
+  document.getElementById('btn-logout').addEventListener('click',function(){if(confirm('¿Está seguro de que desea cerrar sesión?'))showToast('Sesión cerrada (demo)');});
+  document.getElementById('footerAviso').addEventListener('click',function(e){e.preventDefault();showToast('Mindzyxs no realiza diagnósticos clínicos');});
 })();
 </script>
 </body>
