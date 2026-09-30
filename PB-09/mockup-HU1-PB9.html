@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU1-PB9 | Recomendaciones básicas (Invitado)</title>
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Mindzyx — Recomendaciones básicas</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -22,17 +23,14 @@
   .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
   .nav a{color:var(--muted);text-decoration:none}
   .nav a.active{color:var(--text);font-weight:600}
-  .guest-pill{font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:6px 12px;border-radius:20px;white-space:nowrap}
   .wrap{width:100%;max-width:680px;margin:0 auto;padding:24px 16px 30px;flex:1}
   .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
   .screen{display:none}
   .screen.active{display:block}
   .panel-head{text-align:center}
-  .panel-head .badge-guest{display:inline-block;font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:5px 12px;border-radius:20px;margin-bottom:8px}
   .panel-head h2{font-size:20px;font-weight:700}
   .panel-head p.sub{font-size:12px;color:var(--muted);margin-top:4px}
-  .cta-wrap{text-align:center;margin-top:18px}
-  .btn-guest{width:100%;max-width:340px;height:48px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
+  .btn-guest{width:100%;max-width:340px;height:48px;border-radius:20px;border:none;background:var(--color-primario-fuerte,#0E7490);color:white;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
   .btn-guest:hover{filter:brightness(1.05)}
   .btn-secondary{height:40px;padding:0 20px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
   .btn-secondary:hover{border-color:var(--cyan);background:#F8FEFF}
@@ -42,12 +40,6 @@
   .mini-opts .ico{width:36px;height:36px;border-radius:10px;background:#E6F7F8;display:grid;place-items:center;margin:0 auto 6px;font-size:16px}
   .mini-opts h3{font-size:12px;font-weight:700}
   .mini-opts p{font-size:10px;color:var(--muted);margin-top:3px}
-  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
-  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
-  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
-  .chip.risk.active-bajo{background:#E8FFF1;color:#0E8F4B;border-color:#7FE0B0}
-  .chip.risk.active-medio{background:#FFF8E6;color:#8A6A00;border-color:#F3D48A}
-  .chip.risk.active-alto{background:#FFF1F3;color:var(--error);border-color:#FFBFCF}
   .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5}
   .recom-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
   .recom-title{font-size:18px;font-weight:800;text-align:left}
@@ -79,7 +71,7 @@
   .detail-block h3{font-size:12px;font-weight:700;color:#6B5BCE;letter-spacing:.04em;margin-bottom:8px}
   .detail-steps{list-style:none;counter-reset:step;display:flex;flex-direction:column;gap:8px}
   .detail-steps li{font-size:12.5px;color:var(--text);line-height:1.55;background:#F9F8FC;border:1px solid #EDE8F0;border-radius:10px;padding:10px 12px;counter-increment:step}
-  .detail-steps li::before{content:counter(step);display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#6ECFD4;color:white;font-size:11px;font-weight:700;margin-right:8px}
+  .detail-steps li::before{content:counter(step);display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--color-primario-fuerte,#0E7490);color:white;font-size:11px;font-weight:700;margin-right:8px}
   .detail-note{font-size:11.5px;color:var(--muted);background:#FFFDFB;border:1px dashed #F0D9BC;border-radius:10px;padding:10px 12px;margin-top:10px;line-height:1.6}
   .detail-note b{color:var(--text)}
   .detail-actions{display:flex;gap:10px;margin-top:20px}
@@ -110,6 +102,7 @@
   .btn-modal.ok{background:var(--cyan);color:white}
   .btn-modal.ok:hover{background:var(--cyan-hover)}
   .btn-modal.close{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  .icon-inline{display:inline-block;vertical-align:-2px}
   @media(max-width:560px){
     .header{padding:0 14px}
     .nav{font-size:12px;gap:12px}
@@ -123,10 +116,10 @@
 <header class="header">
   <div class="logo"><img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img"></div>
   <nav class="nav">
+    <a href="#" class="active">Inicio</a>
     <a href="#">Nosotros</a>
     <a href="#">Ayuda</a>
   </nav>
-  <span class="guest-pill">👤 Modo invitado</span>
 </header>
 
 <main class="wrap">
@@ -134,22 +127,29 @@
   <div class="screen active" id="screenPanel">
     <div class="card">
       <div class="panel-head">
-        <span class="badge-guest">👤 Modo invitado — sin cuenta</span>
         <h2>Panel de invitado</h2>
         <p class="sub">Accede a recomendaciones básicas de autocuidado y aprende a manejar tu estado emocional.</p>
       </div>
       <div class="mini-opts">
-        <div class="tile" id="openRecom"><div class="ico">💡</div><h3>Ver recomendaciones básicas</h3><p>Contenido de autocuidado administrable</p></div>
-        <div class="tile" data-out="true"><div class="ico">📝</div><h3>Responder cuestionario</h3><p>Ver PB-07 / PB-08</p></div>
-        <div class="tile" data-out="true"><div class="ico">🆘</div><h3>Líneas de ayuda</h3><p>Ver PB-08</p></div>
+        <div class="tile" id="openRecom">
+          <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2A8A94" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8a6 6 0 0 0-12 0c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path></svg></div>
+          <h3>Ver recomendaciones básicas</h3>
+          <p>Consejos de autocuidado</p>
+        </div>
+        <div class="tile" id="openCuestionario">
+          <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B5BCE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></svg></div>
+          <h3>Responder cuestionario</h3>
+          <p>Cuestionario de bienestar emocional</p>
+        </div>
+        <div class="tile" data-out="true">
+          <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E85D7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><path d="m4.93 4.93 4.24 4.24"></path><path d="m14.83 9.17 4.24-4.24"></path><path d="m14.83 14.83 4.24 4.24"></path><path d="m9.17 14.83-4.24 4.24"></path></svg></div>
+          <h3>Líneas de ayuda</h3>
+          <p>Contactos de emergencia y apoyo</p>
+        </div>
       </div>
       <div style="text-align:center;margin-top:16px">
         <button class="btn-secondary" id="panelExit">Salir del modo invitado</button>
       </div>
-    </div>
-    <div class="card" style="margin-top:14px">
-      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
-      <p class="hint" style="text-align:left;margin-top:8px">También se accede desde la pantalla <b>Resultado del riesgo (Invitado)</b> de HU1-PB8 con el botón <b>Ver recomendaciones básicas</b>.</p>
     </div>
   </div>
 
@@ -158,12 +158,38 @@
       <div class="recom-head">
         <div>
           <h2 class="recom-title">Recomendaciones básicas</h2>
-          <p class="recom-sub" id="recomSub">Contenido de autocuidado administrable por el administrador, no sustituye atención profesional.</p>
+          <p class="recom-sub" id="recomSub">Contenido de autocuidado básico, no sustituye atención profesional.</p>
         </div>
       </div>
-      <span class="priority-badge" id="priorityBadge">🎯 Organizadas según tu nivel de riesgo</span>
+      <span class="priority-badge show" id="priorityBadge"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B3541E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg> Organizadas según tu nivel de riesgo</span>
 
-      <div class="rec-list" id="recList"></div>
+      <div class="rec-list" id="recList">
+        <div class="rec-item prio">
+          <div class="rec-ico">🧘</div>
+          <div class="rec-info">
+            <h4>Respiración consciente</h4>
+            <p>Reduzca la tensión con una pausa breve de respiración guiada.</p>
+            <span class="prio-tag">Prioritaria para su nivel</span>
+          </div>
+          <button class="btn-ver" data-id="r1">Ver / Abrir</button>
+        </div>
+        <div class="rec-item">
+          <div class="rec-ico">🚶</div>
+          <div class="rec-info">
+            <h4>Pausa activa</h4>
+            <p>Interrumpa la jornada con movimiento suave durante 5 minutos.</p>
+          </div>
+          <button class="btn-ver" data-id="r2">Ver / Abrir</button>
+        </div>
+        <div class="rec-item">
+          <div class="rec-ico">😴</div>
+          <div class="rec-info">
+            <h4>Higiene del sueño</h4>
+            <p>Prepare su descanso con una rutina nocturna constante.</p>
+          </div>
+          <button class="btn-ver" data-id="r3">Ver / Abrir</button>
+        </div>
+      </div>
 
       <div class="empty-state" id="emptyState">
         <div class="empty-ico">
@@ -171,23 +197,19 @@
         </div>
         <h3>No hay recomendaciones disponibles en este momento</h3>
         <p>El administrador aún no ha cargado contenido de autocuidado. Inténtalo más tarde.</p>
-        <button class="btn-guest" id="emptyBack">Volver al inicio (Invitado)</button>
+        <button class="btn-guest" id="emptyBack">Volver al panel</button>
       </div>
 
       <div style="text-align:center;margin-top:18px">
         <button class="btn-secondary" id="volverRecom">← Volver</button>
       </div>
     </div>
-    <div class="card" style="margin-top:14px">
-      <span style="font-size:11px;font-weight:700;color:#5A5D72">API:</span>
-      <p class="hint" style="text-align:left;margin-top:8px">Lista por <b>GET</b> /api/recomendaciones/invitado?nivel=… (prioriza tu nivel, llega desde PB-08 con <b>?nivel=Bajo|Medio|Alto</b>) y detalle por <b>GET</b> /api/recomendaciones/invitado/{id}. Sin contenido del admin, se muestra el estado vacío.</p>
-    </div>
   </div>
 
   <div class="screen" id="screenDetail">
     <div class="card">
       <div class="detail-head">
-        <div class="detail-ico" id="detIco">🧘</div>
+        <div class="detail-ico" id="detIco"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2A8A94" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg></div>
         <h2 id="detTitle">—</h2>
         <p class="dur" id="detDur">—</p>
         <p class="sub" style="font-size:12px;color:var(--muted);margin-top:10px" id="detIntro"></p>
@@ -200,10 +222,13 @@
         <h3>Instrucciones</h3>
         <p style="font-size:12.5px;color:var(--text);line-height:1.65" id="detInstruc"></p>
       </div>
-      <div class="detail-note">⚠️ Estas recomendaciones son de <b>autocuidado básico</b>, no constituyen un <b>tratamiento clínico</b> ni sustituyen la atención de un profesional de la salud mental.</div>
+      <div class="detail-note">
+        <svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8A347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+        Estas recomendaciones son de <b>autocuidado básico</b>, no constituyen un <b>tratamiento clínico</b> ni sustituyen la atención de un profesional de la salud mental.
+      </div>
       <div class="detail-actions">
         <button class="btn-detail outline" id="detBack">Volver a recomendaciones</button>
-        <button class="btn-detail ok" id="detHome">Volver al inicio (Invitado)</button>
+        <button class="btn-detail ok" id="detHome">Volver al panel</button>
       </div>
     </div>
   </div>
@@ -212,10 +237,10 @@
 
 <footer class="footer">
   <div class="footer-in">
-    <a href="#">Inicio</a>
-    <a href="#">Nosotros</a>
-    <a href="#">Ayuda</a>
-    <a href="#" class="aviso" id="footerAviso"><span class="ico">⚠️</span> Aviso: no diagnóstico</a>
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso" id="footerAviso"><span class="ico"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E8A347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
   </div>
 </footer>
 
@@ -224,7 +249,7 @@
     <div class="modal-icon">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
     </div>
-    <h3>Mensaje aclaratorio</h3>
+    <h3 id="avisoTitle">Mensaje aclaratorio</h3>
     <div class="aviso-txt">
       <b>Mindzyx</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
       Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.
@@ -240,176 +265,182 @@
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-  const API='http://localhost:5015';
-  // Nivel de la sesión (llega desde PB-08 con ?nivel=Bajo|Medio|Alto; sin nivel, orden estándar).
-  const _pn=new URLSearchParams(location.search).get('nivel');
-  let riskLevel=_pn?(_pn.charAt(0).toUpperCase()+_pn.slice(1).toLowerCase()):null;
-  if(!['Bajo','Medio','Alto'].includes(riskLevel)) riskLevel=null;
-  const riskLabel={Bajo:'Riesgo bajo',Medio:'Riesgo medio',Alto:'Riesgo alto'};
-  let recData=[];
-  let pendingRecId=null, avisoCache=null;
+  const DEMO_RECOMS = [
+    {
+      id: 'r1',
+      icono: '🧘',
+      titulo: 'Respiración consciente',
+      intro: 'Reduzca la tensión con una pausa breve de respiración guiada.',
+      duracion: '5 minutos',
+      pasos: ['Siéntese con la espalda recta y relaje los hombros.', 'Inhale por la nariz durante 4 segundos.', 'Sostenga el aire 4 segundos y exhale lentamente por la boca.', 'Repita el ciclo 4 veces y observe cómo se siente.'],
+      instrucciones: 'Usted puede practicar este ejercicio dos veces al día. Si percibe mareo, detenga la práctica y respire con normalidad.',
+      prioritaria: true
+    },
+    {
+      id: 'r2',
+      icono: '🚶',
+      titulo: 'Pausa activa',
+      intro: 'Interrumpa la jornada con movimiento suave durante 5 minutos.',
+      duracion: '5 minutos',
+      pasos: ['Póngase de pie y movilice cuello y hombros.', 'Camine unos minutos y estire brazos y piernas.', 'Hidrate y ventile el espacio antes de retomar.'],
+      instrucciones: 'Usted puede programar esta pausa cada 90 minutos de trabajo continuo.',
+      prioritaria: false
+    },
+    {
+      id: 'r3',
+      icono: '😴',
+      titulo: 'Higiene del sueño',
+      intro: 'Prepare su descanso con una rutina nocturna constante.',
+      duracion: '10 minutos',
+      pasos: ['Defina una hora fija para acostarse.', 'Evite pantallas 30 minutos antes de dormir.', 'Realice una actividad tranquila: lectura o respiración.'],
+      instrucciones: 'Usted puede registrar su horario de sueño para identificar mejoras en su descanso.',
+      prioritaria: false
+    }
+  ];
 
-  const screens={panel:document.getElementById('screenPanel'),recom:document.getElementById('screenRecom'),detail:document.getElementById('screenDetail')};
-  const toast=document.getElementById('toast');
-  const recList=document.getElementById('recList'), emptyState=document.getElementById('emptyState');
-  const priorityBadge=document.getElementById('priorityBadge');
-  const avisoModal=document.getElementById('avisoModal');
+  let pendingRecId = null;
 
-  function escapeHtml(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-  async function api(path,opts){
-    const r=await fetch(API+path,opts);
-    if(!r.ok){ let m=''; try{ m=(await r.json()).error||''; }catch(_){} throw new Error(m||('HTTP '+r.status)); }
-    return r.status===204?null:r.json();
-  }
-  async function ensureAviso(){
-    if(avisoCache) return avisoCache;
-    try{
-      avisoCache=await api('/api/aviso');
-      document.querySelector('#avisoModal .aviso-txt').innerHTML='<b>'+escapeHtml(avisoCache.titulo)+'</b><br><br>'+escapeHtml(avisoCache.texto).replace(/\n/g,'<br>');
-    }catch(e){ addLog('Aviso por defecto (API no disponible)'); }
-    return avisoCache;
-  }
-  function logVisualizacion(res){
-    api('/api/aviso/visualizacion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({origen:'recomendaciones-invitado',resultado:res})}).catch(()=>{});
-  }
+  const screens = {
+    panel: document.getElementById('screenPanel'),
+    recom: document.getElementById('screenRecom'),
+    detail: document.getElementById('screenDetail')
+  };
+  const toast = document.getElementById('toast');
+  const recList = document.getElementById('recList');
+  const emptyState = document.getElementById('emptyState');
+  const priorityBadge = document.getElementById('priorityBadge');
+  const avisoModal = document.getElementById('avisoModal');
+  const recomSub = document.getElementById('recomSub');
+  const detIco = document.getElementById('detIco');
+  const detTitle = document.getElementById('detTitle');
+  const detDur = document.getElementById('detDur');
+  const detIntro = document.getElementById('detIntro');
+  const detSteps = document.getElementById('detSteps');
+  const detInstruc = document.getElementById('detInstruc');
 
-  function addLog(msg){ console.log('[HU1-PB9]', new Date().toLocaleTimeString(), msg); }
+  function escapeHtml(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
   function showToast(msg){
-    toast.textContent=msg; toast.classList.add('show');
+    toast.textContent = msg;
+    toast.classList.add('show');
     clearTimeout(showToast._t);
-    showToast._t=setTimeout(()=>toast.classList.remove('show'),2400);
+    showToast._t = setTimeout(() => toast.classList.remove('show'), 2400);
   }
+
   function showScreen(name){
-    Object.keys(screens).forEach(k=>screens[k].classList.toggle('active', k===name));
+    Object.keys(screens).forEach(k => screens[k].classList.toggle('active', k === name));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  async function loadList(){
-    recList.innerHTML='<p class="hint">Cargando recomendaciones…</p>';
-    try{
-      const d=await api('/api/recomendaciones/invitado'+(riskLevel?'?nivel='+encodeURIComponent(riskLevel):''));
-      if(!d||d.disponible===false){
-        recList.style.display='none';
-        emptyState.classList.add('show');
-        priorityBadge.classList.remove('show');
-        addLog('ESTADO VACÍO — el admin no ha cargado contenido');
-        return;
-      }
-      recData=d.recomendaciones||[];
-      if(d.nivel) riskLevel=d.nivel;
-      renderState();
-      addLog('CONSULTA de recomendaciones (invitado) — '+(riskLevel?('nivel '+riskLabel[riskLevel]+', orden priorizado'):'orden estándar'));
-    }catch(e){
-      recList.style.display='none';
-      emptyState.classList.add('show');
-      priorityBadge.classList.remove('show');
-      document.querySelector('#emptyState h3').textContent='No fue posible cargar las recomendaciones';
-      addLog('ERROR de carga: '+e.message);
-    }
-  }
-  function renderState(){
-    recList.style.display='flex';
+
+  function renderList(){
+    recList.style.display = 'flex';
     emptyState.classList.remove('show');
-
-    if(riskLevel){
-      priorityBadge.classList.add('show');
-      priorityBadge.textContent='🎯 Organizadas según tu nivel de riesgo ('+riskLabel[riskLevel]+')';
-    } else {
-      priorityBadge.classList.remove('show');
-    }
-
-    recList.innerHTML='';
-    recData.forEach(r=>{
-      const item=document.createElement('div');
-      item.className='rec-item'+(r.prioritaria?' prio':'');
-      item.innerHTML=
-        '<div class="rec-ico">'+escapeHtml(r.icono||'💡')+'</div>'+
-        '<div class="rec-info">'+
-          '<h4>'+escapeHtml(r.titulo)+'</h4>'+
-          '<p>'+escapeHtml(r.intro||'')+'</p>'+
-          (r.prioritaria?'<span class="prio-tag">Prioritaria para tu nivel</span>':'')+
-        '</div>'+
-        '<button class="btn-ver" data-id="'+r.id+'">Ver / Abrir</button>';
-      item.querySelector('.btn-ver').addEventListener('click',()=>openDetail(r.id));
+    priorityBadge.classList.add('show');
+    recList.innerHTML = '';
+    DEMO_RECOMS.forEach(r => {
+      const item = document.createElement('div');
+      item.className = 'rec-item' + (r.prioritaria ? ' prio' : '');
+      item.innerHTML =
+        '<div class="rec-ico">' + escapeHtml(r.icono) + '</div>' +
+        '<div class="rec-info">' +
+          '<h4>' + escapeHtml(r.titulo) + '</h4>' +
+          '<p>' + escapeHtml(r.intro) + '</p>' +
+          (r.prioritaria ? '<span class="prio-tag">Prioritaria para su nivel</span>' : '') +
+        '</div>' +
+        '<button class="btn-ver" data-id="' + escapeHtml(r.id) + '">Ver / Abrir</button>';
+      item.querySelector('.btn-ver').addEventListener('click', () => openDetail(r.id));
       recList.appendChild(item);
     });
   }
-  async function openDetail(id){
-    addLog('VISUALIZACIÓN del mensaje aclaratorio antes del detalle (aplica al contenido de autocuidado)');
-    pendingRecId=id;
-    await ensureAviso();
+
+  function openDetail(id){
+    pendingRecId = id;
     avisoModal.classList.add('open');
-    logVisualizacion('ok');
   }
-  async function showDetail(id){
-    try{
-      const r=await api('/api/recomendaciones/invitado/'+id);
-      document.getElementById('detIco').textContent=r.icono||'💡';
-      document.getElementById('detTitle').textContent=r.titulo;
-      document.getElementById('detDur').textContent=r.duracion||'';
-      document.getElementById('detIntro').textContent=r.intro||'';
-      const steps=document.getElementById('detSteps');
-      steps.innerHTML='';
-      (r.pasos||[]).forEach(s=>{ const li=document.createElement('li'); li.textContent=s; steps.appendChild(li); });
-      document.getElementById('detInstruc').textContent=r.instrucciones||'';
-      showScreen('detail');
-      addLog('VISUALIZACIÓN del detalle de "'+r.titulo+'" (pasos, duración sugerida e instrucciones)');
-    }catch(e){
-      showToast(e.message||'Recomendación no disponible');
-      addLog('ERROR detalle: '+e.message);
+
+  function showDetail(id){
+    const r = DEMO_RECOMS.find(x => x.id === id);
+    if(!r){
+      showToast('La recomendación seleccionada no se encuentra disponible.');
+      return;
     }
+    detIco.textContent = r.icono || '💡';
+    detTitle.textContent = r.titulo;
+    detDur.textContent = r.duracion || '';
+    detIntro.textContent = r.intro || '';
+    detSteps.innerHTML = '';
+    (r.pasos || []).forEach(s => {
+      const li = document.createElement('li');
+      li.textContent = s;
+      detSteps.appendChild(li);
+    });
+    detInstruc.textContent = r.instrucciones || '';
+    showScreen('detail');
   }
 
-  document.getElementById('openRecom').addEventListener('click', ()=>{
-    loadList();
+  document.getElementById('openRecom').addEventListener('click', () => {
+    renderList();
     showScreen('recom');
   });
-  document.querySelectorAll('.mini-opts .tile[data-out]').forEach(t=>{
-    t.addEventListener('click', ()=>{ showToast('Fuera del alcance de este mockup (ver PB-07 / PB-08)'); });
-  });
-  document.getElementById('panelExit').addEventListener('click', ()=>{
-    addLog('SALIDA del modo invitado — vuelve a la Landing (fuera de este mockup)');
-    showToast('Volviendo a la Landing (fuera de este mockup)');
-  });
-  document.getElementById('volverRecom').addEventListener('click', ()=>{
-    showScreen('panel');
-    addLog('NAVEGACIÓN: Volver desde Recomendaciones básicas — regresa al panel de invitado');
+
+  document.getElementById('openCuestionario').addEventListener('click', () => {
+    showToast('El cuestionario es demostrativo. Usted puede continuar con las recomendaciones básicas.');
   });
 
-  document.getElementById('avisoOk').addEventListener('click', async ()=>{
-    avisoModal.classList.remove('open');
-    addLog('AVISO ACEPTADO — botón "Entendido"');
-    if(pendingRecId){ await showDetail(pendingRecId); pendingRecId=null; }
+  document.querySelectorAll('.mini-opts .tile[data-out]').forEach(t => {
+    t.addEventListener('click', () => {
+      showToast('Las líneas de ayuda son demostrativas en este mockup.');
+    });
   });
-  document.getElementById('avisoCerrar').addEventListener('click', ()=>{
-    avisoModal.classList.remove('open');
-    pendingRecId=null;
-    addLog('AVISO CERRADO — no se muestra el detalle');
+
+  document.getElementById('panelExit').addEventListener('click', () => {
+    showToast('Usted ha salido del modo invitado (demostración).');
   });
-  document.getElementById('footerAviso').addEventListener('click', async (e)=>{
+
+  document.getElementById('volverRecom').addEventListener('click', () => {
+    showScreen('panel');
+  });
+
+  document.getElementById('emptyBack').addEventListener('click', () => {
+    showScreen('panel');
+  });
+
+  document.getElementById('detBack').addEventListener('click', () => {
+    showScreen('recom');
+  });
+
+  document.getElementById('detHome').addEventListener('click', () => {
+    showScreen('panel');
+  });
+
+  document.getElementById('avisoOk').addEventListener('click', () => {
+    avisoModal.classList.remove('open');
+    if(pendingRecId){ showDetail(pendingRecId); pendingRecId = null; }
+  });
+
+  document.getElementById('avisoCerrar').addEventListener('click', () => {
+    avisoModal.classList.remove('open');
+    pendingRecId = null;
+  });
+
+  document.getElementById('footerAviso').addEventListener('click', (e) => {
     e.preventDefault();
-    await ensureAviso();
+    pendingRecId = null;
     avisoModal.classList.add('open');
-    logVisualizacion('ok');
-    addLog('VISUALIZACIÓN del mensaje aclaratorio por enlace "Aviso: no diagnóstico"');
   });
 
-  document.getElementById('detBack').addEventListener('click', ()=>{
-    showScreen('recom');
-    addLog('NAVEGACIÓN: "Volver a recomendaciones" — regresa a la lista de recomendaciones');
-  });
-  document.getElementById('detHome').addEventListener('click', ()=>{
-    showScreen('panel');
-    addLog('NAVEGACIÓN: "Volver al inicio (Invitado)" — regresa al panel de invitado');
-  });
-  document.getElementById('emptyBack').addEventListener('click', ()=>{
-    showScreen('panel');
-    addLog('NAVEGACIÓN: "Volver al inicio (Invitado)" desde estado vacío');
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') avisoModal.classList.remove('open');
   });
 
-  loadList();
-  addLog('Sistema listo — recomendaciones dinámicas por API (priorizadas por nivel de la sesión)');
+  avisoModal.addEventListener('click', (e) => {
+    if(e.target === avisoModal){ avisoModal.classList.remove('open'); pendingRecId = null; }
+  });
+
+  renderList();
 </script>
 </body>
 </html>

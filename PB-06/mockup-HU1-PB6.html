@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU1-PB6 | Modo invitado</title>
+<title>Panel de invitado - Mindzyxs</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -103,19 +103,14 @@
 <div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
 
 <header class="header">
-  <div class="logo"><img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img"></div>
+  <div class="logo"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"><span>Mindzyxs</span></div>
   <nav class="nav">
-    <a href="#" class="active" id="navLanding">Inicio</a>
+    <a href="#" id="navLanding">Inicio</a>
     <a href="#">Nosotros</a>
     <a href="#">Ayuda</a>
   </nav>
-  <div id="headerGuest" style="display:flex;gap:8px;align-items:center">
-    <button class="btn-ghost" id="headerLogin">Iniciar sesión</button>
-    <button class="btn-primary" id="headerRegister">Registrarse</button>
-  </div>
-  <div id="headerPanel" style="display:none;gap:8px;align-items:center">
-    <span class="guest-pill">👤 Modo invitado</span>
-    <button class="btn-ghost" id="headerLogin2">Iniciar sesión</button>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="btn-ghost" id="btnSalirTop">Salir del modo invitado</button>
   </div>
 </header>
 
@@ -123,49 +118,65 @@
 
   <div class="screen active" id="landingScreen">
     <div class="card hero">
-      <h1>Mindzyx</h1>
+      <h1>Mindzyxs</h1>
       <p>Monitoreo y apoyo de tu bienestar emocional.</p>
-      <div style="margin-top:10px;font-size:11px;color:var(--muted)">HU1-PB6 — Sprint 1 • Modo invitado</div>
     </div>
     <div class="card landing-actions">
       <h2>Entra sin crear una cuenta</h2>
       <p class="sub">Usa servicios básicos sin registrarte ni iniciar sesión.</p>
-      <button class="btn-guest" id="guestBtn">Modo invitado</button>
+      <button class="btn-guest" id="guestBtn">Entrar como invitado</button>
       <div class="divider">— o —</div>
       <button class="btn-secondary" id="altLogin">Iniciar sesión</button>
       <button class="btn-secondary" id="altRegister">Registrarse</button>
     </div>
-    <p class="hint">Demo: presiona <b>Modo invitado</b> para acceder al Panel de invitado. Si activás <b>Simular error</b>, se muestra "No fue posible acceder en modo invitado. Intente nuevamente".</p>
+    <p class="hint">Demo: presiona <b>Entrar como invitado</b> para acceder al Panel de invitado.</p>
   </div>
 
   <div class="screen" id="panelScreen">
     <div class="card">
       <div class="panel-head">
-        <span class="badge-guest">👤 Modo invitado — sin cuenta</span>
-        <h2>Inicio (Invitado)</h2>
-        <p class="sub">Opciones disponibles sin crear cuenta ni iniciar sesión. Navegación limitada.</p>
+        <h1>Panel de invitado</h1>
+        <p class="sub">Explora sin crear una cuenta.</p>
       </div>
 
       <div class="section">
         <span class="section-title">Disponibles para invitado</span>
         <div class="grid-avail">
           <div class="tile">
-            <div class="ico">📝</div>
+            <div class="ico">🌿</div>
             <h3>Responder cuestionario</h3>
             <p>Cuestionario de bienestar emocional</p>
             <button class="btn" id="qBtn">Entrar</button>
           </div>
           <div class="tile">
+            <div class="ico">✨</div>
+            <h3>Crear cuenta</h3>
+            <p>Accede a todas las funciones</p>
+            <button class="btn" id="createBtn">Entrar</button>
+          </div>
+          <div class="tile">
+            <div class="ico">🧾</div>
+            <h3>Ver resultado</h3>
+            <p>Consulta tu nivel de riesgo emocional</p>
+            <button class="btn" id="resBtn">Abrir</button>
+          </div>
+          <div class="tile">
             <div class="ico">💡</div>
-            <h3>Ver recomendaciones básicas</h3>
-            <p>Consejos generales de cuidado</p>
-            <button class="btn" id="recBtn">Entrar</button>
+            <h3>Recomendaciones</h3>
+            <p>Consejos básicos de autocuidado</p>
+            <button class="btn" id="recBtn">Abrir</button>
           </div>
           <div class="tile">
             <div class="ico">🆘</div>
             <h3>Líneas de ayuda</h3>
             <p>Contactos de emergencia y apoyo</p>
-            <button class="btn" id="helpBtn">Entrar</button>
+            <button class="btn" id="helpBtn">Abrir</button>
+          </div>
+          <div class="tile">
+            <div class="ico">⚠️</div>
+            <h3>Aviso importante</h3>
+            <p>Información clave de la plataforma</p>
+            <button class="btn" id="avisoBtn">Leer</button>
           </div>
         </div>
       </div>
@@ -198,11 +209,11 @@
             <div class="lock-badge">🔒 Exclusivo</div>
           </div>
         </div>
-        <p class="lock-note">🔒 Estas funciones requieren <b>crear una cuenta o iniciar sesión</b>. Como invitado sólo podés usar las tres opciones básicas de arriba.</p>
+        <p class="lock-note">🔒 Estas funciones requieren <b>crear una cuenta o iniciar sesión</b>. Como invitado solo puede usar las opciones de arriba.</p>
       </div>
 
       <div style="text-align:center;margin-top:18px">
-        <button class="btn-secondary" style="max-width:280px" id="exitGuest">← Volver a la Landing</button>
+        <button class="btn-secondary" style="max-width:280px" id="exitGuest">← Salir del modo invitado</button>
       </div>
     </div>
 
@@ -220,10 +231,10 @@
 
 <footer class="footer">
   <div class="footer-in">
-    <a href="#">Inicio</a>
-    <a href="#">Nosotros</a>
-    <a href="#">Ayuda</a>
-    <a href="#" class="aviso" id="footerAviso"><span class="ico">⚠️</span> Aviso: no diagnóstico</a>
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso" id="footerAviso"><span class="ico">ℹ️</span> Aviso: no diagnóstico</a>
   </div>
 </footer>
 
@@ -234,12 +245,12 @@
     </div>
     <h3 id="avisoTitle">Mensaje aclaratorio</h3>
     <div class="aviso-txt">
-      <b>Mindzyx</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
+      <b>Mindzyxs</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
       Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.
       <br><br>
       Ante un <b>riesgo alto o una situación de urgencia</b>, busca ayuda profesional o utiliza las <b>líneas de ayuda disponibles</b> en tu país (por ejemplo, servicios de emergencia o líneas de crisis locales).
       <br><br>
-      Mindzyx es solo una <b>herramienta de apoyo y monitoreo emocional</b> y <b>no reemplaza la atención profesional</b>.
+      Mindzyxs es solo una <b>herramienta de apoyo y monitoreo emocional</b> y <b>no reemplaza la atención profesional</b>.
     </div>
     <div class="modal-actions">
       <button class="btn-modal close" id="btnCerrar">Cerrar</button>
@@ -266,18 +277,18 @@
     <div class="modal-icon ok">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
     </div>
-    <h3 id="helpTitle">Líneas de ayuda</h3>
+    <h3 id="helpTitle">Líneas de ayuda y apoyo emocional</h3>
     <div class="aviso-txt small">
-      Si estás pasando por una situación difícil o de riesgo, buscá ayuda profesional o comunicate con las líneas de ayuda de tu país:
+      Si te encuentras en una situación de crisis emocional o necesitas orientación profesional inmediata, puedes comunicarte a:
       <br><br>
-      • <b>Emergencias</b> (911 o el número local de emergencias de tu país)<br>
-      • <b>Líneas de crisis</b> locales disponibles en tu región<br>
-      • <b>Profesionales de salud mental</b> o servicios de salud cercanos
+      • 📞 <b>Línea 106:</b> Ayuda psicológica y crisis emocional (24 horas, gratuita).<br>
+      • 📞 <b>Línea 192:</b> Orientación en salud mental y apoyo psicosocial.<br>
+      • 🚨 <b>Línea 123:</b> Emergencias y urgencias generales.
       <br><br>
-      Mindzyx es una herramienta de apoyo y no reemplaza la atención profesional.
+      Recuerda que no estás solo y siempre hay ayuda disponible.
     </div>
     <div class="modal-actions">
-      <button class="btn-modal ok" id="helpOk">Entendido</button>
+      <button class="btn-modal ok" id="helpOk">Cerrar</button>
     </div>
   </div>
 </div>
@@ -286,7 +297,6 @@
 
 <script>
   const landingScreen=document.getElementById('landingScreen'), panelScreen=document.getElementById('panelScreen');
-  const headerGuest=document.getElementById('headerGuest'), headerPanel=document.getElementById('headerPanel');
   const toast=document.getElementById('toast');
   const obligatorioChip=document.getElementById('obligatorioChip'), errChip=document.getElementById('errChip');
   const avisoModal=document.getElementById('avisoModal'), errModal=document.getElementById('errModal'), helpModal=document.getElementById('helpModal');
@@ -307,8 +317,6 @@
   function showScreen(panel){
     landingScreen.classList.toggle('active', !panel);
     panelScreen.classList.toggle('active', panel);
-    headerGuest.style.display=panel?'none':'flex';
-    headerPanel.style.display=panel?'flex':'none';
     document.getElementById('navLanding').className=panel?'':'active';
   }
   function openErr(title,msg){
@@ -333,6 +341,12 @@
     showScreen(false);
     pendingAction=null;
     addLog('SALIDA del modo invitado — vuelve a la Landing');
+  });
+
+  document.getElementById('btnSalirTop').addEventListener('click', ()=>{
+    showScreen(false);
+    pendingAction=null;
+    addLog('SALIDA del modo invitado (header) — vuelve a la Landing');
   });
 
   function openAviso(fromSensitive){
@@ -400,6 +414,20 @@
     addLog('ACCESO: Líneas de ayuda consultadas (invitado)');
   });
 
+  document.getElementById('createBtn').addEventListener('click', ()=>{
+    addLog('ACCESO: Crear cuenta (invitado) — va a registro');
+    showToast('Ir a crear cuenta ✓');
+  });
+
+  document.getElementById('resBtn').addEventListener('click', ()=>{
+    addLog('ACCESO: Ver resultado (invitado)');
+    showToast('Abriendo resultado ✓');
+  });
+
+  document.getElementById('avisoBtn').addEventListener('click', ()=>{
+    openAviso(null);
+  });
+
   document.querySelectorAll('.tile.locked').forEach(t=>{
     t.addEventListener('click', ()=>{
       const name=t.querySelector('h3').textContent;
@@ -424,16 +452,6 @@
       : 'DEMO: modo error de acceso DESACTIVADO');
   });
 
-  document.querySelectorAll('#headerLogin, #headerLogin2').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      addLog('INTENTO de iniciar sesión desde header');
-      showToast('Ir a Iniciar sesión (fuera de este mockup)');
-    });
-  });
-  document.getElementById('headerRegister').addEventListener('click', ()=>{
-    addLog('INTENTO de registrarse desde header');
-    showToast('Ir a Registrarse (fuera de este mockup)');
-  });
   document.getElementById('altLogin').addEventListener('click', ()=>{
     addLog('INTENTO de iniciar sesión desde la Landing');
     showToast('Ir a Iniciar sesión (fuera de este mockup)');
@@ -443,7 +461,7 @@
     showToast('Ir a Registrarse (fuera de este mockup)');
   });
 
-  addLog('Sistema listo — botón "Modo invitado" disponible en la Landing Page');
+  addLog('Sistema listo — botón "Entrar como invitado" disponible en la Landing Page');
 </script>
 </body>
 </html>

@@ -3,18 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU1-PB15 | Recordatorios (Paciente)</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Mindzyxs — Recordatorios de registro emocional</title>
 <style>
-  /* ===== Unificado al estilo ACTUAL del front (base.css + inicio.css) ===== */
   :root{
     --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#1E293B; --muted:#64748B;
     --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B; --purple-accent:#6B5BCE;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#fff;margin:0;padding:0;color:var(--text);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow-x:hidden}
-  body::before{content:'';position:fixed;top:-120px;left:-130px;width:580px;height:520px;background-color:#fdebee;border-radius:50%;z-index:-1;pointer-events:none}
-  body::after{content:'';position:fixed;top:30px;right:-160px;width:680px;height:680px;background-color:#f1ecfe;border-radius:50%;z-index:-1;pointer-events:none}
+  body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow-x:hidden}
   .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
   .blob{position:absolute;border-radius:50%;opacity:.55;filter:blur(2px)}
   .blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
@@ -23,32 +20,19 @@
   .logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
   .logo-container .logo-img{height:38px;width:auto;object-fit:contain;border-radius:8px}
   .main-nav ul{display:flex;list-style:none;gap:24px;margin:0;padding:0}
-  .main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500;transition:color .2s ease}
-  .main-nav a:hover,.main-nav a.active{color:var(--text);font-weight:600}
+  .main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+  .main-nav a:hover{color:var(--text);font-weight:600}
   .header-right{display:flex;align-items:center;gap:16px}
   .header-auth-buttons{display:flex;gap:10px}
-  .badge-role{font-size:11px;font-weight:700;color:var(--purple-accent);background:#EDE7FF;padding:4px 10px;border-radius:20px;border:1px solid #DFDAEE;white-space:nowrap}
-  .btn-volver-landing{background:#fff;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .2s ease;font-family:inherit}
-  .btn-volver-landing:hover{background:#F1F5F9;border-color:#94A3B8;color:#1E293B;transform:translateY(-1px)}
+  .btn-logout{background-color:#EB5771;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .btn-logout:hover{background-color:#D63A54}
   .wrap{width:100%;max-width:800px;margin:0 auto;padding:28px 20px 40px;flex:1}
+  .btn-volver-landing{background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;font-family:inherit}
+  .btn-volver-landing:hover{background:#F1F5F9;border-color:#94A3B8;color:#1E293B}
   .card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px;margin-bottom:20px}
-  .card.hero{text-align:center;padding:32px 24px}
-  .hero h1{font-size:26px;font-weight:700;color:var(--text);margin-bottom:8px}
-  .hero p{font-size:13.5px;color:var(--muted);line-height:1.6;max-width:620px;margin:0 auto 14px}
-  .section-header{margin-bottom:12px}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px;margin-bottom:8px}
-  .tile{border:1px solid #DFDAEE;border-radius:14px;padding:22px 16px;background:#fff;text-align:center;display:flex;flex-direction:column;align-items:center;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
-  .tile:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(107,91,206,.08);border-color:#C8BEDE}
-  .tile-icon{width:46px;height:46px;border-radius:12px;background:#E6F7F8;color:#56C5C0;display:grid;place-items:center;margin-bottom:12px}
-  .tile h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
-  .tile p{font-size:12px;color:#8E91A3;line-height:1.45;margin-bottom:16px;flex:1}
-  .btn-tile{width:100%;height:38px;border-radius:20px;border:none;background:var(--cyan);color:#fff;font-weight:700;font-size:12.5px;cursor:pointer;transition:background-color .2s ease,transform .15s ease,box-shadow .2s ease}
-  .btn-tile:hover{background:var(--cyan-hover);transform:translateY(-1px);box-shadow:0 4px 10px rgba(110,207,212,.35)}
-  a.btn-tile{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;line-height:38px}
   .panel-head{text-align:center}
-  .panel-head .badge{ display:inline-block;font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:5px 12px;border-radius:20px;margin-bottom:8px}
-  .panel-head h2{font-size:20px;font-weight:700}
-  .panel-head p.sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .panel-head h1{font-size:22px;font-weight:700;margin:0 0 6px}
+  .panel-head p.sub{font-size:12.5px;color:var(--muted);margin:0}
   .current{display:flex;align-items:center;gap:12px;background:#F9F7FF;border:1px solid #E6E1F2;border-radius:12px;padding:12px 14px;margin-top:16px}
   .current .ico{width:42px;height:42px;border-radius:12px;background:#E6F7F8;display:grid;place-items:center;font-size:20px;flex-shrink:0}
   .current h3{font-size:13px;font-weight:700}
@@ -58,20 +42,20 @@
   .row-between{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
   .row-between label{font-size:13px;font-weight:700}
   .row-between small{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:2px}
-  .switch{position:relative;width:48px;height:26px;flex-shrink:0}
+  .switch{position:relative;width:48px;height:26px;flex-shrink:0;display:inline-block}
   .switch input{opacity:0;width:0;height:0}
   .slider{position:absolute;inset:0;background:#D9D9E3;border-radius:999px;cursor:pointer;transition:.2s}
   .slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:white;border-radius:50%;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
   .switch input:checked + .slider{background:var(--cyan)}
   .switch input:checked + .slider:before{transform:translateX(22px)}
-  .section-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--purple-accent);background:#F9F7FF;padding:6px 12px;border-radius:20px;border:1px solid #ECE7FB;display:inline-block;margin-top:20px}
+  .section-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--purple-accent);background:#F9F7FF;padding:6px 12px;border-radius:20px;border:1px solid #ECE7FB;display:inline-block;margin:20px 0 0}
+  h2.section-title{font-size:11px}
   .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
-  .chip{padding:8px 16px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:12px;font-weight:600;cursor:pointer}
+  .chip{padding:8px 16px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text)}
   .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
   .field{margin-top:12px}
   .field label{font-size:12px;font-weight:600;display:block;margin-bottom:6px}
   .field input[type="time"]{width:100%;max-width:220px;height:42px;border-radius:12px;border:1px solid #DFDAEE;padding:0 12px;font-family:inherit;font-size:14px;color:var(--text);background:white}
-  .field input[type="time"]:focus{outline:none;border-color:var(--cyan)}
   .days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:12px}
   .day{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:600;border:1px solid #DFDAEE;border-radius:10px;padding:10px 4px;cursor:pointer;background:white;user-select:none}
   .day input{accent-color:var(--cyan);width:16px;height:16px;cursor:pointer}
@@ -80,93 +64,93 @@
   .msg.err{display:block;color:var(--error);background:#FFF1F3;border:1px solid #FBD3DC}
   .msg.ok{display:block;color:#0E8A4D;background:#E8FFF1;border:1px solid #BDE9CF}
   .actions{display:flex;gap:10px;margin-top:18px}
-  .btn{flex:1;height:44px;border-radius:20px;font-weight:700;font-size:13px;cursor:pointer;border:none}
+  .btn{flex:1;height:44px;border-radius:20px;font-weight:700;font-size:13px;cursor:pointer;border:none;font-family:inherit}
   .btn.save{background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;box-shadow:0 4px 12px rgba(94,188,196,.35)}
-  .btn.save:hover{filter:brightness(1.05)}
   .btn.cancel{border:1px solid #DFDAEE;background:white;color:var(--text)}
   .btn.cancel:hover{border-color:var(--cyan);background:#F8FEFF}
-  .btn:disabled{opacity:.6;cursor:not-allowed}
-  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
   .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s ease;pointer-events:none;z-index:10000;box-shadow:0 6px 20px rgba(0,0,0,.2);max-width:90vw;text-align:center}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
   .footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
-  .footer-in a{color:var(--muted);text-decoration:none;transition:color .2s ease}
+  .footer-in a{color:var(--muted);text-decoration:none}
   .footer-in a:hover{color:var(--text)}
-  .footer-in a.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;text-decoration:none;font-size:12px;transition:all .2s ease;box-shadow:0 2px 8px rgba(107,91,206,.15)}
-  .footer-in a.aviso-link:hover{background:#E7DDFF;border-color:#B9A3F2;color:#4A38B0;box-shadow:0 4px 12px rgba(107,91,206,.25);transform:translateY(-1px)}
+  .footer-in a.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;text-decoration:none;font-size:12px}
   .aviso-ico{font-size:13px}
   .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999}
   .modal-overlay.open{display:flex}
   .modal{width:min(480px,100%);background:#fff;border-radius:16px;padding:26px 22px;box-shadow:0 12px 36px rgba(0,0,0,.18);text-align:center;max-height:90vh;overflow-y:auto}
-  .modal h3{font-size:17px;font-weight:700;color:var(--text);margin-bottom:12px}
+  .modal-icon{width:52px;height:52px;border-radius:14px;background:#FFF9E6;color:var(--warning);display:grid;place-items:center;margin:0 auto 14px;font-size:24px}
+  .modal h3{font-size:17px;font-weight:700;margin-bottom:12px}
+  .aviso-txt{font-size:12.5px;color:#475569;line-height:1.65;margin-top:12px;text-align:left;background:#F8FAFC;padding:16px;border-radius:12px;border:1px solid #E2E8F0}
+  .highlight{color:var(--error);font-weight:700;background:#FFF1F3;padding:2px 4px;border-radius:4px}
   .modal-actions{display:flex;gap:10px;margin-top:20px}
-  .btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s ease}
+  .btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
   .btn-modal.btn-ok{background:var(--cyan);color:#fff}
-  .btn-modal.btn-ok:hover{background:var(--cyan-hover)}
   .btn-modal.btn-close{border:1px solid #DFDAEE;background:#fff;color:var(--text)}
   @media(max-width:680px){
-    .header-nav{padding:10px 16px}
-    .main-nav{display:none}
-    .grid{grid-template-columns:1fr}
-    .days{grid-template-columns:repeat(4,1fr)}
-    .actions{flex-direction:column}
-    .modal-actions{flex-direction:column}
+    .header-nav{padding:10px 16px} .main-nav{display:none}
+    .days{grid-template-columns:repeat(4,1fr)} .actions{flex-direction:column} .modal-actions{flex-direction:column}
   }
 </style>
 </head>
 <body>
-<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
 
-  <header class="header-nav">
-    <div class="logo-container">
-      <a href="#" class="logo-link">
-        <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
-        <span>Mindzyxs</span>
-      </a>
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link">
+      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img">
+      <span>Mindzyxs</span>
+    </a>
+  </div>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <ul>
+      <li class="nav-inicio"><a href="#">Inicio</a></li>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
     </div>
-    <nav class="main-nav" aria-label="Navegación principal">
-      <ul>
-        <li><a href="#">Inicio</a></li>
-        <li><a href="#" class="active">Recordatorios</a></li>
-        <li><a href="#">Ayuda</a></li>
-      </ul>
-    </nav>
-    <div class="header-right">
-      <span class="badge-role">Paciente</span>
-      <button class="btn-volver-landing" id="backBtn">← Volver</button>
-    </div>
-  </header>
+  </div>
+</header>
 
 <main class="wrap">
+  <a href="#" class="btn-volver-landing" id="backBtn">← Volver al panel</a>
   <div class="card">
     <div class="panel-head">
-      <span class="badge">⏰ HU1-PB15 • Paciente</span>
-      <h2>Recordatorios</h2>
+      <h1>Recordatorios</h1>
       <p class="sub">Configura avisos para tu registro emocional diario o semanal.</p>
     </div>
 
     <div class="current" id="currentBox">
-      <div class="ico">🔔</div>
+      <div class="ico" aria-hidden="true">🔔</div>
       <div>
         <h3>Configuración actual</h3>
-        <p id="currentText"><span class="status-dot" id="statusDot"></span>Diaria 08:00 • Activa</p>
+        <p id="currentText">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="currentStatusText">Cargando configuración...</span>
+        </p>
       </div>
     </div>
 
     <div class="row-between">
-      <label>Recordatorios activados<small>Desactívalos si no quieres recibir avisos.</small></label>
-      <label class="switch" title="Activar / desactivar">
+      <div>
+        <label for="toggleActive">Recordatorios activados</label>
+        <small>Desactívelos si no desea recibir avisos.</small>
+      </div>
+      <label class="switch" title="Activar o desactivar recordatorios">
         <input type="checkbox" id="toggleActive" checked>
         <span class="slider"></span>
       </label>
     </div>
 
-    <span class="section-title">Frecuencia</span>
-    <div class="controls" role="group" aria-label="Frecuencia">
-      <button class="chip active" id="chipDiaria">Diaria</button>
-      <button class="chip" id="chipSemanal">Semanal</button>
-      <button class="chip" id="chipClear" title="Demo: limpiar selección">Limpiar (demo)</button>
+    <h2 class="section-title">Frecuencia</h2>
+    <div class="controls" role="group" aria-label="Selección de frecuencia">
+      <button type="button" class="chip active" id="chipDiaria" data-freq="Diaria">Diaria</button>
+      <button type="button" class="chip" id="chipSemanal" data-freq="Semanal">Semanal</button>
     </div>
 
     <div class="field">
@@ -174,165 +158,160 @@
       <input type="time" id="horaInput" value="08:00">
     </div>
 
-    <div id="daysBlock" style="display:none">
-      <span class="section-title">Días de la semana</span>
-      <div class="days" id="daysGrid">
-        <label class="day"><input type="checkbox" value="Lun">Lun</label>
-        <label class="day"><input type="checkbox" value="Mar">Mar</label>
-        <label class="day"><input type="checkbox" value="Mié">Mié</label>
-        <label class="day"><input type="checkbox" value="Jue">Jue</label>
-        <label class="day"><input type="checkbox" value="Vie">Vie</label>
-        <label class="day"><input type="checkbox" value="Sáb">Sáb</label>
-        <label class="day"><input type="checkbox" value="Dom">Dom</label>
+    <div id="daysBlock" style="display:none;">
+      <h2 class="section-title">Días de la semana</h2>
+      <div class="days" id="daysGrid" role="group" aria-label="Selección de días">
+        <label class="day" data-day="1"><input type="checkbox" value="Lun" data-val="1">Lun</label>
+        <label class="day" data-day="2"><input type="checkbox" value="Mar" data-val="2">Mar</label>
+        <label class="day" data-day="3"><input type="checkbox" value="Mié" data-val="3">Mié</label>
+        <label class="day" data-day="4"><input type="checkbox" value="Jue" data-val="4">Jue</label>
+        <label class="day" data-day="5"><input type="checkbox" value="Vie" data-val="5">Vie</label>
+        <label class="day" data-day="6"><input type="checkbox" value="Sáb" data-val="6">Sáb</label>
+        <label class="day" data-day="7"><input type="checkbox" value="Dom" data-val="7">Dom</label>
       </div>
     </div>
 
-    <div class="msg" id="msgBox" role="alert"></div>
+    <div class="msg" id="msgBox" role="alert" style="display:none;"></div>
 
     <div class="actions">
-      <button class="btn save" id="saveBtn">Guardar</button>
-      <button class="btn cancel" id="cancelBtn">Cancelar / Volver</button>
+      <button type="button" class="btn save" id="saveBtn">Guardar</button>
+      <button type="button" class="btn cancel" id="cancelBtn">Cancelar</button>
     </div>
-  </div>
-
-  <div class="card" style="margin-top:14px">
-    <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
-    <div class="controls">
-      <button class="chip active" id="demoAviso">🔔 Simular aviso programado</button>
-      <button class="chip" id="demoSinDatos">Simular sin frecuencia ni hora</button>
-    </div>
-    <p class="hint">Todo es simulado con JS + <b>console.log</b> (sin fetch). Abre la consola para ver los logs <b>[HU1-PB15]</b>. Si guardas sin frecuencia u hora verás: “Debes seleccionar frecuencia y hora”.</p>
   </div>
 </main>
 
 <footer class="footer">
   <div class="footer-in">
-    <a href="#">Inicio</a>
-    <a href="#">Nosotros</a>
-    <a href="#">Ayuda</a>
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
     <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico</a>
   </div>
 </footer>
 
-<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-icon" aria-hidden="true">ℹ️</div>
+    <h3 id="avisoTitle">Mensaje aclaratorio</h3>
+    <div class="aviso-txt">
+      <p><b>Mindzyxs</b> es una plataforma diseñada exclusivamente para el <b>monitoreo y apoyo del bienestar emocional</b>. Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.</p>
+      <p>Ante un <b>riesgo alto o una situación de urgencia</b>, busque ayuda profesional o comuníquese con las líneas de crisis disponibles en su país.</p>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal btn-close" id="btnCerrar">Cerrar</button>
+      <button type="button" class="btn-modal btn-ok" id="btnEntendido">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-  const toast = document.getElementById('toast');
-  const msgBox = document.getElementById('msgBox');
-  const toggleActive = document.getElementById('toggleActive');
-  const chipDiaria = document.getElementById('chipDiaria');
-  const chipSemanal = document.getElementById('chipSemanal');
-  const chipClear = document.getElementById('chipClear');
-  const horaInput = document.getElementById('horaInput');
-  const daysBlock = document.getElementById('daysGrid') ? document.getElementById('daysBlock') : null;
-  const daysWrap = document.getElementById('daysBlock');
-  const currentText = document.getElementById('currentText');
-  const statusDot = document.getElementById('statusDot');
+(function(){
+  var toast = document.getElementById('toast');
+  var msgBox = document.getElementById('msgBox');
+  var toggleActive = document.getElementById('toggleActive');
+  var chipDiaria = document.getElementById('chipDiaria');
+  var chipSemanal = document.getElementById('chipSemanal');
+  var horaInput = document.getElementById('horaInput');
+  var daysBlock = document.getElementById('daysBlock');
+  var daysGrid = document.getElementById('daysGrid');
+  var currentStatusText = document.getElementById('currentStatusText');
+  var statusDot = document.getElementById('statusDot');
+  var currentText = document.getElementById('currentText');
+  var avisoModal = document.getElementById('avisoModal');
 
-  // Estado guardado (simulado) + borrador del formulario
-  let saved = { activa: true, freq: 'Diaria', hora: '08:00', dias: [] };
-  let draft = { ...saved, dias: [...saved.dias] };
+  var saved = { activa: true, freq: 'Diaria', hora: '08:00', dias: [] };
+  var draft = { activa: true, freq: 'Diaria', hora: '08:00', dias: [] };
 
-  function addLog(){ console.log.apply(console, ['[HU1-PB15]'].concat([].slice.call(arguments))); }
   function showToast(msg){
     toast.textContent = msg; toast.classList.add('show');
     clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => toast.classList.remove('show'), 2400);
+    showToast._t = setTimeout(function(){ toast.classList.remove('show'); }, 2400);
   }
   function showMsg(type, text){
-    msgBox.className = 'msg' + (type ? ' ' + type : '');
-    msgBox.textContent = text || '';
-    if(!type) msgBox.style.display = 'none';
+    if (!type || !text) { msgBox.className = 'msg'; msgBox.textContent = ''; msgBox.style.display = 'none'; return; }
+    msgBox.className = 'msg ' + type;
+    msgBox.textContent = text;
+    msgBox.style.display = 'block';
   }
   function fmtConfig(c){
-    const st = c.activa ? 'Activa' : 'Desactivada';
-    let base = (c.freq || '—') + ' ' + (c.hora || '—') + ' • ' + st;
-    if(c.freq === 'Semanal' && c.dias.length) base += ' (' + c.dias.join(', ') + ')';
+    var st = c.activa ? 'Activa' : 'Desactivada';
+    var base = (c.freq || '—') + ' ' + (c.hora || '—') + ' • ' + st;
+    if (c.freq === 'Semanal' && c.dias.length) base += ' (' + c.dias.join(', ') + ')';
     return base;
   }
   function render(){
-    currentText.innerHTML = '<span class="status-dot' + (draft.activa && saved.activa ? '' : ' off') + '" id="statusDot"></span>' + fmtConfig(saved);
+    currentStatusText.textContent = fmtConfig(saved);
+    statusDot.className = saved.activa ? 'status-dot' : 'status-dot off';
     toggleActive.checked = draft.activa;
     chipDiaria.classList.toggle('active', draft.freq === 'Diaria');
     chipSemanal.classList.toggle('active', draft.freq === 'Semanal');
     horaInput.value = draft.hora || '';
-    daysWrap.style.display = draft.freq === 'Semanal' ? 'block' : 'none';
-    document.querySelectorAll('#daysGrid .day').forEach(l => {
-      const cb = l.querySelector('input');
-      const on = draft.dias.includes(cb.value);
+    daysBlock.style.display = draft.freq === 'Semanal' ? 'block' : 'none';
+    Array.prototype.forEach.call(daysGrid.querySelectorAll('.day'), function(l){
+      var cb = l.querySelector('input');
+      var on = draft.dias.indexOf(cb.value) !== -1;
       cb.checked = on;
       l.classList.toggle('sel', on);
     });
   }
-  function setFreq(f){
-    draft.freq = f;
-    addLog('Frecuencia seleccionada:', f || '(ninguna)');
-    showMsg('', '');
-    render();
-  }
+  function setFreq(f){ draft.freq = f; showMsg('', ''); render(); }
 
-  chipDiaria.addEventListener('click', () => setFreq('Diaria'));
-  chipSemanal.addEventListener('click', () => setFreq('Semanal'));
-  chipClear.addEventListener('click', () => {
-    draft.freq = null; draft.hora = '';
-    addLog('DEMO: selección limpiada (sin frecuencia ni hora)');
-    showMsg('', '');
+  // Simula la carga inicial desde el servidor
+  setTimeout(function(){
+    saved = { activa: true, freq: 'Diaria', hora: '08:00', dias: [] };
+    draft = { activa: true, freq: 'Diaria', hora: '08:00', dias: [] };
     render();
-  });
-  toggleActive.addEventListener('change', () => {
-    draft.activa = toggleActive.checked;
-    addLog('Toggle recordatorios:', draft.activa ? 'ACTIVADO' : 'DESACTIVADO');
-  });
-  horaInput.addEventListener('change', () => {
-    draft.hora = horaInput.value;
-    addLog('Hora seleccionada:', draft.hora || '(vacía)');
-  });
-  document.querySelectorAll('#daysGrid input').forEach(cb => {
-    cb.addEventListener('change', () => {
-      draft.dias = Array.from(document.querySelectorAll('#daysGrid input:checked')).map(x => x.value);
-      addLog('Días seleccionados:', draft.dias.join(', ') || '(ninguno)');
+  }, 600);
+
+  chipDiaria.addEventListener('click', function(){ setFreq('Diaria'); });
+  chipSemanal.addEventListener('click', function(){ setFreq('Semanal'); });
+  toggleActive.addEventListener('change', function(){ draft.activa = toggleActive.checked; });
+  horaInput.addEventListener('change', function(){ draft.hora = horaInput.value; showMsg('', ''); });
+  Array.prototype.forEach.call(daysGrid.querySelectorAll('input'), function(cb){
+    cb.addEventListener('change', function(){
+      draft.dias = Array.prototype.map.call(daysGrid.querySelectorAll('input:checked'), function(x){ return x.value; });
+      showMsg('', '');
       render();
     });
   });
 
-  document.getElementById('saveBtn').addEventListener('click', () => {
+  document.getElementById('saveBtn').addEventListener('click', function(){
     draft.hora = horaInput.value;
-    if(!draft.freq || !draft.hora){
-      addLog('ERROR validación: falta frecuencia u hora. No se guarda.');
-      showMsg('err', 'Debes seleccionar frecuencia y hora');
-      showToast('Debes seleccionar frecuencia y hora');
+    if (!draft.freq || !draft.hora) {
+      showMsg('err', 'Debe seleccionar frecuencia y hora');
+      showToast('Debe seleccionar frecuencia y hora');
       return;
     }
-    saved = { activa: draft.activa, freq: draft.freq, hora: draft.hora, dias: [...draft.dias] };
-    addLog('GUARDADO:', JSON.stringify(saved));
-    showMsg('ok', 'Recordatorios configurados correctamente');
-    showToast('Recordatorios configurados correctamente ✓');
+    if (draft.freq === 'Semanal' && draft.dias.length === 0) {
+      showMsg('err', 'Debe seleccionar al menos un día para la frecuencia semanal');
+      showToast('Debe seleccionar al menos un día');
+      return;
+    }
+    saved = { activa: draft.activa, freq: draft.freq, hora: draft.hora, dias: draft.dias.slice() };
+    showMsg('ok', 'Sus recordatorios se configuraron correctamente');
+    showToast('Sus recordatorios se configuraron correctamente ✓');
     render();
   });
-
-  function volver(){
-    draft = { ...saved, dias: [...saved.dias] };
-    render();
-    showMsg('', '');
-    addLog('CANCELAR: cambios descartados, vuelve a la configuración guardada:', JSON.stringify(saved));
-    showToast('Cambios descartados');
+  function volver(e){
+    if (e) e.preventDefault();
+    draft = { activa: saved.activa, freq: saved.freq, hora: saved.hora, dias: saved.dias.slice() };
+    render(); showMsg('', '');
+    showToast('Sus cambios fueron descartados');
   }
   document.getElementById('cancelBtn').addEventListener('click', volver);
   document.getElementById('backBtn').addEventListener('click', volver);
+  document.getElementById('btn-logout').addEventListener('click', function(){ if (confirm('¿Está seguro de que desea cerrar sesión?')) showToast('Su sesión se ha cerrado.'); });
 
-  document.getElementById('demoAviso').addEventListener('click', () => {
-    addLog('AVISO programado disparado (simulado).');
-    showToast('🔔 Es hora de tu registro emocional');
-  });
-  document.getElementById('demoSinDatos').addEventListener('click', () => {
-    draft.freq = null; draft.hora = '';
-    render();
-    addLog('DEMO: estado sin frecuencia ni hora — presiona Guardar para ver el error.');
-    showToast('Selección limpiada: presiona Guardar');
-  });
+  var footerAviso = document.getElementById('footerAviso');
+  footerAviso.addEventListener('click', function(e){ e.preventDefault(); avisoModal.classList.add('open'); avisoModal.setAttribute('aria-hidden', 'false'); });
+  document.getElementById('btnCerrar').addEventListener('click', function(){ avisoModal.classList.remove('open'); avisoModal.setAttribute('aria-hidden', 'true'); });
+  document.getElementById('btnEntendido').addEventListener('click', function(){ avisoModal.classList.remove('open'); avisoModal.setAttribute('aria-hidden', 'true'); showToast('Gracias por su confirmación.'); });
+  avisoModal.addEventListener('click', function(e){ if (e.target === avisoModal) { avisoModal.classList.remove('open'); avisoModal.setAttribute('aria-hidden', 'true'); } });
 
   render();
-  addLog('Sistema listo — pantalla Recordatorios (Diaria 08:00, activa).');
+})();
 </script>
 </body>
 </html>

@@ -3,120 +3,253 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU1-PB5 | Recuperar contraseña</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Recuperar Contraseña - Mindzyxs</title>
 <style>
-  :root{--cyan:#6ECFD4;--text:#2E2E33;--muted:#8E91A3;--error:#E85D7A}
+  :root{
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A; --ok:#0E8F4B;
+  }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
-  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
-  .blob{position:absolute;border-radius:50%;opacity:0.6}
-  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
-  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
-  .header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
-  .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
-  .logo-mark{width:30px;height:30px;border-radius:8px;background:#7ED6E8;display:grid;place-items:center;color:white;font-size:14px}
-  .wrap{max-width:440px;margin:28px auto;padding:0 16px 30px}
-  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
-  .card-head{text-align:center;margin-bottom:14px}
-  .card-head h2{font-size:22px;font-weight:700}
-  .card-head p{font-size:12px;color:var(--muted);margin-top:4px}
-  .field label{font-size:11px;font-weight:600;color:#5A5D72}
-  .control input{width:100%;height:40px;padding:0 12px;border:1px solid #DFDAEE;border-radius:10px;font-size:13px;outline:none}
-  .control input:focus{border-color:var(--cyan)}
-  .control.has-error input{border-color:var(--error);background:#FFF6F7}
-  .error-msg{display:none;font-size:11px;color:var(--error);background:#FFF1F3;border:1px solid #FFE0E6;padding:6px 8px;border-radius:8px;margin-top:6px}
-  .error-msg.show{display:block}
-  .info-msg{display:none;font-size:12px;color:#0E8F4B;background:#E8FFF1;border:1px solid #C6F5D9;padding:8px 10px;border-radius:10px;margin-top:10px;text-align:center}
-  .info-msg.show{display:block}
-  .btn{width:100%;height:42px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer;margin-top:12px}
-  .btn:hover{background:#5ABCC2}
-  .links{display:flex;justify-content:space-between;margin-top:12px}
-  .link{font-size:11px;font-weight:600;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline}
-  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
-  .screen{display:none}
-  .screen.active{display:block}
+  body{font-family:Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
+  .header-nav{height:60px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
+  .logo-container .logo-link{display:flex;align-items:center;gap:8px;font-weight:700;
+    font-size:18px;color:var(--text);text-decoration:none}
+  .logo-img{width:30px;height:30px;border-radius:8px}
+  main{max-width:440px;margin:28px auto;padding:0 16px 30px;display:flex;flex-direction:column;gap:20px}
+  .recuperar-card,.verificacion-card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);padding:22px 20px}
+  .recuperar-card h1,.verificacion-card h1{font-size:22px;font-weight:700;text-align:center}
+  .recuperar-subtitulo,.verificacion-subtitulo{font-size:12px;color:var(--muted);text-align:center;margin-top:4px}
+  .alerta-error{display:none;background:#FFF1F3;border:1px solid #FFE0E6;color:var(--error);
+    padding:8px 10px;border-radius:10px;font-size:12px;text-align:center;margin-top:10px}
+  .alerta-error.show{display:block}
+  .alerta-exito{display:none;background:#E8FFF1;border:1px solid #C6F5D9;color:var(--ok);
+    padding:8px 10px;border-radius:10px;font-size:12px;text-align:center;margin-top:10px}
+  .alerta-exito.show{display:block}
+  .form-group{display:flex;flex-direction:column;gap:5px;margin-top:12px}
+  .form-group label{font-size:11px;font-weight:600;color:#5A5D72}
+  .form-group input{width:100%;height:40px;padding:0 12px;border:1px solid #DFDAEE;
+    border-radius:10px;font-size:13px;outline:none}
+  .form-group input:focus{border-color:var(--cyan)}
+  .form-group input.campo-error{border-color:var(--error);background:#FFF6F7}
+  #codigo-verificacion{text-align:center;letter-spacing:8px;font-size:20px;font-weight:700;height:48px}
+  .btn-recuperar-submit,.btn-verificar{width:100%;height:42px;border-radius:20px;border:none;
+    background:var(--cyan);color:#fff;font-weight:700;font-size:13px;cursor:pointer;margin-top:14px}
+  .btn-recuperar-submit:hover,.btn-verificar:hover{background:var(--cyan-hover)}
+  .recuperar-enlaces{display:flex;justify-content:space-between;margin-top:12px}
+  .verificacion-acciones{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+  .link-accion{font-size:11px;font-weight:600;color:#5ABCC2;background:none;border:none;cursor:pointer;text-decoration:underline}
+  .link-cancelar{font-size:11px;font-weight:600;color:var(--muted);text-decoration:underline}
+  .chip-correo{display:inline-flex;align-items:center;gap:6px;background:#F9F7FF;
+    border:1px solid #EDE6FF;padding:6px 10px;border-radius:20px;font-size:11px;color:#6B5BCE;margin-top:10px}
+  .centro{text-align:center}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;
+    align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-overlay.open{display:flex}
+  .modal-contenido{width:min(420px,100%);background:#fff;border-radius:14px;padding:20px;text-align:center}
+  .modal-badge-exito{width:40px;height:40px;border-radius:10px;background:#E8FFF1;display:grid;
+    place-items:center;margin:0 auto 12px;color:#1BBF6B;font-weight:700}
+  .modal-contenido h2{font-size:15px;font-weight:700}
+  .modal-contenido p{font-size:12px;color:var(--muted);margin-top:6px}
+  .btn-modal-continuar{display:inline-block;margin-top:14px;height:38px;line-height:38px;padding:0 24px;
+    border-radius:20px;background:var(--cyan);color:#fff;font-weight:700;font-size:13px;text-decoration:none;border:none;cursor:pointer}
+  @media(max-width:640px){.header-nav{padding:0 14px}}
 </style>
 </head>
 <body>
-<div class="bg"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
-<header class="header"><div class="logo"><div class="logo-mark">◐</div> Mindzyx</div><div style="font-size:12px;color:var(--muted)">HU1-PB5 — Sprint 1</div></header>
-<main class="wrap">
-  <!-- Pantalla 1: Recuperar contraseña -->
-  <div class="card screen active" id="screen1">
-    <div class="card-head"><h2>Recuperar contraseña</h2><p>Te enviaremos un código a tu correo</p></div>
-    <form id="form1" novalidate>
-      <div class="field"><label for="correo">Correo</label><div class="control" id="c-correo"><input id="correo" type="email" placeholder="tu@correo.com"></div><div class="error-msg" id="e-correo"></div></div>
-      <button type="submit" class="btn">Enviar código</button>
-      <div class="info-msg" id="info1"></div>
-      <div class="links"><button type="button" class="link" id="cancel1">Cancelar / Volver</button><span class="link" style="text-decoration:none;color:var(--muted)">¿Olvidaste tu contraseña?</span></div>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link">
+      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img">
+      Mindzyxs
+    </a>
+  </div>
+</header>
+
+<main>
+  <!-- Sección 1: espejo de recuperar_contrasena.html -->
+  <section class="recuperar-card" id="seccion-recuperar">
+    <h1>Recuperar contraseña</h1>
+    <p class="recuperar-subtitulo">Te enviaremos un código a tu correo</p>
+
+    <!-- En el front estas vistas están separadas; aquí banner-error-recuperar y
+         banner-exito-recuperar equivalen a banner-error y banner-exito. -->
+    <div id="banner-error-recuperar" class="alerta-error"></div>
+    <div id="banner-exito-recuperar" class="alerta-exito"></div>
+
+    <form class="form-recuperar" id="form-recuperar" novalidate action="#">
+      <div class="form-group">
+        <label for="email">Correo</label>
+        <input type="email" id="email" name="email" placeholder="tu@correo.com" required>
+      </div>
+
+      <button type="submit" class="btn-recuperar-submit" id="btn-enviar-codigo">Enviar código</button>
     </form>
-    <p class="hint">Vacío o sin @ → error y no envía. Con <b>paciente@test.com</b> → envía. Con <b>noexiste@test.com</b> → mensaje genérico de seguridad.</p>
-  </div>
-  <!-- Pantalla 2: Verificar código -->
-  <div class="card screen" id="screen2">
-    <div class="card-head"><h2>Verificar código</h2><p>Ingresa el código de 6 dígitos enviado a tu correo</p></div>
-    <div class="field"><label for="codigo">Código de verificación</label><div class="control" id="c-codigo"><input id="codigo" maxlength="6" placeholder="123456" style="text-align:center;letter-spacing:6px;font-weight:700"></div><div class="error-msg" id="e-codigo"></div></div>
-    <button class="btn" id="verificarBtn">Verificar</button>
-    <div class="info-msg" id="info2"></div>
-    <div class="links"><button class="link" id="reenviarBtn">Reenviar código</button><button class="link" id="cancel2">Cancelar / Volver</button></div>
-    <p class="hint" id="hint2" style="margin-top:8px">Prueba: <b>123456</b> correcto • <b>000000</b> expirado • otro incorrecto</p>
-  </div>
+
+    <div class="recuperar-enlaces">
+      <a href="../PB-02/mockup-HU1-PB2.html" class="link-accion">Cancelar / Volver</a>
+      <a href="../PB-01/mockup-HU1-PB1.html" class="link-accion">Registrarse</a>
+    </div>
+  </section>
+
+  <!-- Sección 2: espejo de verificacion_recuperar.html -->
+  <section class="verificacion-card centro" id="seccion-verificar">
+    <h1>Verificación de recuperación</h1>
+    <p class="verificacion-subtitulo">Ingresa el código enviado a tu correo</p>
+
+    <div class="chip-correo">
+      <span>📨</span>
+      <span>Código enviado a <strong>tu@correo.com</strong> &bull; válido 5 min</span>
+    </div>
+
+    <!-- banner-error-verificar y banner-exito-verificar equivalen a
+         banner-error y banner-exito de la vista del front. -->
+    <div id="banner-error-verificar" class="alerta-error"></div>
+    <div id="banner-exito-verificar" class="alerta-exito"></div>
+
+    <form class="form-verificacion" id="form-verificacion-recuperar" action="#" novalidate style="text-align:left">
+      <div class="form-group">
+        <label for="codigo-verificacion">Código de verificación</label>
+        <input type="text" id="codigo-verificacion" name="codigo_verificacion" maxlength="6" inputmode="numeric"
+          pattern="[0-9]*" placeholder="—  —  —  —  —  —" autocomplete="off" required>
+      </div>
+
+      <button type="submit" id="btn-verificar" class="btn-verificar">Verificar</button>
+
+      <div class="verificacion-acciones">
+        <button type="button" id="btn-reenviar" class="link-accion">Reenviar código</button>
+        <a href="#seccion-recuperar" id="link-cancelar" class="link-cancelar">Cancelar</a>
+      </div>
+    </form>
+  </section>
 </main>
+
+<div id="modal-exito" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+  <div class="modal-contenido">
+    <div class="modal-badge-exito"><span>&check;</span></div>
+    <h2 id="modal-titulo">Código verificado</h2>
+    <p id="modal-subtitulo">Tu código ha sido verificado correctamente. Ahora puedes establecer una nueva contraseña.</p>
+    <a href="../PB-05/mockup-HU2-PB5.html" id="btn-modal-continuar" class="btn-modal-continuar">Continuar</a>
+  </div>
+</div>
+
 <script>
-  const form1=document.getElementById('form1'), correo=document.getElementById('correo'), cCorreo=document.getElementById('c-correo'), eCorreo=document.getElementById('e-correo'), info1=document.getElementById('info1');
-  const screen1=document.getElementById('screen1'), screen2=document.getElementById('screen2'), info2=document.getElementById('info2');
-  const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const existing=['paciente@test.com','psicologo@test.com','admin@test.com'];
-  correo.addEventListener('input',()=>{ cCorreo.classList.remove('has-error'); eCorreo.classList.remove('show'); info1.classList.remove('show')});
-  form1.addEventListener('submit', e=>{
-    e.preventDefault(); const v=correo.value.trim();
-    if(!v){ cCorreo.classList.add('has-error'); eCorreo.textContent='Ingresa un correo válido'; eCorreo.classList.add('show'); return; }
-    if(!emailRegex.test(v)){ cCorreo.classList.add('has-error'); eCorreo.textContent='Ingresa un correo válido'; eCorreo.classList.add('show'); return; }
-    // si no existe -> mensaje genérico seguridad, no revela si existe
-    if(!existing.includes(v.toLowerCase())){
-      info1.textContent='Si el correo está registrado, recibirás un código. Revisa tu bandeja.';
-      info1.style.background='#EAF7FA'; info1.style.borderColor='#C8EEF3'; info1.style.color='#1A7A85';
-      info1.classList.add('show');
-      // no avanza
+  var formRecuperar = document.getElementById('form-recuperar');
+  var inputEmail = document.getElementById('email');
+  var bannerErrorRec = document.getElementById('banner-error-recuperar');
+  var bannerExitoRec = document.getElementById('banner-exito-recuperar');
+  var btnEnviar = document.getElementById('btn-enviar-codigo');
+
+  var formVerificar = document.getElementById('form-verificacion-recuperar');
+  var inputCodigo = document.getElementById('codigo-verificacion');
+  var bannerErrorVer = document.getElementById('banner-error-verificar');
+  var bannerExitoVer = document.getElementById('banner-exito-verificar');
+  var btnVerificar = document.getElementById('btn-verificar');
+  var btnReenviar = document.getElementById('btn-reenviar');
+  var modalExito = document.getElementById('modal-exito');
+  var temporizadorExito = null;
+
+  function mostrarErrorRec(msg) {
+    bannerErrorRec.textContent = msg;
+    bannerErrorRec.classList.add('show');
+    bannerExitoRec.classList.remove('show');
+    inputEmail.classList.add('campo-error');
+  }
+  function mostrarExitoRec(msg) {
+    bannerExitoRec.textContent = msg;
+    bannerExitoRec.classList.add('show');
+    bannerErrorRec.classList.remove('show');
+    inputEmail.classList.remove('campo-error');
+  }
+
+  inputEmail.addEventListener('input', function () {
+    inputEmail.classList.remove('campo-error');
+    bannerErrorRec.classList.remove('show');
+    bannerExitoRec.classList.remove('show');
+  });
+
+  formRecuperar.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = inputEmail.value.trim().toLowerCase();
+    if (!email) {
+      mostrarErrorRec('Este campo es obligatorio');
       return;
     }
-    // si existe -> genera y envía código
-    info1.textContent='Código enviado a '+v+' (código: 123456)';
-    info1.style.background='#E8FFF1'; info1.style.borderColor='#C6F5D9'; info1.style.color='#0E8F4B';
-    info1.classList.add('show');
-    setTimeout(()=>{
-      screen1.classList.remove('active'); screen2.classList.add('active');
-      info2.textContent='Código enviado a '+v; info2.classList.add('show');
-    }, 900);
-  });
-  const codigo=document.getElementById('codigo'), cCodigo=document.getElementById('c-codigo'), eCodigo=document.getElementById('e-codigo');
-  codigo.addEventListener('input',()=>{
-    codigo.value=codigo.value.replace(/\D/g,'').slice(0,6);
-    cCodigo.classList.remove('has-error'); eCodigo.classList.remove('show'); info2.classList.remove('show');
-  });
-  document.getElementById('verificarBtn').addEventListener('click', ()=>{
-    const v=codigo.value.trim();
-    eCodigo.classList.remove('show'); info2.classList.remove('show'); cCodigo.classList.remove('has-error');
-    if(!v || v.length!==6){ cCodigo.classList.add('has-error'); eCodigo.textContent='Ingresa el código de 6 dígitos'; eCodigo.classList.add('show'); return; }
-    if(v==='123456'){
-      info2.textContent='Código verificado correctamente. Ahora puedes definir tu nueva contraseña (ver HU2-PB5).';
-      info2.style.background='#E8FFF1'; info2.style.borderColor='#C6F5D9'; info2.style.color='#0E8F4B';
-      info2.classList.add('show');
-      setTimeout(()=>{ info2.textContent='Código verificado correctamente → Redirigiendo a Nueva contraseña...'; }, 1200);
-    } else if(v==='000000'){
-      cCodigo.classList.add('has-error'); eCodigo.textContent='El código expiró. Reenvía el código'; eCodigo.classList.add('show');
-    } else {
-      cCodigo.classList.add('has-error'); eCodigo.textContent='Código incorrecto. Verifica e intenta nuevamente'; eCodigo.classList.add('show');
+    if (email.indexOf('@') === -1) {
+      mostrarErrorRec('Ingresa un correo válido');
+      return;
     }
+    btnEnviar.disabled = true;
+    btnEnviar.textContent = 'Enviando...';
+    // Demostración: el sistema real envía el código y continúa a la verificación.
+    setTimeout(function () {
+      btnEnviar.disabled = false;
+      btnEnviar.textContent = 'Enviar código';
+      mostrarExitoRec('Si el correo está registrado, recibirá un código.');
+      document.getElementById('seccion-verificar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 600);
   });
-  document.getElementById('reenviarBtn').addEventListener('click', ()=>{
-    info2.textContent='Código reenviado'; info2.style.background='#EAF7FA'; info2.style.borderColor='#C8EEF3'; info2.style.color='#1A7A85'; info2.classList.add('show');
-    eCodigo.classList.remove('show'); cCodigo.classList.remove('has-error');
-    setTimeout(()=>info2.classList.remove('show'),2000);
+
+  function mostrarErrorVer(msg) {
+    bannerErrorVer.textContent = msg;
+    bannerErrorVer.classList.add('show');
+    bannerExitoVer.classList.remove('show');
+    inputCodigo.classList.add('campo-error');
+  }
+  function mostrarExitoVer(msg) {
+    bannerExitoVer.textContent = msg;
+    bannerExitoVer.classList.add('show');
+    bannerErrorVer.classList.remove('show');
+    inputCodigo.classList.remove('campo-error');
+  }
+
+  inputCodigo.addEventListener('input', function () {
+    this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
+    inputCodigo.classList.remove('campo-error');
+    bannerErrorVer.classList.remove('show');
+    bannerExitoVer.classList.remove('show');
   });
-  document.getElementById('cancel1').addEventListener('click', ()=>{ form1.reset(); cCorreo.classList.remove('has-error'); eCorreo.classList.remove('show'); info1.classList.remove('show')});
-  document.getElementById('cancel2').addEventListener('click', ()=>{ screen2.classList.remove('active'); screen1.classList.add('active'); info1.classList.remove('show'); info2.classList.remove('show'); eCodigo.classList.remove('show'); cCodigo.classList.remove('has-error'); codigo.value='';});
+
+  // Demostración de interfaz: con 6 dígitos se muestra el modal de éxito.
+  // El sistema real valida el código en el servidor.
+  formVerificar.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var codigo = inputCodigo.value.trim();
+    if (codigo.length < 6) {
+      mostrarErrorVer('Por favor, ingresa el código completo de 6 dígitos.');
+      return;
+    }
+    btnVerificar.disabled = true;
+    btnVerificar.textContent = 'Verificando...';
+    setTimeout(function () {
+      btnVerificar.disabled = false;
+      btnVerificar.textContent = 'Verificar';
+      bannerErrorVer.classList.remove('show');
+      bannerExitoVer.classList.remove('show');
+      modalExito.classList.add('open');
+    }, 600);
+  });
+
+  btnReenviar.addEventListener('click', function () {
+    inputCodigo.value = '';
+    inputCodigo.focus();
+    btnReenviar.disabled = true;
+    setTimeout(function () {
+      btnReenviar.disabled = false;
+      mostrarExitoVer('Se ha reenviado un nuevo código a tu correo.');
+      clearTimeout(temporizadorExito);
+      temporizadorExito = setTimeout(function () {
+        bannerExitoVer.classList.remove('show');
+      }, 4000);
+    }, 400);
+  });
+
+  modalExito.addEventListener('click', function (e) {
+    if (e.target === modalExito) modalExito.classList.remove('open');
+  });
 </script>
 </body>
 </html>

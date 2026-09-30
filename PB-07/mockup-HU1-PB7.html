@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU1-PB7 | Cuestionario emocional (Invitado)</title>
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Encuesta para invitado - Mindzyxs</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -17,7 +18,7 @@
   .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
   .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
   .header{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
-  .logo{display:flex;align-items:center}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:18px;text-decoration:none;color:var(--text)}
   .logo-img{height:44px;width:auto;object-fit:contain}
   .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
   .nav a{color:var(--muted);text-decoration:none}
@@ -99,300 +100,339 @@
   .btn-modal.ok:hover{background:var(--cyan-hover)}
   .btn-modal.close{border:1px solid #DFDAEE;background:white;color:var(--text)}
   .btn-modal.danger{background:var(--error);color:white}
+  /* Espejo del front encuesta_invitado: hero, progress, steps, actions, botones */
+  .topbar{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:18px;text-decoration:none;color:var(--text)}
+  .brand-logo{height:44px;width:auto;object-fit:contain}
+  .survey-shell{width:100%;max-width:680px;margin:0 auto;padding:24px 16px 30px;flex:1}
+  .hero{text-align:center;margin-bottom:14px}
+  .eyebrow{font-size:12px;font-weight:700;color:#6B5BCE;background:#F9F7FF;border:1px solid #EDE6FF;display:inline-block;padding:6px 14px;border-radius:20px;margin-bottom:10px}
+  .hero h1{font-size:22px;font-weight:800}
+  .survey-body{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
+  .progress-wrap{margin-bottom:6px}
+  .progress-meta{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px}
+  .progress-bar{height:8px;background:#F0EAF6;border-radius:20px;overflow:hidden}
+  .progress-fill{height:100%;background:var(--cyan);border-radius:20px;transition:width .3s;width:0%}
+  .step{display:none}
+  .step.activo{display:block}
+  .aviso-card{text-align:left}
+  .aviso-card h2{font-size:18px;font-weight:800;margin-bottom:8px}
+  .aviso-card p{font-size:13px;color:var(--muted);line-height:1.65}
+  .question-title{font-size:16px;font-weight:700;line-height:1.45;margin-top:8px}
+  .q-count{font-size:11px;font-weight:700;color:#6B5BCE;background:#F9F7FF;border:1px solid #EDE6FF;padding:5px 12px;border-radius:20px;display:inline-block;margin-bottom:6px}
+  .actions{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:18px}
+  .actions-info{min-width:200px;flex:1}
+  .helper{font-size:11px;color:var(--muted)}
+  .error-msg{display:none;font-size:12px;color:var(--error);background:#FFF1F3;border:1px solid #FFE0E6;padding:8px 10px;border-radius:10px;margin-top:8px}
+  .error-msg.show{display:block}
+  .actions-buttons{display:flex;gap:10px}
+  .button{flex:1;min-height:44px;padding:0 22px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer;text-decoration:none;text-align:center;line-height:44px;display:inline-block}
+  .button:hover{background:var(--cyan-hover)}
+  .button-secondary{background:white;border:1px solid #DFDAEE;color:var(--text);box-shadow:none}
+  .button-secondary:hover{border-color:var(--cyan);background:#F8FEFF}
+  .button-danger{background:var(--error);color:white}
+  .modal-card{width:min(480px,100%);background:white;border-radius:14px;padding:24px 22px;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-align:center;max-height:92vh;overflow:auto}
+  .modal-card h2{font-size:16px;font-weight:700}
+  .modal-card p{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
   @media(max-width:560px){
     .header{padding:0 14px}
     .nav{font-size:12px;gap:12px}
     .mini-opts .tile{width:100%}
+    .actions{flex-direction:column;align-items:stretch}
+    .actions-buttons{width:100%}
   }
 </style>
 </head>
 <body>
 <div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
 
-<header class="header">
-  <div class="logo"><img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img"></div>
-  <nav class="nav">
+<header class="header topbar">
+  <a href="#" class="brand logo" aria-label="Mindzyxs inicio">
+    <img src="../Logo1.png" alt="Logo Mindzyxs" class="brand-logo logo-img">
+    <span>Mindzyxs</span>
+  </a>
+  <nav class="nav" aria-label="Navegación principal">
     <a href="#">Nosotros</a>
     <a href="#">Ayuda</a>
   </nav>
-  <span class="guest-pill">👤 Modo invitado</span>
 </header>
 
-<main class="wrap">
+<main class="wrap survey-shell">
+  <section class="hero">
+    <p class="eyebrow">Participe y comparta su experiencia</p>
+    <h1>Cuestionario para invitados</h1>
+  </section>
 
-  <div class="screen active" id="screenPanel">
-    <div class="card">
-      <div class="panel-head">
-        <span class="badge-guest">👤 Modo invitado — sin cuenta</span>
-        <h2>Panel de invitado</h2>
-        <p class="sub">Respondiendo el cuestionario emocional sin registrarte. Navegación limitada.</p>
+  <div class="card survey-body">
+    <div class="progress-wrap" aria-label="Progreso de la encuesta">
+      <div class="progress-meta">
+        <span>Progreso</span>
+        <span id="progress-text">0%</span>
       </div>
-      <div class="pending-box" id="pendingBox"><p>Cargando cuestionarios disponibles…</p></div>
-      <div class="cta-wrap">
-        <button class="btn-guest" id="panelQBtn" disabled>Responder cuestionario</button>
-      </div>
-      <div class="done-list" id="doneList"></div>
-      <div style="text-align:center;margin-top:16px">
-        <button class="btn-secondary" id="panelExit">Salir del modo invitado</button>
+      <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-live="polite" aria-label="Progreso del formulario" id="progressBar">
+        <div class="progress-fill" id="progress-fill"></div>
       </div>
     </div>
-    <div class="card" style="margin-top:14px">
-      <span style="font-size:11px;font-weight:700;color:#5A5D72">API:</span>
-      <p class="hint"><b>GET</b> /api/cuestionario/invitado?excluidos=… · <b>POST</b> /inicio · <b>POST</b> /finalizar — Los cuestionarios rotan: al completar uno se marca como hecho en la sesión (cookies) y se ofrece el siguiente. Sin pendientes, no se puede responder más.</p>
-    </div>
+
+    <form id="encuestaForm">
+      <section class="step aviso activo" data-step="aviso">
+        <div class="aviso-card">
+          <h2>Mensaje aclaratorio</h2>
+          <p>
+            Mindzyxs es una herramienta de apoyo emocional. No realiza diagnósticos clínicos ni sustituye la
+            atención profesional. Si presenta síntomas intensos o riesgo alto, busque ayuda profesional o contacte
+            una línea de ayuda.
+          </p>
+        </div>
+      </section>
+
+      <div id="preguntas-dinamicas"></div>
+
+      <section class="step question" data-step="sin-pendientes">
+        <div class="aviso-card">
+          <h2>Sin cuestionarios pendientes</h2>
+          <p id="sin-pendientes-msg">No tiene cuestionarios pendientes por responder.</p>
+          <div class="modal-actions">
+            <a href="../PB-06/mockup-HU1-PB6.html" class="button button-secondary">Volver al panel</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="step question" data-step="error-carga">
+        <div class="aviso-card">
+          <h2>No fue posible cargar el cuestionario</h2>
+          <p>Intente nuevamente.</p>
+          <div class="modal-actions">
+            <button type="button" id="btn-reintentar" class="button">Reintentar</button>
+            <a href="../PB-06/mockup-HU1-PB6.html" class="button button-secondary">Volver al panel</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="step completado" data-step="completado">
+        <div class="aviso-card" style="text-align:center">
+          <div class="done-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+          </div>
+          <h2>Cuestionario completado</h2>
+          <p style="text-align:center">Gracias por participar. Sus respuestas fueron registradas.</p>
+          <div class="modal-actions" style="justify-content:center">
+            <button type="button" id="btn-volver-inicio" class="button button-secondary">Volver al panel</button>
+            <button type="button" id="btn-ver-resultado" class="button">Ver resultado</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="actions">
+        <div class="actions-info">
+          <span class="helper" id="helper-info">Todas las preguntas son obligatorias.</span>
+          <p class="error-msg" id="error-mensaje" role="alert"></p>
+        </div>
+        <div class="actions-buttons">
+          <button type="button" id="btn-volver" class="button button-secondary">Volver</button>
+          <button type="button" id="btn-siguiente" class="button">Entendido</button>
+        </div>
+      </div>
+    </form>
   </div>
-
-  <div class="screen" id="screenQuiz">
-    <div class="card">
-      <div class="quiz-title" id="quizTitle"></div>
-      <div class="quiz-head">
-        <span class="q-num" id="qNum"></span>
-      </div>
-      <div class="progress"><div class="bar" id="qBar"></div></div>
-      <h2 class="q-title" id="qTitle"></h2>
-      <div class="opts" id="qOptions"></div>
-      <div class="err-msg" id="qError">Debes seleccionar una respuesta para continuar</div>
-      <div class="quiz-actions">
-        <button class="btn-cancel" id="cancelQ">Cancelar / Volver</button>
-        <button class="btn-next" id="nextQ">Siguiente →</button>
-      </div>
-    </div>
-    <p class="hint">Todas las preguntas son obligatorias. En la última pregunta el botón cambia a <b>Finalizar</b>.</p>
-  </div>
-
-  <div class="screen" id="screenDone">
-    <div class="card done">
-      <div class="done-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
-      </div>
-      <h2>Cuestionario completado</h2>
-      <p class="sub">
-        Tus respuestas fueron <b>guardadas temporalmente en la sesión del invitado</b> sin pedir datos personales.
-        Podrás ver un resultado básico sobre tus síntomas emocionales.
-      </p>
-      <div class="done-score" id="doneScore"></div>
-      <a class="btn-guest" id="viewResult" href="../PB-08/mockup-HU1-PB8.html">Ver resultado</a>
-      <div class="row">
-        <button class="btn-secondary" id="nextPendingBtn">Responder otro cuestionario</button>
-        <button class="btn-secondary" id="backPanelBtn">Volver al panel de invitado</button>
-      </div>
-    </div>
-  </div>
-
+  <p class="hint">Demo local: agregue <b>?estado=sin-pendientes</b> o <b>?estado=error-carga</b> a la URL para previsualizar esos estados.</p>
 </main>
 
 <footer class="footer">
   <div class="footer-in">
-    <a href="#">Inicio</a>
-    <a href="#">Nosotros</a>
-    <a href="#">Ayuda</a>
-    <a href="#" class="aviso" id="footerAviso"><span class="ico">⚠️</span> Aviso: no diagnóstico</a>
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso" id="footerAviso"><span class="ico">ℹ️</span> Aviso: no diagnóstico</a>
   </div>
 </footer>
 
-<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle">
-  <div class="modal">
-    <div class="modal-icon">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-    </div>
-    <h3 id="avisoTitle">Mensaje aclaratorio</h3>
-    <div class="aviso-txt" id="avisoText">
-      <b>Mindzyx</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
-      Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.
-      <br><br>
-      Ante un <b>riesgo alto o una situación de urgencia</b>, busca ayuda profesional o utiliza las <b>líneas de ayuda disponibles</b> en tu país.
-      <br><br>
-      Mindzyx es solo una <b>herramienta de apoyo y monitoreo emocional</b> y <b>no reemplaza la atención profesional</b>.
-    </div>
+<div class="modal-overlay" id="modal-salir" role="dialog" aria-modal="true" aria-labelledby="modal-salir-titulo">
+  <div class="modal-card modal">
+    <h2 id="modal-salir-titulo">Salir del cuestionario</h2>
+    <p>¿Desea salir del cuestionario? Se perderán sus respuestas</p>
     <div class="modal-actions">
-      <button class="btn-modal close" id="avisoCerrar">Cerrar</button>
-      <button class="btn-modal ok" id="avisoOk">Entendido</button>
+      <button type="button" id="btn-salir-no" class="button button-secondary">No, continuar</button>
+      <button type="button" id="btn-salir-si" class="button button-danger">Sí, salir</button>
     </div>
   </div>
 </div>
-
-<div class="modal-overlay" id="cancelModal" role="alertdialog" aria-modal="true" aria-labelledby="cancelTitle">
-  <div class="modal">
-    <div class="modal-icon err">!</div>
-    <h3 id="cancelTitle">¿Deseas salir del cuestionario?</h3>
-    <p class="sub">Se perderán tus respuestas</p>
-    <div class="modal-actions">
-      <button class="btn-modal close" id="stayBtn">No, continuar</button>
-      <button class="btn-modal danger" id="leaveBtn">Sí, salir</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script>
-  const API='http://localhost:5015';
-  const $=id=>document.getElementById(id);
-  const screens={panel:$('screenPanel'),quiz:$('screenQuiz'),done:$('screenDone')};
-  const toast=$('toast');
-  const pendingBox=$('pendingBox'), panelQBtn=$('panelQBtn'), doneList=$('doneList');
-  const avisoModal=$('avisoModal'), cancelModal=$('cancelModal');
-  const qNum=$('qNum'), qBar=$('qBar'), qTitle=$('qTitle'), qOptions=$('qOptions'), qError=$('qError'), nextQ=$('nextQ');
-  const quizTitle=$('quizTitle'), doneScore=$('doneScore');
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var progressText = $('progress-text');
+  var progressBar = $('progressBar');
+  var progressFill = $('progress-fill');
+  var form = $('encuestaForm');
+  var contenedor = $('preguntas-dinamicas');
+  var errorMensaje = $('error-mensaje');
+  var btnVolver = $('btn-volver');
+  var btnSiguiente = $('btn-siguiente');
+  var modalSalir = $('modal-salir');
+  var btnSalirNo = $('btn-salir-no');
+  var btnSalirSi = $('btn-salir-si');
+  var btnReintentar = $('btn-reintentar');
+  var btnVolverInicio = $('btn-volver-inicio');
+  var btnVerResultado = $('btn-ver-resultado');
+  var sinPendientesMsg = $('sin-pendientes-msg');
 
-  let quiz=null;            // cuestionario pendiente actual (del API)
-  let current=0, selectionId=null, answers={};
-  let avisoObligatorio=true, avisoCache=null;
+  var DEMO_PREGUNTAS = [
+    { id: 'p1', texto: '¿Con qué frecuencia se ha sentido desanimado(a) o con poca energía en las últimas dos semanas?', opciones: ['Nunca', 'A veces', 'A menudo', 'Casi siempre'] },
+    { id: 'p2', texto: '¿Con qué frecuencia ha tenido dificultades para dormir o ha dormido en exceso?', opciones: ['Nunca', 'A veces', 'A menudo', 'Casi siempre'] },
+    { id: 'p3', texto: '¿Con qué frecuencia se ha sentido nervioso(a) o con preocupación constante?', opciones: ['Nunca', 'A veces', 'A menudo', 'Casi siempre'] }
+  ];
 
-  function addLog(msg){ console.log('[HU1-PB7]', new Date().toLocaleTimeString(), msg); }
-  function showToast(msg){ toast.textContent=msg; toast.classList.add('show'); clearTimeout(showToast._t); showToast._t=setTimeout(()=>toast.classList.remove('show'),2400); }
-  function showScreen(n){ Object.keys(screens).forEach(k=>screens[k].classList.toggle('active', k===n)); }
-  function clearError(){ qError.classList.remove('show'); }
-  function showError(t){ if(t) qError.textContent=t; qError.classList.add('show'); }
+  var indice = -1; // -1 = aviso, 0..N-1 = preguntas, N = completado
+  var respuestas = {};
+  var params = new URLSearchParams(location.search);
+  var estadoInicial = params.get('estado');
 
-  // --- sesión del invitado (cookies): cuest_<id>=1 marca cuestionario hecho al 100% ---
-  function setDone(id){ document.cookie='cuest_'+id+'=1;max-age=31536000;path=/;SameSite=Lax'; }
-  function getDoneIds(){
-    return document.cookie.split(';').map(s=>s.trim()).filter(s=>s.startsWith('cuest_'))
-      .map(s=>s.split('=')[0].replace('cuest_','')).filter(v=>/^\d+$/.test(v));
+  function pasos(){ return Array.prototype.slice.call(form.querySelectorAll('.step')); }
+  function mostrarPaso(nombre){
+    pasos().forEach(function(s){
+      s.classList.toggle('activo', s.getAttribute('data-step') === nombre);
+    });
+    var acciones = form.querySelector('.actions');
+    if(nombre === 'completado' || nombre === 'sin-pendientes' || nombre === 'error-carga'){
+      acciones.style.display = 'none';
+    } else {
+      acciones.style.display = 'flex';
+    }
   }
-  function paintDone(){
-    const ids=getDoneIds();
-    doneList.innerHTML=ids.length
-      ? 'Cuestionarios completados en esta sesión: '+ids.map(i=>'<span class="tag">✔ #'+i+'</span>').join(' ')
-      : '';
+  function actualizarProgreso(){
+    var total = DEMO_PREGUNTAS.length;
+    var respondidas = Object.keys(respuestas).length;
+    var pct = 0;
+    if(indice >= 0 && indice < total){ pct = Math.round((respondidas / total) * 100); }
+    if(indice >= total){ pct = 100; }
+    progressText.textContent = pct + '%';
+    progressFill.style.width = pct + '%';
+    progressBar.setAttribute('aria-valuenow', String(pct));
+  }
+  function limpiarError(){ errorMensaje.textContent = ''; errorMensaje.classList.remove('show'); }
+  function mostrarError(msg){ errorMensaje.textContent = msg; errorMensaje.classList.add('show'); }
+
+  function renderPreguntas(){
+    contenedor.innerHTML = '';
+    DEMO_PREGUNTAS.forEach(function(p, i){
+      var sec = document.createElement('section');
+      sec.className = 'step question';
+      sec.setAttribute('data-step', 'pregunta-' + (i + 1));
+      var count = document.createElement('span');
+      count.className = 'q-count';
+      count.textContent = 'Pregunta ' + (i + 1) + ' de ' + DEMO_PREGUNTAS.length;
+      var h = document.createElement('h2');
+      h.className = 'question-title';
+      h.textContent = p.texto;
+      var opts = document.createElement('div');
+      opts.className = 'opts';
+      opts.setAttribute('role', 'radiogroup');
+      opts.setAttribute('aria-label', p.texto);
+      p.opciones.forEach(function(op){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'opt' + (respuestas[p.id] === op ? ' selected' : '');
+        b.textContent = op;
+        b.setAttribute('aria-pressed', respuestas[p.id] === op ? 'true' : 'false');
+        b.addEventListener('click', function(){
+          respuestas[p.id] = op;
+          limpiarError();
+          Array.prototype.forEach.call(opts.querySelectorAll('.opt'), function(x){
+            x.classList.remove('selected'); x.setAttribute('aria-pressed', 'false');
+          });
+          b.classList.add('selected'); b.setAttribute('aria-pressed', 'true');
+          actualizarProgreso();
+        });
+        opts.appendChild(b);
+      });
+      sec.appendChild(count);
+      sec.appendChild(h);
+      sec.appendChild(opts);
+      contenedor.appendChild(sec);
+    });
   }
 
-  async function api(path, opts){
-    const r=await fetch(API+path, opts);
-    if(!r.ok){ let m=''; try{ m=(await r.json()).error||''; }catch(_){} throw new Error(m||('HTTP '+r.status)); }
-    return r.status===204?null:r.json();
+  function irA(i){
+    indice = i;
+    limpiarError();
+    if(i === -1){
+      mostrarPaso('aviso');
+      btnSiguiente.textContent = 'Entendido';
+      btnVolver.textContent = 'Volver';
+    } else if(i >= 0 && i < DEMO_PREGUNTAS.length){
+      mostrarPaso('pregunta-' + (i + 1));
+      btnSiguiente.textContent = (i === DEMO_PREGUNTAS.length - 1) ? 'Finalizar' : 'Siguiente';
+      btnVolver.textContent = 'Volver';
+    } else {
+      mostrarPaso('completado');
+    }
+    actualizarProgreso();
   }
 
-  // --- carga el siguiente cuestionario pendiente (rotación) ---
-  async function loadPending(){
-    paintDone();
-    pendingBox.classList.remove('error');
-    pendingBox.innerHTML='<p>Cargando cuestionarios disponibles…</p>';
-    panelQBtn.disabled=true;
-    try{
-      const excl=getDoneIds().join(',');
-      const q=await api('/api/cuestionario/invitado'+(excl?'?excluidos='+encodeURIComponent(excl):''));
-      if(!q||q.disponible===false){
-        quiz=null;
-        pendingBox.innerHTML='<h3>Sin cuestionarios pendientes</h3><p>'+((q&&q.mensaje)||'No tienes cuestionarios pendientes por responder.')+'</p>';
-        addLog('Sin cuestionarios pendientes — no se puede responder más');
+  btnSiguiente.addEventListener('click', function(){
+    if(indice === -1){ irA(0); return; }
+    if(indice >= 0 && indice < DEMO_PREGUNTAS.length){
+      var p = DEMO_PREGUNTAS[indice];
+      if(!respuestas[p.id]){
+        mostrarError('Seleccione una respuesta para continuar.');
         return;
       }
-      quiz=q;
-      avisoObligatorio=q.avisoObligatorio!==false;
-      pendingBox.innerHTML='<h3>'+escapeHtml(q.titulo)+'</h3><p>'+q.preguntas.length+' preguntas · todas obligatorias</p>';
-      panelQBtn.disabled=false;
-      addLog('Cuestionario pendiente cargado: "'+q.titulo+'" ('+q.preguntas.length+' preguntas)');
-    }catch(e){
-      quiz=null;
-      pendingBox.classList.add('error');
-      pendingBox.innerHTML='<h3>No fue posible cargar el cuestionario</h3><p>Intente nuevamente. <a href="#" id="retryLoad">Reintentar</a></p>';
-      $('retryLoad').addEventListener('click',ev=>{ev.preventDefault();loadPending();});
-      addLog('ERROR de carga del cuestionario: '+e.message);
+      if(indice === DEMO_PREGUNTAS.length - 1){ irA(DEMO_PREGUNTAS.length); return; }
+      irA(indice + 1);
     }
-  }
-  function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-  // --- aviso aclaratorio (GET /api/aviso, log en POST /visualizacion) ---
-  async function ensureAviso(){
-    if(avisoCache) return avisoCache;
-    try{
-      avisoCache=await api('/api/aviso');
-      $('avisoText').innerHTML='<b>'+escapeHtml(avisoCache.titulo)+'</b><br><br>'+escapeHtml(avisoCache.texto).replace(/\n/g,'<br>');
-    }catch(e){ addLog('Aviso por defecto (API no disponible): '+e.message); }
-    return avisoCache;
-  }
-  function logVisualizacion(resultado){
-    api('/api/aviso/visualizacion',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({origen:'cuestionario-invitado',resultado})}).catch(()=>{});
-  }
-
-  panelQBtn.addEventListener('click', async ()=>{
-    if(!quiz) return;
-    if(avisoObligatorio){
-      await ensureAviso();
-      avisoModal.classList.add('open');
-      logVisualizacion('ok');
-      addLog('VISUALIZACIÓN del mensaje aclaratorio (obligatorio, antes de iniciar el cuestionario)');
-      return;
-    }
-    startQuiz();
-  });
-  $('avisoOk').addEventListener('click', ()=>{ avisoModal.classList.remove('open'); addLog('AVISO ACEPTADO — botón "Entendido"'); startQuiz(); });
-  $('avisoCerrar').addEventListener('click', ()=>{ avisoModal.classList.remove('open'); addLog('AVISO CERRADO — no se inicia el cuestionario'); });
-  $('footerAviso').addEventListener('click', async e=>{ e.preventDefault(); await ensureAviso(); avisoModal.classList.add('open'); logVisualizacion('ok'); });
-
-  function startQuiz(){
-    current=0; selectionId=null; answers={};
-    api('/api/cuestionario/invitado/inicio',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({cuestionarioId:quiz.id})}).catch(e=>addLog('Log de inicio (no bloquea): '+e.message));
-    quizTitle.textContent=quiz.titulo;
-    renderQuestion();
-    showScreen('quiz');
-    addLog('INICIO del cuestionario "'+quiz.titulo+'" (invitado) — sesión temporal');
-  }
-
-  function renderQuestion(){
-    const q=quiz.preguntas[current];
-    selectionId=answers[q.id]??null;
-    qNum.textContent='Pregunta '+(current+1)+' de '+quiz.preguntas.length;
-    qBar.style.width=(current/(quiz.preguntas.length-1||1)*100)+'%';
-    qTitle.textContent=q.texto;
-    qOptions.innerHTML='';
-    q.opciones.forEach((o,i)=>{
-      const b=document.createElement('button');
-      b.type='button';
-      b.className='opt'+(o.id===selectionId?' selected':'');
-      b.textContent=(i+1)+'. '+o.texto;
-      b.addEventListener('click',()=>{ selectionId=o.id; clearError(); qOptions.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); });
-      qOptions.appendChild(b);
-    });
-    nextQ.textContent=current===quiz.preguntas.length-1?'Finalizar':'Siguiente →';
-    clearError();
-  }
-
-  async function finalizeQuiz(){
-    const payload={cuestionarioId:quiz.id,respuestas:Object.entries(answers).map(([preguntaId,opcionId])=>({preguntaId:+preguntaId,opcionId}))};
-    try{
-      const r=await api('/api/cuestionario/invitado/finalizar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-      setDone(quiz.id);   // 100% respondido -> marcado como hecho en la sesión (cookies)
-      doneScore.textContent='Puntaje '+r.puntaje+' · Nivel '+(r.nivel||'');
-      $('viewResult').href='../PB-08/mockup-HU1-PB8.html?cuestionarioId='+quiz.id;
-      showScreen('done');
-      addLog('FINALIZACIÓN del cuestionario — 100% respondido, marcado como hecho en la sesión (cookie cuest_'+quiz.id+'), puntaje '+r.puntaje);
-      quiz=null;
-    }catch(e){
-      showError(e.message||'Debes seleccionar una respuesta para continuar');
-      addLog('VALIDACIÓN fallida al finalizar: '+e.message);
-    }
-  }
-
-  nextQ.addEventListener('click', ()=>{
-    const q=quiz.preguntas[current];
-    if(selectionId==null){ showError('Debes seleccionar una respuesta para continuar'); addLog('BLOQUEO de avance: sin respuesta en pregunta '+(current+1)); return; }
-    answers[q.id]=selectionId;
-    addLog('RESPUESTA guardada ('+(current+1)+'/'+quiz.preguntas.length+')');
-    if(current===quiz.preguntas.length-1){ finalizeQuiz(); return; }
-    current++;
-    renderQuestion();
   });
 
-  $('cancelQ').addEventListener('click', ()=>{ cancelModal.classList.add('open'); addLog('INTENTO de cancelar — se muestra confirmación'); });
-  $('stayBtn').addEventListener('click', ()=>{ cancelModal.classList.remove('open'); addLog('Confirmación: NO salir — continúa'); });
-  $('leaveBtn').addEventListener('click', ()=>{
-    cancelModal.classList.remove('open');
-    current=0; selectionId=null; answers={}; quiz=null;
-    loadPending(); showScreen('panel');
-    addLog('CONFIRMADO salir — respuestas descartadas, cuestionario NO marcado como completado');
+  btnVolver.addEventListener('click', function(){
+    if(indice === -1){ modalSalir.classList.add('open'); return; }
+    if(indice === 0){ irA(-1); return; }
+    if(indice >= 1 && indice < DEMO_PREGUNTAS.length){ irA(indice - 1); return; }
   });
 
-  $('nextPendingBtn').addEventListener('click', ()=>{ loadPending(); showScreen('panel'); });
-  $('backPanelBtn').addEventListener('click', ()=>{ loadPending(); showScreen('panel'); });
-  $('panelExit').addEventListener('click', ()=>{ addLog('SALIDA del modo invitado — vuelve a la Landing'); showToast('Volviendo a la Landing (fuera de este mockup)'); });
+  btnSalirNo.addEventListener('click', function(){ modalSalir.classList.remove('open'); });
+  btnSalirSi.addEventListener('click', function(){
+    modalSalir.classList.remove('open');
+    respuestas = {};
+    renderPreguntas();
+    irA(-1);
+  });
 
-  loadPending();
-  addLog('Sistema listo — cuestionarios dinámicos desde el API con rotación por cookies');
+  btnReintentar.addEventListener('click', function(){
+    respuestas = {};
+    renderPreguntas();
+    irA(-1);
+  });
+
+  btnVolverInicio.addEventListener('click', function(){
+    window.location.href = '../PB-06/mockup-HU1-PB6.html';
+  });
+  btnVerResultado.addEventListener('click', function(){
+    window.location.href = '../PB-08/mockup-HU1-PB8.html?origen=encuesta-demo';
+  });
+
+  $('footerAviso').addEventListener('click', function(e){
+    e.preventDefault();
+    respuestas = respuestas || {};
+    irA(-1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  form.addEventListener('submit', function(e){ e.preventDefault(); });
+
+  renderPreguntas();
+  if(estadoInicial === 'sin-pendientes'){
+    mostrarPaso('sin-pendientes');
+    if(sinPendientesMsg){ sinPendientesMsg.textContent = 'No tiene cuestionarios pendientes por responder.'; }
+    form.querySelector('.actions').style.display = 'none';
+    progressText.textContent = '0%'; progressFill.style.width = '0%';
+    progressBar.setAttribute('aria-valuenow', '0');
+  } else if(estadoInicial === 'error-carga'){
+    mostrarPaso('error-carga');
+    form.querySelector('.actions').style.display = 'none';
+  } else {
+    irA(-1);
+  }
+})();
 </script>
 </body>
 </html>

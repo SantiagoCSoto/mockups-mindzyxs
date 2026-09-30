@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU1-PB8 | Resultado del riesgo (Invitado)</title>
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Mindzyx — Resultado del riesgo</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -17,7 +18,7 @@
   .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
   .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
   .header{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;max-width:1100px;margin:0 auto;width:100%;border-bottom:1px solid #F0EAF6}
-  .logo{display:flex;align-items:center}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:18px;text-decoration:none;color:var(--text)}
   .logo-img{height:44px;width:auto;object-fit:contain}
   .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
   .nav a{color:var(--muted);text-decoration:none}
@@ -61,6 +62,7 @@
   .result-level{font-size:34px;font-weight:800;margin-top:16px}
   .result-level.bajo{color:#0E8F4B}
   .result-level.medio{color:#8A6A00}
+  .result-level.moderado{color:#8A6A00}
   .result-level.alto{color:var(--error)}
   .result-score{font-size:12px;font-weight:600;color:var(--muted);margin-top:4px}
   .result-expl{font-size:13px;color:var(--text);line-height:1.65;margin-top:16px;text-align:left;background:#F9F8FC;border:1px solid #EDE8F0;border-radius:12px;padding:14px 16px}
@@ -76,7 +78,7 @@
   .btn-help.lineas:hover{border-color:var(--cyan);background:#F8FEFF}
   .btn-help.lineas.urgente{background:linear-gradient(180deg,#E85D7A,#D6486A);color:white;border:none;box-shadow:0 4px 12px rgba(232,93,122,0.35);animation:pulse 1.6s infinite}
   .btn-help.lineas.urgente:hover{filter:brightness(1.05)}
-  .btn-help.volver{min-height:42px;background:white;border:1px solid #DFDAEE;color:var(--text);box-shadow:none}
+  .btn-help.volver{min-height:42px;background:white;border:1px solid #DFDAEE;color:var(--text);box-shadow:none;line-height:42px}
   .btn-help.volver:hover{border-color:var(--cyan);background:#F8FEFF}
   @keyframes pulse{0%,100%{box-shadow:0 4px 12px rgba(232,93,122,0.35)}50%{box-shadow:0 4px 20px rgba(232,93,122,0.6)}}
   .panel-alert{display:none;gap:8px;align-items:flex-start;text-align:left;background:#FFF1F3;border:1px solid #FFD8E0;color:#B02A4E;font-size:12px;line-height:1.5;border-radius:12px;padding:12px 14px;margin-bottom:14px}
@@ -113,10 +115,22 @@
   .btn-modal.ok{background:var(--cyan);color:white}
   .btn-modal.ok:hover{background:var(--cyan-hover)}
   .btn-modal.close{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  /* Espejo del front resultado_riesgo: error-card, modales anchos, filtros */
+  .error-card{text-align:center}
+  .error-card h2{font-size:18px;font-weight:800}
+  .error-card p{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .modal-wide{width:min(560px,100%)}
+  .modal-x{float:right;border:1px solid #DFDAEE;background:white;border-radius:10px;width:32px;height:32px;cursor:pointer;font-size:14px;color:var(--text)}
+  .modal-x:hover{border-color:var(--cyan);background:#F8FEFF}
+  .lineas-filtros{display:flex;gap:8px;margin-top:14px}
+  .lineas-filtros input,.lineas-filtros select{height:40px;border-radius:12px;border:1px solid #DFDAEE;padding:0 12px;font-size:12px;font-family:inherit;color:var(--text);background:white}
+  .lineas-filtros input{flex:2;min-width:0}
+  .lineas-filtros select{flex:1;min-width:0}
   @media(max-width:560px){
     .header{padding:0 14px}
     .nav{font-size:12px;gap:12px}
     .mini-opts .tile{width:100%}
+    .lineas-filtros{flex-direction:column}
   }
 </style>
 </head>
@@ -124,338 +138,196 @@
 <div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
 
 <header class="header">
-  <div class="logo"><img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img"></div>
-  <nav class="nav">
+  <a href="#" class="logo" aria-label="Mindzyxs inicio">
+    <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"> <span>Mindzyxs</span>
+  </a>
+  <nav class="nav" aria-label="Navegación principal">
     <a href="#">Nosotros</a>
     <a href="#">Ayuda</a>
   </nav>
-  <span class="guest-pill">👤 Modo invitado</span>
 </header>
 
 <main class="wrap">
-
-  <div class="screen active" id="screenPanel">
-    <div class="card">
-      <div class="panel-alert" id="panelAlert">
-        <span class="ico">✖️</span>
-        <span>No se encontraron respuestas para calcular el riesgo. Por favor responde el cuestionario nuevamente</span>
-      </div>
-      <div class="panel-head">
-        <span class="badge-guest">👤 Modo invitado — sin cuenta</span>
-        <h2>Panel de invitado</h2>
-        <p class="sub">Respuestas validadas en la sesión del invitado. Desde aquí puedes responder el cuestionario emocional.</p>
-      </div>
-      <div class="pending-box" id="pendingBox"><p>Cargando cuestionarios disponibles…</p></div>
-      <div class="cta-wrap">
-        <button class="btn-guest" id="panelQBtn" disabled>Responder cuestionario</button>
-      </div>
-      <div style="text-align:center;margin-top:16px">
-        <button class="btn-secondary" id="panelExit">Salir del modo invitado</button>
+  <div class="card result-card">
+    <span class="result-title">Resultado del riesgo</span>
+    <div class="result-level alto" id="resLevel">Riesgo alto</div>
+    <div class="result-score" id="resScore">Puntaje 10 de 12</div>
+    <div class="alert-urgente show" id="alertUrgente">
+      <span class="ico">🚨</span>
+      <div>
+        <b>Riesgo alto detectado. Busque ayuda profesional o comuníquese con una línea de ayuda</b>
+        <p>Su bienestar es lo más importante. Le recomendamos contactar a un profesional de la salud mental o a una línea de ayuda disponible en su país.</p>
       </div>
     </div>
-    <div class="card" style="margin-top:14px">
-      <span style="font-size:11px;font-weight:700;color:#5A5D72">API:</span>
-      <p class="hint"><b>POST</b> /api/riesgo/invitado/calcular con las respuestas de la sesión · <b>GET</b> /api/ayuda/lineas — Puntaje = promedio de escala 1–5 (1–2 Bajo, 3 Medio, 4–5 Alto).</p>
+    <div class="result-expl" id="resExpl">Sus respuestas indican señales frecuentes de malestar emocional. Le recomendamos conversar con un profesional de la salud mental, mantener hábitos de autocuidado y guardar este resultado como referencia. Si el malestar aumenta, busque apoyo de inmediato.</div>
+    <div class="result-actions">
+      <a class="btn-help" id="btnRecom" href="../PB-09/mockup-HU1-PB9.html">Ver recomendaciones básicas</a>
+      <button class="btn-help lineas urgente" id="btnLineas" type="button">Líneas de ayuda</button>
+      <a class="btn-help volver" href="../PB-06/mockup-HU1-PB6.html">Volver al panel</a>
     </div>
+    <p class="hint">⚠️ Este resultado <b>no es un diagnóstico clínico</b>. Mindzyxs es solo una herramienta de apoyo y monitoreo emocional.</p>
   </div>
 
-  <div class="screen" id="screenQuiz">
-    <div class="card">
-      <div class="quiz-head" style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px">
-        <span style="font-size:11px;font-weight:700;color:#6B5BCE;background:#F9F7FF;border:1px solid #EDE6FF;padding:5px 12px;border-radius:20px" id="qNum"></span>
-      </div>
-      <div style="height:8px;background:#F0EAF6;border-radius:20px;overflow:hidden;margin:10px 0 16px"><div style="height:100%;background:var(--cyan);border-radius:20px;transition:width .3s;width:0%" id="qBar"></div></div>
-      <h2 id="qTitle" style="font-size:16px;font-weight:700;line-height:1.45"></h2>
-      <div id="qOptions" style="display:flex;flex-direction:column;gap:10px;margin-top:18px"></div>
-      <div id="qError" style="display:none;align-items:center;gap:6px;font-size:12px;color:var(--error);background:#FFF1F3;border:1px solid #FFE0E6;padding:8px 10px;border-radius:10px;margin-top:14px">Debes seleccionar una respuesta para continuar</div>
-      <div style="display:flex;gap:10px;margin-top:18px">
-        <button id="cancelQ" style="height:44px;padding:0 18px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer">Cancelar / Volver</button>
-        <button id="nextQ" style="flex:1;height:44px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer">Siguiente →</button>
-      </div>
-    </div>
-    <p class="hint">Todas las preguntas son obligatorias. En la última pregunta el botón cambia a <b>Finalizar</b>.</p>
-  </div>
-
-  <div class="screen" id="screenDone">
-    <div class="card done">
-      <div class="done-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
-      </div>
-      <h2>Cuestionario completado</h2>
-      <p class="sub">
-        Tus respuestas fueron <b>guardadas temporalmente en la sesión del invitado</b> sin pedir datos personales.
-        Presiona <b>Ver resultado</b> para que el sistema valide tus respuestas, procese y calcule tu nivel de riesgo emocional.
-      </p>
-      <button class="btn-guest" id="viewResult">Ver resultado</button>
-      <div class="card" style="margin-top:18px;text-align:center;border-style:dashed;box-shadow:none">
-        <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo — estado de la sesión:</span>
-        <div class="controls" style="justify-content:center">
-          <button class="chip" id="noRespChip">Simular sesión sin respuestas (expirada)</button>
-        </div>
-        <p class="hint">Limpia las respuestas de la sesión para ver el mensaje "No se encontraron respuestas para calcular el riesgo…".</p>
-      </div>
+  <div class="card error-card" id="errorCard" hidden>
+    <h2>No se pudo calcular el riesgo</h2>
+    <p id="errorMsg">No se encontraron respuestas para calcular el riesgo. Por favor responda el cuestionario nuevamente</p>
+    <div class="result-actions">
+      <a class="btn-help" href="../PB-07/mockup-HU1-PB7.html">Responder cuestionario</a>
+      <a class="btn-help volver" href="../PB-06/mockup-HU1-PB6.html">Volver al panel</a>
     </div>
   </div>
-
-  <div class="screen" id="screenResult">
-    <div class="card result-card">
-      <span class="result-title">Resultado del riesgo (Invitado)</span>
-      <div class="result-level" id="resLevel">—</div>
-      <div class="result-score" id="resScore">—</div>
-      <div class="alert-urgente" id="alertUrgente">
-        <span class="ico">🚨</span>
-        <div>
-          <b>Riesgo alto detectado. Busca ayuda profesional o comunícate con una línea de ayuda</b>
-          <p>Tu bienestar es lo más importante. Te recomendamos contactar a un profesional de la salud mental o a una línea de ayuda disponible en tu país.</p>
-        </div>
-      </div>
-      <div class="result-expl" id="resExpl"></div>
-      <div class="result-actions">
-        <a class="btn-help" id="btnRecom" href="../PB-09/mockup-HU1-PB9.html">Ver recomendaciones básicas</a>
-        <button class="btn-help lineas" id="btnLineas">Líneas de ayuda</button>
-        <button class="btn-help volver" id="btnVolver">Volver al inicio (Invitado)</button>
-      </div>
-      <p class="hint">⚠️ Este resultado <b>no es un diagnóstico clínico</b>. Mindzyx es solo una herramienta de apoyo y monitoreo emocional.</p>
-    </div>
-  </div>
-
+  <p class="hint">Demo local: agregue <b>?demo=error</b> a la URL para previsualizar el estado de error.</p>
 </main>
 
 <footer class="footer">
   <div class="footer-in">
-    <a href="#">Inicio</a>
-    <a href="#">Nosotros</a>
-    <a href="#">Ayuda</a>
-    <a href="#" class="aviso" id="footerAviso"><span class="ico">⚠️</span> Aviso: no diagnóstico</a>
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso" id="footerAviso"><span class="ico">ℹ️</span> Aviso: no diagnóstico</a>
   </div>
 </footer>
 
-<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle">
+<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true">
   <div class="modal">
-    <div class="modal-icon">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-    </div>
+    <div class="modal-icon">⚠️</div>
     <h3>Mensaje aclaratorio</h3>
     <div class="aviso-txt" id="avisoText">
-      <b>Mindzyx</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
-      Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.
-      <br><br>
-      Ante un <b>riesgo alto o una situación de urgencia</b>, busca ayuda profesional o utiliza las <b>líneas de ayuda disponibles</b> en tu país.
+      <b>Mindzyxs</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
+      Este sistema <b>no realiza diagnósticos clínicos</b> y <b>no sustituye la atención de un profesional de la salud mental</b>.
       <br><br>
       El resultado mostrado es solo una <b>estimación orientativa</b> del nivel de riesgo emocional.
     </div>
     <div class="modal-actions">
-      <button class="btn-modal close" id="avisoCerrar">Cerrar</button>
-      <button class="btn-modal ok" id="avisoOk">Entendido</button>
+      <button class="btn-modal close" id="avisoCerrar" type="button">Cerrar</button>
+      <button class="btn-modal ok" id="avisoOk" type="button">Entendido</button>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="lineasModal" role="dialog" aria-modal="true" aria-labelledby="lineasTitle">
-  <div class="modal">
+<div class="modal-overlay" id="lineasModal" role="dialog" aria-modal="true">
+  <div class="modal modal-wide">
+    <button class="modal-x" id="lineasX" aria-label="Cerrar">✕</button>
     <div class="modal-icon info">🆘</div>
     <h3>Líneas de ayuda</h3>
-    <p class="sub" style="font-size:11px">Líneas de emergencia y acompañamiento emocional.</p>
-    <div class="modal-actions" style="flex-direction:column;gap:10px;margin-top:14px" id="lineasList"></div>
+    <p class="sub">Líneas de emergencia y acompañamiento emocional.</p>
+    <div class="lineas-filtros">
+      <input type="text" id="lineasQ" maxlength="60" placeholder="Ciudad, departamento o nombre…" autocomplete="off" aria-label="Buscar líneas por ciudad o nombre">
+      <select id="lineasTipo" aria-label="Tipo de atención">
+        <option value="">Todas</option>
+        <option value="apoyo_emocional">Apoyo emocional</option>
+        <option value="intervencion_crisis">Intervención en crisis</option>
+        <option value="emergencia">Emergencia</option>
+        <option value="violencia_genero">Violencia de género</option>
+        <option value="infancia_adolescencia">Infancia y adolescencia</option>
+        <option value="orientacion_institucional">Orientación institucional</option>
+      </select>
+    </div>
+    <div id="lineasList" style="display:flex;flex-direction:column;gap:10px;margin-top:14px;text-align:left"></div>
     <div class="modal-actions">
-      <button class="btn-modal close" id="lineasClose">Cerrar</button>
+      <button class="btn-modal close" id="lineasClose" type="button">Cerrar</button>
     </div>
   </div>
 </div>
-
-<div class="modal-overlay" id="cancelModal" role="alertdialog" aria-modal="true" aria-labelledby="cancelTitle">
-  <div class="modal">
-    <div class="modal-icon err">!</div>
-    <h3 id="cancelTitle">¿Deseas salir del cuestionario?</h3>
-    <p class="sub">Se perderán tus respuestas</p>
-    <div class="modal-actions">
-      <button class="btn-modal close" id="stayBtn">No, continuar</button>
-      <button class="btn-modal danger" id="leaveBtn" style="flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer;background:var(--error);color:white">Sí, salir</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script>
-  const API='http://localhost:5015';
-  const $=id=>document.getElementById(id);
-  const screens={panel:$('screenPanel'),quiz:$('screenQuiz'),done:$('screenDone'),result:$('screenResult')};
-  const toast=$('toast');
-  const pendingBox=$('pendingBox'), panelQBtn=$('panelQBtn'), panelAlert=$('panelAlert');
-  const avisoModal=$('avisoModal'), lineasModal=$('lineasModal'), cancelModal=$('cancelModal');
-  const qNum=$('qNum'), qBar=$('qBar'), qTitle=$('qTitle'), qOptions=$('qOptions'), qError=$('qError'), nextQ=$('nextQ');
-  const resLevel=$('resLevel'), resScore=$('resScore'), resExpl=$('resExpl'), alertEl=$('alertUrgente'), lineasBtn=$('btnLineas');
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var resLevel = $('resLevel');
+  var resScore = $('resScore');
+  var resExpl = $('resExpl');
+  var alertUrgente = $('alertUrgente');
+  var btnRecom = $('btnRecom');
+  var btnLineas = $('btnLineas');
+  var errorCard = $('errorCard');
+  var errorMsg = $('errorMsg');
+  var footerAviso = $('footerAviso');
+  var avisoModal = $('avisoModal');
+  var avisoText = $('avisoText');
+  var avisoCerrar = $('avisoCerrar');
+  var avisoOk = $('avisoOk');
+  var lineasModal = $('lineasModal');
+  var lineasX = $('lineasX');
+  var lineasQ = $('lineasQ');
+  var lineasTipo = $('lineasTipo');
+  var lineasList = $('lineasList');
+  var lineasClose = $('lineasClose');
 
-  let quiz=null, current=0, selectionId=null, answers={};
-  let avisoObligatorio=true, avisoCache=null, pendingLevel=null;
+  var DEMO_RESULTADO = {
+    nivel: 'Alto',
+    puntajeTexto: 'Puntaje 10 de 12',
+    explicacion: 'Sus respuestas indican señales frecuentes de malestar emocional. Le recomendamos conversar con un profesional de la salud mental, mantener hábitos de autocuidado y guardar este resultado como referencia. Si el malestar aumenta, busque apoyo de inmediato.'
+  };
 
-  function addLog(msg){ console.log('[HU1-PB8]', new Date().toLocaleTimeString(), msg); }
-  function showToast(msg){ toast.textContent=msg; toast.classList.add('show'); clearTimeout(showToast._t); showToast._t=setTimeout(()=>toast.classList.remove('show'),2400); }
-  function showScreen(n){ Object.keys(screens).forEach(k=>screens[k].classList.toggle('active', k===n)); }
-  function clearError(){ qError.style.display='none'; }
-  function showError(){ qError.style.display='flex'; }
-  function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  var LINEAS = [
+    { nombre: 'Línea 106', detalle: 'Apoyo emocional y crisis en infancia y adolescencia', telefono: '106', ciudad: 'Bogotá Nacional', tipo: 'apoyo_emocional', tipoEtiqueta: 'Apoyo emocional', horario: '24 horas, gratuita' },
+    { nombre: 'Línea 192', detalle: 'Orientación en salud mental y apoyo psicosocial', telefono: '192', ciudad: 'Nacional', tipo: 'orientacion_institucional', tipoEtiqueta: 'Orientación institucional', horario: '24 horas, gratuita' },
+    { nombre: 'Línea 123', detalle: 'Emergencias y urgencias generales', telefono: '123', ciudad: 'Nacional', tipo: 'emergencia', tipoEtiqueta: 'Emergencia', horario: '24 horas, gratuita' }
+  ];
 
-  // --- sesión del invitado: respuestas en sessionStorage + hechos en cookies cuest_* ---
-  const SKEY='mindzyx_inv_answers';
-  function saveSession(cid,resp){ sessionStorage.setItem(SKEY,JSON.stringify({cuestionarioId:cid,respuestas:resp})); }
-  function readSession(){ try{ return JSON.parse(sessionStorage.getItem(SKEY)); }catch(_){ return null; } }
-  function clearSession(){ sessionStorage.removeItem(SKEY); }
-  function getDoneIds(){ return document.cookie.split(';').map(s=>s.trim()).filter(s=>s.startsWith('cuest_')).map(s=>s.split('=')[0].replace('cuest_','')).filter(v=>/^\d+$/.test(v)); }
-
-  async function api(path,opts){
-    const r=await fetch(API+path,opts);
-    if(!r.ok){ let m=''; try{ m=(await r.json()).error||''; }catch(_){} throw new Error(m||('HTTP '+r.status)); }
-    return r.status===204?null:r.json();
+  function pintarResultado(){
+    resLevel.textContent = 'Riesgo ' + DEMO_RESULTADO.nivel.toLowerCase();
+    resLevel.className = 'result-level ' + DEMO_RESULTADO.nivel.toLowerCase();
+    resScore.textContent = DEMO_RESULTADO.puntajeTexto;
+    resExpl.textContent = DEMO_RESULTADO.explicacion;
+    var esAlto = DEMO_RESULTADO.nivel.toLowerCase() === 'alto';
+    alertUrgente.classList.toggle('show', esAlto);
+    btnLineas.classList.toggle('urgente', esAlto);
   }
 
-  // --- cuestionario pendiente (rotación; ?cuestionarioId= tiene preferencia si sigue pendiente) ---
-  async function loadPending(){
-    pendingBox.classList.remove('error');
-    pendingBox.innerHTML='<p>Cargando cuestionarios disponibles…</p>';
-    panelQBtn.disabled=true;
-    try{
-      const params=new URLSearchParams(location.search);
-      const prefer=params.get('cuestionarioId');
-      let excl=getDoneIds();
-      if(prefer&&/^\d+$/.test(prefer)) excl=excl.filter(i=>i!==prefer);
-      const q=await api('/api/cuestionario/invitado'+(excl.length?'?excluidos='+encodeURIComponent(excl.join(',')):''));
-      if(!q||q.disponible===false){ quiz=null; pendingBox.innerHTML='<h3>Sin cuestionarios pendientes</h3><p>'+escapeHtml((q&&q.mensaje)||'No tienes cuestionarios pendientes por responder.')+'</p>'; return; }
-      quiz=q; avisoObligatorio=q.avisoObligatorio!==false;
-      pendingBox.innerHTML='<h3>'+escapeHtml(q.titulo)+'</h3><p>'+q.preguntas.length+' preguntas · todas obligatorias</p>';
-      panelQBtn.disabled=false;
-      addLog('Cuestionario pendiente cargado: "'+q.titulo+'"');
-    }catch(e){
-      quiz=null; pendingBox.classList.add('error');
-      pendingBox.innerHTML='<h3>No fue posible cargar el cuestionario</h3><p>Intente nuevamente. <a href="#" id="retryLoad">Reintentar</a></p>';
-      $('retryLoad').addEventListener('click',ev=>{ev.preventDefault();loadPending();});
-      addLog('ERROR de carga: '+e.message);
-    }
-  }
-
-  async function ensureAviso(){
-    if(avisoCache) return avisoCache;
-    try{
-      avisoCache=await api('/api/aviso');
-      $('avisoText').innerHTML='<b>'+escapeHtml(avisoCache.titulo)+'</b><br><br>'+escapeHtml(avisoCache.texto).replace(/\n/g,'<br>');
-    }catch(e){ addLog('Aviso por defecto (API no disponible)'); }
-    return avisoCache;
-  }
-  function logVisualizacion(res){
-    api('/api/aviso/visualizacion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({origen:'resultado-riesgo',resultado:res})}).catch(()=>{});
-  }
-
-  panelQBtn.addEventListener('click', async ()=>{
-    if(!quiz) return;
-    panelAlert.classList.remove('show');
-    if(avisoObligatorio){ await ensureAviso(); avisoModal.classList.add('open'); logVisualizacion('ok'); addLog('VISUALIZACIÓN del mensaje aclaratorio (antes del cuestionario)'); pendingAction=startQuiz; return; }
-    startQuiz();
-  });
-  let pendingAction=null;
-  $('avisoOk').addEventListener('click', ()=>{ avisoModal.classList.remove('open'); addLog('AVISO ACEPTADO — "Entendido"'); (pendingAction||(()=>{}))(); pendingAction=null; });
-  $('avisoCerrar').addEventListener('click', ()=>{ avisoModal.classList.remove('open'); pendingAction=null; addLog('AVISO CERRADO — no continúa'); });
-  $('footerAviso').addEventListener('click', async e=>{ e.preventDefault(); await ensureAviso(); avisoModal.classList.add('open'); logVisualizacion('ok'); });
-
-  function startQuiz(){
-    current=0; selectionId=null; answers={};
-    api('/api/cuestionario/invitado/inicio',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cuestionarioId:quiz.id})}).catch(e=>addLog('Log de inicio (no bloquea): '+e.message));
-    renderQuestion(); showScreen('quiz');
-    addLog('INICIO del cuestionario "'+quiz.titulo+'"');
-  }
-  function renderQuestion(){
-    const q=quiz.preguntas[current];
-    selectionId=answers[q.id]??null;
-    qNum.textContent='Pregunta '+(current+1)+' de '+quiz.preguntas.length;
-    qBar.style.width=(current/(quiz.preguntas.length-1||1)*100)+'%';
-    qTitle.textContent=q.texto;
-    qOptions.innerHTML='';
-    q.opciones.forEach((o,i)=>{
-      const b=document.createElement('button');
-      b.type='button';
-      b.style.cssText='padding:14px 16px;border:1px solid #DFDAEE;border-radius:12px;background:#FFF;font-size:13px;text-align:left;cursor:pointer;font-family:inherit'+(o.id===selectionId?';border-color:var(--cyan);background:#E6F7F8;font-weight:600;box-shadow:0 0 0 1px var(--cyan)':'');
-      b.textContent=(i+1)+'. '+o.texto;
-      b.addEventListener('click',()=>{ selectionId=o.id; clearError(); renderQuestion(); });
-      qOptions.appendChild(b);
+  function pintarLineas(){
+    var q = (lineasQ.value || '').toLowerCase().trim();
+    var t = lineasTipo.value || '';
+    var items = LINEAS.filter(function(l){
+      var okQ = !q || (l.nombre + ' ' + l.detalle + ' ' + l.ciudad + ' ' + l.telefono).toLowerCase().indexOf(q) !== -1;
+      var okT = !t || l.tipo === t;
+      return okQ && okT;
     });
-    nextQ.textContent=current===quiz.preguntas.length-1?'Finalizar':'Siguiente →';
-    clearError();
-  }
-  async function finalizeQuiz(){
-    const payload={cuestionarioId:quiz.id,respuestas:Object.entries(answers).map(([preguntaId,opcionId])=>({preguntaId:+preguntaId,opcionId}))};
-    try{
-      await api('/api/cuestionario/invitado/finalizar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-      document.cookie='cuest_'+quiz.id+'=1;max-age=31536000;path=/;SameSite=Lax';
-      saveSession(quiz.id,payload.respuestas);
-      showScreen('done');
-      addLog('FINALIZACIÓN 100% — respuestas en la sesión, cookie cuest_'+quiz.id);
-      quiz=null;
-    }catch(e){ qError.textContent=e.message||'Debes seleccionar una respuesta para continuar'; showError(); addLog('VALIDACIÓN fallida: '+e.message); }
-  }
-  nextQ.addEventListener('click', ()=>{
-    const q=quiz.preguntas[current];
-    if(selectionId==null){ showError(); addLog('BLOQUEO de avance: sin respuesta'); return; }
-    answers[q.id]=selectionId;
-    if(current===quiz.preguntas.length-1){ finalizeQuiz(); return; }
-    current++; renderQuestion();
-  });
-
-  $('cancelQ').addEventListener('click', ()=>cancelModal.classList.add('open'));
-  $('stayBtn').addEventListener('click', ()=>cancelModal.classList.remove('open'));
-  $('leaveBtn').addEventListener('click', ()=>{ cancelModal.classList.remove('open'); current=0; selectionId=null; answers={}; quiz=null; loadPending(); showScreen('panel'); addLog('CONFIRMADO salir — descartadas, NO completado'); });
-
-  // --- Ver resultado: valida sesión, aviso si aplica, calcula ---
-  $('viewResult').addEventListener('click', async ()=>{
-    const s=readSession();
-    if(!s||!s.respuestas||!s.respuestas.length){
-      panelAlert.classList.add('show'); loadPending(); showScreen('panel');
-      addLog('SIN RESPUESTAS en la sesión (expirada o no finalizado) — redirige al panel/cuestionario');
-      showToast('No se encontraron respuestas para calcular el riesgo');
+    if(!items.length){
+      lineasList.innerHTML = '<div class="line-item">No se encontraron líneas con ese criterio. Intente con otra búsqueda.</div>';
       return;
     }
-    const doCalc=async ()=>{
-      try{
-        const r=await api('/api/riesgo/invitado/calcular',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(s)});
-        pendingLevel=r.nivel;
-        resLevel.textContent='Riesgo '+r.nivel;
-        resLevel.className='result-level '+r.nivel.toLowerCase();
-        resScore.textContent='Puntaje '+r.puntaje+' / 5';
-        resExpl.textContent=r.explicacion;
-        const alto=r.alerta&&r.alerta.mostrar;
-        alertEl.classList.toggle('show',!!alto);
-        lineasBtn.classList.toggle('urgente',!!alto);
-        lineasBtn.textContent=alto?'🚨 Líneas de ayuda (urgente)':'Líneas de ayuda';
-        $('btnRecom').href='../PB-09/mockup-HU1-PB9.html?nivel='+encodeURIComponent(r.nivel);
-        showScreen('result');
-        addLog('CÁLCULO del riesgo — puntaje '+r.puntaje+' → nivel "'+r.nivel+'"'+(alto?' — ALERTA de urgencia, Líneas resaltado':''));
-      }catch(e){
-        panelAlert.classList.add('show'); loadPending(); showScreen('panel');
-        addLog('ERROR al calcular: '+e.message+' — redirige al cuestionario');
-      }
-    };
-    if(avisoObligatorio){ await ensureAviso(); avisoModal.classList.add('open'); logVisualizacion('ok'); pendingAction=doCalc; addLog('VISUALIZACIÓN del mensaje aclaratorio (junto al resultado)'); }
-    else doCalc();
-  });
+    lineasList.innerHTML = '';
+    items.forEach(function(l){
+      var d = document.createElement('div');
+      d.className = 'line-item';
+      d.innerHTML = '<b></b><br><span></span><br><span></span><br><span></span><br><span></span>';
+      d.querySelector('b').textContent = '🆘 ' + l.nombre + ' — ' + l.tipoEtiqueta;
+      var spans = d.querySelectorAll('span');
+      spans[0].textContent = '📞 ' + l.telefono;
+      spans[1].textContent = '📍 ' + l.ciudad;
+      spans[2].textContent = '🕒 ' + l.horario;
+      spans[3].textContent = l.detalle + '.';
+      lineasList.appendChild(d);
+    });
+  }
 
-  // --- Líneas de ayuda (API, solo activas) ---
-  lineasBtn.addEventListener('click', async ()=>{
-    const list=$('lineasList');
-    list.innerHTML='<div class="line-item">Cargando…</div>';
+  btnLineas.addEventListener('click', function(){
+    pintarLineas();
     lineasModal.classList.add('open');
-    try{
-      const ls=await api('/api/ayuda/lineas');
-      list.innerHTML=ls.length?ls.map(l=>'<div class="line-item">🆘 <b>'+escapeHtml(l.nombre)+'</b>'+(l.telefono?'<br>📞 '+escapeHtml(l.telefono):'')+(l.url?'<br>🌐 '+escapeHtml(l.url):'')+(l.horario?'<br>🕒 '+escapeHtml(l.horario):'')+(l.cobertura?'<br>📍 '+escapeHtml(l.cobertura):'')+'</div>').join(''):'<div class="line-item">No hay líneas de ayuda disponibles en este momento.</div>';
-      addLog('VISUALIZACIÓN de líneas de ayuda ('+ls.length+')'+(pendingLevel==='Alto'?' — acceso urgente resaltado':''));
-    }catch(e){ list.innerHTML='<div class="line-item">No fue posible cargar las líneas de ayuda. Intente nuevamente.</div>'; addLog('ERROR líneas: '+e.message); }
   });
-  $('lineasClose').addEventListener('click', ()=>lineasModal.classList.remove('open'));
+  lineasClose.addEventListener('click', function(){ lineasModal.classList.remove('open'); });
+  lineasX.addEventListener('click', function(){ lineasModal.classList.remove('open'); });
+  lineasQ.addEventListener('input', pintarLineas);
+  lineasTipo.addEventListener('change', pintarLineas);
 
-  $('noRespChip').addEventListener('click', ()=>{ clearSession(); panelAlert.classList.add('show'); loadPending(); showScreen('panel'); addLog('DEMO: sesión limpiada — próximo "Ver resultado" mostrará el mensaje de sin-respuestas'); });
-  $('btnVolver').addEventListener('click', ()=>{ loadPending(); showScreen('panel'); addLog('NAVEGACIÓN: "Volver al inicio (Invitado)"'); });
-  $('panelExit').addEventListener('click', ()=>{ addLog('SALIDA del modo invitado'); showToast('Volviendo a la Landing (fuera de este mockup)'); });
+  footerAviso.addEventListener('click', function(e){
+    e.preventDefault();
+    avisoModal.classList.add('open');
+  });
+  avisoCerrar.addEventListener('click', function(){ avisoModal.classList.remove('open'); });
+  avisoOk.addEventListener('click', function(){ avisoModal.classList.remove('open'); });
 
-  loadPending();
-  addLog('Sistema listo — cálculo de riesgo por API (promedio 1–5) con alerta en Alto');
+  pintarResultado();
+  pintarLineas();
+
+  var params = new URLSearchParams(location.search);
+  if(params.get('demo') === 'error'){
+    document.querySelector('.result-card').hidden = true;
+    errorCard.hidden = false;
+    if(errorMsg){ errorMsg.textContent = 'No se encontraron respuestas para calcular el riesgo. Por favor responda el cuestionario nuevamente'; }
+  }
+})();
 </script>
 </body>
 </html>

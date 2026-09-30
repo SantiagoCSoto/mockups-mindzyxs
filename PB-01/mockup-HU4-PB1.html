@@ -3,180 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU4-PB1 | Verificación de cuenta</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Verificación de cuenta - Mindzyxs</title>
 <style>
-  :root{ --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3; --error:#E85D7A; --ok:#1BBF6B; }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
-  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
-  .blob{position:absolute;border-radius:50%;opacity:0.6}
-  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
-  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
-  .header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
-  .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
-  .logo-mark{width:30px;height:30px;border-radius:8px;background:#7ED6E8;display:grid;place-items:center;color:white;font-size:14px}
-  .wrap{max-width:460px;margin:28px auto;padding:0 16px 30px}
-  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
-  .card-head{text-align:center;margin-bottom:14px}
-  .card-head h2{font-size:22px;font-weight:700}
-  .card-head p{font-size:12px;color:var(--muted);margin-top:6px}
-  .mail-badge{display:inline-flex;align-items:center;gap:6px;background:#F9F7FF;border:1px solid #EDE6FF;padding:6px 10px;border-radius:20px;font-size:11px;color:#6B5BCE;margin-top:10px}
-  .field{display:flex;flex-direction:column;gap:5px;margin-top:14px}
-  .field label{font-size:11px;font-weight:600;color:#5A5D72}
-  .code-input{
-    width:100%;height:48px;text-align:center;letter-spacing:8px;font-size:20px;font-weight:700;
-    border:1px solid #DFDAEE;border-radius:10px;outline:none;
+  :root{
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A; --ok:#1BBF6B;
   }
-  .code-input:focus{border-color:var(--cyan)}
-  .code-input.has-error{border-color:var(--error);background:#FFF6F7}
-  .error-msg{display:none;align-items:center;gap:6px;font-size:11px;color:var(--error);background:#FFF1F3;border:1px solid #FFE0E6;padding:6px 8px;border-radius:8px;margin-top:6px}
-  .error-msg.show{display:flex}
-  .success-msg{display:none;align-items:center;gap:6px;font-size:11px;color:#0E8F4B;background:#E8FFF1;border:1px solid #C6F5D9;padding:6px 8px;border-radius:8px;margin-top:6px}
-  .success-msg.show{display:flex}
-  .actions{display:flex;flex-direction:column;gap:10px;margin-top:16px}
-  .btn-primary{height:42px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer}
-  .btn-primary:hover{background:var(--cyan-hover)}
-  .links{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
-  .link{font-size:12px;font-weight:600;color:#5ABCC2;background:none;border:none;cursor:pointer;text-decoration:underline}
-  .link.muted{color:var(--muted)}
-  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
+  .header-nav{height:60px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
+  .logo-container .logo-link{display:flex;align-items:center;gap:8px;font-weight:700;
+    font-size:18px;color:var(--text);text-decoration:none}
+  .logo-img{width:30px;height:30px;border-radius:8px}
+  .main-nav ul{display:flex;gap:18px;list-style:none}
+  .main-nav a{color:var(--muted);text-decoration:none;font-size:13px}
+  .header-auth-buttons{display:flex;gap:10px}
+  .btn-login{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:#fff;
+    color:var(--text);font-weight:600;font-size:12px;text-decoration:none}
+  .btn-signup-header{padding:7px 16px;border-radius:20px;border:none;background:var(--cyan);
+    color:#fff;font-weight:600;font-size:12px;text-decoration:none}
+  main{max-width:460px;margin:28px auto;padding:0 16px 30px}
+  .verificacion-card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);padding:22px 20px;text-align:center}
+  .verificacion-card h1{font-size:22px;font-weight:700}
+  .verificacion-subtitulo{font-size:12px;color:var(--muted);margin-top:6px}
+  .chip-correo{display:inline-flex;align-items:center;gap:6px;background:#F9F7FF;
+    border:1px solid #EDE6FF;padding:6px 10px;border-radius:20px;font-size:11px;color:#6B5BCE;margin-top:10px}
+  .icono-correo{font-size:13px}
+  .form-verificacion{margin-top:14px;text-align:left}
+  .form-group{display:flex;flex-direction:column;gap:5px}
+  .form-group label{font-size:11px;font-weight:600;color:#5A5D72}
+  .input-codigo-contenedor input{width:100%;height:48px;text-align:center;letter-spacing:8px;
+    font-size:20px;font-weight:700;border:1px solid #DFDAEE;border-radius:10px;outline:none}
+  .input-codigo-contenedor input:focus{border-color:var(--cyan)}
+  .input-codigo-contenedor input.campo-error{border-color:var(--error);background:#FFF6F7}
+  .alerta-error{display:none;font-size:11px;color:var(--error);background:#FFF1F3;
+    border:1px solid #FFE0E6;padding:6px 8px;border-radius:8px;margin-top:6px}
+  .alerta-error.show{display:block}
+  .alerta-exito{display:none;font-size:11px;color:#0E8F4B;background:#E8FFF1;
+    border:1px solid #C6F5D9;padding:6px 8px;border-radius:8px;margin-top:6px}
+  .alerta-exito.show{display:block}
+  .btn-verificar{width:100%;height:42px;border-radius:20px;border:none;background:var(--cyan);
+    color:#fff;font-weight:700;font-size:13px;cursor:pointer;margin-top:14px}
+  .btn-verificar:hover{background:var(--cyan-hover)}
+  .verificacion-acciones{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+  .link-accion{font-size:12px;font-weight:600;color:#5ABCC2;background:none;border:none;cursor:pointer;text-decoration:underline}
+  .link-cancelar{font-size:12px;font-weight:600;color:var(--muted);text-decoration:underline}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;
+    align-items:center;justify-content:center;padding:16px;z-index:50}
   .modal-overlay.open{display:flex}
-  .modal{width:min(420px,100%);background:white;border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-align:center}
-  .modal-icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;margin:0 auto 12px}
-  .modal-icon.err{background:#FFF1F3;color:var(--error)}
-  .modal-icon.ok{background:#E8FFF1;color:var(--ok)}
-  .modal h3{font-size:15px;font-weight:700}
-  .modal p{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
-  .modal-actions{display:flex;gap:10px;margin-top:16px}
-  .btn-modal{flex:1;height:38px;border-radius:20px;border:none;font-weight:700;cursor:pointer}
-  .btn-modal.cancel{border:1px solid #DFDAEE;background:white;color:var(--text)}
-  .btn-modal.go{background:var(--cyan);color:white}
-  .btn-modal.leave{background:var(--error);color:white}
+  .modal-contenido{width:min(420px,100%);background:#fff;border-radius:14px;padding:20px;text-align:center}
+  .modal-badge-exito{width:40px;height:40px;border-radius:10px;background:#E8FFF1;display:grid;
+    place-items:center;margin:0 auto 12px;color:var(--ok);font-weight:700}
+  .modal-contenido h2{font-size:15px;font-weight:700}
+  .modal-contenido p{font-size:12px;color:var(--muted);margin-top:6px}
+  .btn-iniciar-sesion{display:inline-block;margin-top:14px;height:38px;line-height:38px;padding:0 24px;
+    border-radius:20px;background:var(--cyan);color:#fff;font-weight:700;font-size:13px;text-decoration:none}
+  @media(max-width:640px){.header-nav{padding:0 14px}}
 </style>
 </head>
 <body>
-<div class="bg"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
-<header class="header">
-  <div class="logo"><div class="logo-mark">◐</div> Mindzyx</div>
-  <div style="font-size:12px;color:var(--muted)">HU4-PB1 — Sprint 1</div>
-</header>
-<main class="wrap">
-  <div class="card">
-    <div class="card-head">
-      <h2>Verificación de cuenta</h2>
-      <p>Ingresa el código enviado a tu correo</p>
-      <div class="mail-badge">✉️ Código enviado a <b id="mailLabel">tu@correo.com</b> • válido 5 min</div>
-    </div>
 
-    <div class="field">
-      <label for="codigo">Código de verificación</label>
-      <input id="codigo" class="code-input" type="text" maxlength="6" placeholder="— — — — — —" inputmode="numeric" autocomplete="off">
-      <div class="error-msg" id="e-codigo"></div>
-      <div class="success-msg" id="s-codigo">Código reenviado</div>
-    </div>
-
-    <div class="actions">
-      <button class="btn-primary" id="verificarBtn">Verificar</button>
-    </div>
-    <div class="links">
-      <button class="link" id="reenviarBtn">Reenviar código</button>
-      <button class="link muted" id="cancelBtn">Cancelar</button>
-    </div>
-    <p class="hint">Prueba: código correcto <b>123456</b> • incorrecto otro • expirado <b>000000</b></p>
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link">
+      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img">
+      Mindzyxs
+    </a>
   </div>
+  <nav class="main-nav">
+    <ul>
+      <li><a href="#">Inicio</a></li>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-auth-buttons">
+    <a href="../PB-02/mockup-HU1-PB2.html" class="btn-login">Iniciar sesión</a>
+    <a href="../PB-01/mockup-HU1-PB1.html" class="btn-signup-header">Registrarse</a>
+  </div>
+</header>
+
+<main>
+  <section class="verificacion-card">
+    <h1>Verificación de cuenta</h1>
+    <p class="verificacion-subtitulo">Ingresa el código enviado a tu correo</p>
+
+    <div class="chip-correo">
+      <span class="icono-correo">📨</span>
+      <span>Código enviado a <strong>tu@correo.com</strong> &bull; válido 5 min</span>
+    </div>
+
+    <form class="form-verificacion" id="form-verificacion" action="#" novalidate>
+      <div class="form-group">
+        <label for="codigo-verificacion">Código de verificación</label>
+        <div class="input-codigo-contenedor">
+          <input type="text" id="codigo-verificacion" name="codigo_verificacion" maxlength="6" inputmode="numeric"
+            pattern="[0-9]*" placeholder="—  —  —  —  —  —" autocomplete="off" required>
+        </div>
+        <div id="banner-error" class="alerta-error">El código expiró. Reenvía el código</div>
+        <div id="banner-exito" class="alerta-exito">Se ha reenviado un nuevo código a tu correo.</div>
+      </div>
+
+      <button type="submit" id="btn-verificar" class="btn-verificar">Verificar</button>
+
+      <div class="verificacion-acciones">
+        <button type="button" id="btn-reenviar" class="link-accion">Reenviar código</button>
+        <a href="../PB-01/mockup-HU1-PB1.html" id="link-cancelar" class="link-cancelar">Cancelar</a>
+      </div>
+    </form>
+  </section>
 </main>
 
-<!-- Modal cancelar -->
-<div class="modal-overlay" id="cancelModal">
-  <div class="modal">
-    <div class="modal-icon err">!</div>
-    <h3>¿Deseas cancelar el registro?</h3>
-    <p>Si cancelas, no se activará tu cuenta y volverás a la Landing Page.</p>
-    <div class="modal-actions">
-      <button class="btn-modal cancel" id="stayBtn">No, continuar</button>
-      <button class="btn-modal leave" id="leaveBtn">Sí, cancelar</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal éxito -->
-<div class="modal-overlay" id="successModal">
-  <div class="modal">
-    <div class="modal-icon ok">✓</div>
-    <h3>Registro exitoso. Ya puedes iniciar sesión</h3>
+<div id="modal-exito" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-exito-titulo">
+  <div class="modal-contenido">
+    <div class="modal-badge-exito"><span>&check;</span></div>
+    <h2 id="modal-exito-titulo">Registro exitoso. Ya puedes iniciar sesión</h2>
     <p>Tu cuenta fue activada correctamente. Ahora puedes entrar al sistema.</p>
-    <div class="modal-actions">
-      <button class="btn-modal go" id="loginBtn">Iniciar sesión</button>
-    </div>
+    <a href="../PB-02/mockup-HU1-PB2.html" class="btn-iniciar-sesion">Iniciar sesión</a>
   </div>
 </div>
 
 <script>
-  // Simulación: código correcto 123456, expirado 000000, resto incorrecto
-  const codigoInput=document.getElementById('codigo');
-  const eCodigo=document.getElementById('e-codigo'), sCodigo=document.getElementById('s-codigo');
-  const verificarBtn=document.getElementById('verificarBtn'), reenviarBtn=document.getElementById('reenviarBtn');
-  const cancelModal=document.getElementById('cancelModal'), successModal=document.getElementById('successModal');
+  var form = document.getElementById('form-verificacion');
+  var inputCodigo = document.getElementById('codigo-verificacion');
+  var bannerError = document.getElementById('banner-error');
+  var bannerExito = document.getElementById('banner-exito');
+  var modalExito = document.getElementById('modal-exito');
+  var btnVerificar = document.getElementById('btn-verificar');
+  var btnReenviar = document.getElementById('btn-reenviar');
+  var temporizadorExito = null;
 
-  function showError(msg){
-    eCodigo.textContent=msg; eCodigo.classList.add('show'); sCodigo.classList.remove('show');
-    codigoInput.classList.add('has-error');
+  function mostrarBannerError(msg) {
+    bannerError.textContent = msg;
+    bannerError.classList.add('show');
+    bannerExito.classList.remove('show');
+    inputCodigo.classList.add('campo-error');
   }
-  function showSuccess(msg){
-    sCodigo.textContent=msg; sCodigo.classList.add('show'); eCodigo.classList.remove('show');
-    codigoInput.classList.remove('has-error');
+  function mostrarBannerExito(msg) {
+    bannerExito.textContent = msg;
+    bannerExito.classList.add('show');
+    bannerError.classList.remove('show');
+    inputCodigo.classList.remove('campo-error');
   }
-  function clearMsg(){ eCodigo.classList.remove('show'); sCodigo.classList.remove('show'); codigoInput.classList.remove('has-error'); }
+  function ocultarBanners() {
+    bannerError.classList.remove('show');
+    bannerExito.classList.remove('show');
+    inputCodigo.classList.remove('campo-error');
+  }
 
-  codigoInput.addEventListener('input', ()=>{
-    // solo números y limita a 6
-    codigoInput.value=codigoInput.value.replace(/\D/g,'').slice(0,6);
-    clearMsg();
+  inputCodigo.addEventListener('input', function () {
+    this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
+    ocultarBanners();
   });
 
-  verificarBtn.addEventListener('click', ()=>{
-    const v=codigoInput.value.trim();
-    clearMsg();
-    if(!v || v.length!==6){
-      showError('Ingresa el código de 6 dígitos');
+  // Demostración de interfaz: con 6 dígitos se muestra el modal de éxito.
+  // El sistema real valida el código en el servidor.
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var codigo = inputCodigo.value.trim();
+    if (codigo.length < 6) {
+      mostrarBannerError('Por favor, ingresa el código completo de 6 dígitos.');
       return;
     }
-    if(v==='123456'){
-      successModal.classList.add('open');
-      showSuccess('');
-    } else if(v==='000000'){
-      showError('El código expiró. Reenvía el código');
-    } else {
-      showError('Código incorrecto. Verifica e intenta nuevamente');
-    }
+    btnVerificar.disabled = true;
+    btnVerificar.textContent = 'Verificando...';
+    setTimeout(function () {
+      btnVerificar.disabled = false;
+      btnVerificar.textContent = 'Verificar';
+      ocultarBanners();
+      modalExito.classList.add('open');
+    }, 600);
   });
 
-  reenviarBtn.addEventListener('click', ()=>{
-    clearMsg();
-    codigoInput.value='';
-    showSuccess('Código reenviado');
-    // resetea para nueva prueba: el correcto sigue siendo 123456
-    setTimeout(()=>{ sCodigo.classList.remove('show'); }, 2500);
+  btnReenviar.addEventListener('click', function () {
+    inputCodigo.value = '';
+    inputCodigo.focus();
+    btnReenviar.disabled = true;
+    setTimeout(function () {
+      btnReenviar.disabled = false;
+      mostrarBannerExito('Se ha reenviado un nuevo código a tu correo.');
+      clearTimeout(temporizadorExito);
+      temporizadorExito = setTimeout(function () {
+        bannerExito.classList.remove('show');
+      }, 4000);
+    }, 400);
   });
 
-  document.getElementById('cancelBtn').addEventListener('click', ()=> cancelModal.classList.add('open'));
-  document.getElementById('stayBtn').addEventListener('click', ()=> cancelModal.classList.remove('open'));
-  document.getElementById('leaveBtn').addEventListener('click', ()=>{
-    cancelModal.classList.remove('open');
-    codigoInput.value=''; clearMsg();
-    // simula volver a landing
-    clearMsg();
-    showError('Registro cancelado. Volviste a la Landing Page sin activar la cuenta.');
-    setTimeout(()=>clearMsg(), 2200);
+  modalExito.addEventListener('click', function (e) {
+    if (e.target === modalExito) modalExito.classList.remove('open');
   });
-  document.getElementById('loginBtn').addEventListener('click', ()=>{
-    successModal.classList.remove('open');
-    codigoInput.value=''; clearMsg();
-  });
-  cancelModal.addEventListener('click', e=>{ if(e.target===cancelModal) cancelModal.classList.remove('open')});
-  successModal.addEventListener('click', e=>{ if(e.target===successModal) successModal.classList.remove('open')});
 </script>
 </body>
 </html>

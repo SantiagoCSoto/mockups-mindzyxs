@@ -3,16 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU1-PB10 | Editar perfil (Paciente)</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Perfil — Mindzyxs</title>
 <style>
-  /* Unificado al estilo ACTUAL del front (base.css + inicio.css: panel_invitado) */
   :root{
     --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#1E293B; --muted:#64748B;
     --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B; --purple-accent:#6B5BCE;
   }
-  *{box-sizing:border-box}
-  body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#FFFFFF;margin:0;padding:0;color:var(--text);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow-x:hidden}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#FFFFFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow-x:hidden}
   .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
   .blob{position:absolute;border-radius:50%;opacity:.55;filter:blur(2px)}
   .blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
@@ -25,23 +24,26 @@
   .main-nav a:hover,.main-nav a.active{color:var(--text);font-weight:600}
   .header-right{display:flex;align-items:center;gap:16px}
   .header-auth-buttons{display:flex;gap:10px}
-  .badge-role{font-size:11px;font-weight:700;color:var(--purple-accent);background:#EDE7FF;padding:4px 10px;border-radius:20px;border:1px solid #DFDAEE;white-space:nowrap}
+  .btn-logout{background-color:#EB5771;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;transition:background-color .2s ease,transform .15s ease}
+  .btn-logout:hover{background-color:#D63A54;transform:translateY(-1px)}
   .wrap{width:100%;max-width:800px;margin:0 auto;padding:28px 20px 40px;flex:1}
+  .btn-volver-landing{background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px}
+  .btn-volver-landing:hover{border-color:#94A3B8;color:#1E293B}
   .card{background:#FFF;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px;margin-bottom:20px}
   .card.hero{text-align:center;padding:32px 24px}
   .hero h1{font-size:26px;font-weight:700;color:var(--text);margin-bottom:8px}
-  .hero p{font-size:13.5px;color:var(--muted);line-height:1.6;max-width:620px;margin:0 auto 14px}
+  .hero p{font-size:13.5px;color:var(--muted);line-height:1.6;max-width:620px;margin:0 auto}
   .screen{display:none}
   .screen.active{display:block}
   .profile-top{display:flex;gap:16px;align-items:center}
   .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(180deg,#6ECFD4,#6B5BCE);color:#fff;display:grid;place-items:center;font-size:24px;font-weight:700;flex-shrink:0}
   .profile-top h2{font-size:20px;font-weight:700;color:var(--text)}
-  .profile-top p.sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .profile-top p.sub{font-size:12px;color:var(--muted);margin-top:4px;word-break:break-all}
   .data-grid{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .field{background:#FBFAFF;border:1px solid #EDE8F0;border-radius:12px;padding:12px 14px}
   .field.full{grid-column:1/-1}
   .field label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--purple-accent)}
-  .field .val{font-size:14px;font-weight:600;margin-top:4px;color:var(--text)}
+  .field .val{font-size:14px;font-weight:600;margin-top:4px;color:var(--text);word-break:break-word}
   .actions{display:flex;gap:10px;margin-top:18px}
   .btn-edit{flex:1;height:44px;border-radius:20px;border:none;background:var(--cyan);color:#fff;font-weight:700;font-size:14px;cursor:pointer;transition:background-color .2s ease,transform .15s ease,box-shadow .2s ease}
   .btn-edit:hover{background:var(--cyan-hover);transform:translateY(-1px);box-shadow:0 4px 10px rgba(110,207,212,.35)}
@@ -49,9 +51,9 @@
   .form-group{display:flex;flex-direction:column;gap:6px}
   .form-group.full{grid-column:1/-1}
   .form-group label{font-size:12px;font-weight:600;color:var(--text)}
-  .form-group input,.form-group select{height:42px;border-radius:12px;border:1px solid #DFDAEE;padding:0 12px;font-size:13px;font-family:inherit;background:#fff;color:var(--text)}
-  .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(110,207,212,.18)}
-  .form-group input.invalid,.form-group select.invalid{border-color:var(--error)}
+  .form-group input{height:42px;border-radius:12px;border:1px solid #DFDAEE;padding:0 12px;font-size:13px;font-family:inherit;background:#fff;color:var(--text);width:100%}
+  .form-group input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(110,207,212,.18)}
+  .form-group input.invalid{border-color:var(--error)}
   .err-msg{font-size:11px;color:var(--error);font-weight:600;display:none}
   .err-msg.show{display:block}
   .form-actions{display:flex;gap:10px;margin-top:18px}
@@ -59,10 +61,6 @@
   .btn-save:hover{background:var(--cyan-hover);box-shadow:0 4px 10px rgba(110,207,212,.3)}
   .btn-cancel{flex:1;height:44px;border-radius:20px;border:1px solid #DFDAEE;background:#fff;color:var(--text);font-weight:700;font-size:14px;cursor:pointer;transition:all .2s ease}
   .btn-cancel:hover{background:#F8FAFC;border-color:#B8AEE0}
-  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
-  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:#fff;font-size:11px;font-weight:600;cursor:pointer;color:var(--text)}
-  .chip:hover{border-color:var(--cyan)}
-  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
   .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
   .footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
   .footer-in a{color:var(--muted);text-decoration:none;transition:color .2s ease}
@@ -76,6 +74,9 @@
   .modal-icon{width:52px;height:52px;border-radius:14px;background:#E6F7F8;color:#2AA5AC;display:grid;place-items:center;margin:0 auto 14px;font-size:24px}
   .modal h3{font-size:17px;font-weight:700;color:var(--text);margin-bottom:12px}
   .modal p.sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .modal .aviso-txt{font-size:12.5px;color:#475569;line-height:1.65;margin-top:12px;text-align:left;background:#F8FAFC;padding:16px;border-radius:12px;border:1px solid #E2E8F0}
+  .modal .aviso-txt b{color:#0F172A}
+  .modal .highlight{color:var(--error);font-weight:700;background:#FFF1F3;padding:2px 4px;border-radius:4px}
   .code-input{width:100%;height:48px;margin-top:16px;border-radius:12px;border:1px solid #DFDAEE;text-align:center;font-size:20px;font-weight:700;letter-spacing:.35em;font-family:inherit;color:var(--text)}
   .code-input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(110,207,212,.18)}
   .modal-actions{display:flex;gap:10px;margin-top:20px}
@@ -93,224 +94,289 @@
 </style>
 </head>
 <body>
-<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
 
 <header class="header-nav">
   <div class="logo-container">
     <a href="#" class="logo-link">
-      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img">
       <span>Mindzyxs</span>
     </a>
   </div>
   <nav class="main-nav" aria-label="Navegación principal">
     <ul>
-      <li><a href="#">Inicio</a></li>
-      <li><a href="#" class="active">Perfil</a></li>
+      <li class="nav-inicio"><a href="#">Inicio</a></li>
+      <li><a href="#">Nosotros</a></li>
       <li><a href="#">Ayuda</a></li>
     </ul>
   </nav>
   <div class="header-right">
     <div class="header-auth-buttons">
-      <span class="badge-role">🧑 Paciente</span>
+      <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
     </div>
   </div>
 </header>
 
 <main class="wrap">
-  <div class="card hero">
-    <h1>Editar perfil (Paciente)</h1>
-    <p>Visualiza y actualiza tus datos personales. Si cambias tu correo, deberás verificarlo con un código.</p>
-    <div style="margin-top:10px;font-size:11px;color:var(--muted)">HU1-PB10 — Sprint 1 • Mockup estático interactivo</div>
-  </div>
+  <a href="#" class="btn-volver-landing">&larr; Volver al panel</a>
 
-  <!-- PANTALLA 1: VISTA -->
-  <div class="screen active" id="viewScreen">
+  <section class="card hero">
+    <h1>Mi perfil</h1>
+    <p>Visualice sus datos personales. Solo puede cambiar su correo electrónico, verificándolo con un código.</p>
+  </section>
+
+  <!-- Pantalla 1: Modo Vista -->
+  <section class="screen active" id="viewScreen" aria-label="Información de perfil">
     <div class="card">
       <div class="profile-top">
-        <div class="avatar" id="avatarIni">CR</div>
+        <div class="avatar" id="avatarIni">--</div>
         <div>
-          <h2 id="vNombre">Camila Rojas</h2>
-          <p class="sub" id="vCorreoSub">paciente@test.com • Paciente</p>
+          <h2 id="vNombre">Cargando perfil...</h2>
+          <p class="sub" id="vCorreoSub">Cargando información...</p>
         </div>
       </div>
       <div class="data-grid">
-        <div class="field"><label>Nombres</label><div class="val" id="vNombres">Camila</div></div>
-        <div class="field"><label>Apellidos</label><div class="val" id="vApellidos">Rojas</div></div>
-        <div class="field"><label>Fecha de nacimiento</label><div class="val" id="vEdad">10/05/2002 (23 años)</div></div>
-        <div class="field"><label>Género</label><div class="val" id="vGenero">Femenino</div></div>
-        <div class="field full"><label>Correo electrónico</label><div class="val" id="vCorreo">paciente@test.com</div></div>
+        <div class="field">
+          <label>Nombres</label>
+          <div class="val" id="vNombres">-</div>
+        </div>
+        <div class="field">
+          <label>Apellidos</label>
+          <div class="val" id="vApellidos">-</div>
+        </div>
+        <div class="field">
+          <label>Fecha de nacimiento</label>
+          <div class="val" id="vFechaNacimiento">-</div>
+        </div>
+        <div class="field">
+          <label>Género</label>
+          <div class="val" id="vGenero">-</div>
+        </div>
+        <div class="field full">
+          <label>Correo electrónico</label>
+          <div class="val" id="vCorreo">-</div>
+        </div>
       </div>
-      <div class="actions"><button class="btn-edit" id="btnEditar">✏️ Editar</button></div>
+      <div class="actions">
+        <button type="button" class="btn-edit" id="btnEditar">✉️ Cambiar correo</button>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <!-- PANTALLA 2: EDICIÓN -->
-  <div class="screen" id="editScreen">
+  <!-- Pantalla 2: Modo Edición (solo correo) -->
+  <section class="screen" id="editScreen" aria-label="Formulario de edición de perfil">
     <div class="card">
       <div class="profile-top">
-        <div class="avatar">✏️</div>
-        <div><h2>Editar perfil</h2><p class="sub">Modifica tus datos y guarda los cambios.</p></div>
+        <div class="avatar" aria-hidden="true">✉️</div>
+        <div>
+          <h2>Cambiar correo electrónico</h2>
+          <p class="sub">Ingrese su nuevo correo y confírmelo con el código de verificación.</p>
+        </div>
       </div>
-      <div class="form-grid">
-        <div class="form-group"><label for="inNombres">Nombres *</label><input id="inNombres" type="text" placeholder="Ej. Camila"><span class="err-msg" id="eNombres">El nombre es obligatorio.</span></div>
-        <div class="form-group"><label for="inApellidos">Apellidos *</label><input id="inApellidos" type="text" placeholder="Ej. Rojas"><span class="err-msg" id="eApellidos">El apellido es obligatorio.</span></div>
-        <div class="form-group"><label for="inEdad">Fecha de nacimiento *</label><input id="inEdad" type="date" max="2026-09-26"><span class="err-msg" id="eEdad">Ingresa una fecha válida.</span></div>
-        <div class="form-group"><label for="inGenero">Género *</label>
-          <select id="inGenero"><option value="">Seleccionar…</option><option>Femenino</option><option>Masculino</option><option>No binario</option><option>Prefiero no decirlo</option></select>
-          <span class="err-msg" id="eGenero">Selecciona una opción.</span></div>
-        <div class="form-group full"><label for="inCorreo">Correo electrónico *</label><input id="inCorreo" type="email" placeholder="tucorreo@test.com"><span class="err-msg" id="eCorreo">Ingresa un correo válido.</span></div>
-      </div>
-      <div class="form-actions">
-        <button class="btn-cancel" id="btnCancelar">Cancelar</button>
-        <button class="btn-save" id="btnGuardar">Guardar cambios</button>
-      </div>
+      <form id="formPerfil" novalidate>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="inCorreo">Correo electrónico *</label>
+            <input type="email" id="inCorreo" name="correo" placeholder="sucorreo@test.com" autocomplete="email" required>
+            <span class="err-msg" id="eCorreo">Ingrese un correo válido.</span>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" id="btnCancelar">Cancelar</button>
+          <button type="submit" class="btn-save" id="btnGuardar">Enviar código</button>
+        </div>
+      </form>
     </div>
-  </div>
-
-  <div class="card" style="margin-top:14px">
-    <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
-    <div class="controls">
-      <button class="chip" id="chipDup">Simular correo duplicado</button>
-      <button class="chip" id="chipNew">Simular cambio de correo</button>
-    </div>
-    <p class="hint">Código demo de verificación: <b>123456</b> • Correo existente demo: <b>admin@test.com</b>. Todo se simula en JS, sin fetch. Revisa la consola (addLog).</p>
-  </div>
+  </section>
 </main>
 
 <footer class="footer">
   <div class="footer-in">
-    <a href="#">Inicio</a>
-    <a href="#">Nosotros</a>
-    <a href="#">Ayuda</a>
-    <a href="#" class="aviso-link"><span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico</a>
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
+      <span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico
+    </a>
   </div>
 </footer>
 
-<!-- MODAL VERIFICACIÓN -->
-<div class="modal-overlay" id="codeModal" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
+<!-- Modal: Verificación de cambio de correo -->
+<div class="modal-overlay" id="codeModal" role="dialog" aria-modal="true" aria-labelledby="codeTitle" aria-hidden="true">
   <div class="modal">
-    <div class="modal-icon">✉️</div>
-    <h3 id="codeTitle">Verifica tu nuevo correo</h3>
-    <p class="sub" id="codeSub">Enviamos un código de 6 dígitos a <b id="codeEmail">—</b>. Ingrésalo para confirmar el cambio. (Demo: <b>123456</b>)</p>
-    <input class="code-input" id="codeInput" maxlength="6" inputmode="numeric" placeholder="••••••">
-    <span class="err-msg" id="eCode" style="margin-top:8px">Código incorrecto. Verifica e intenta nuevamente</span>
+    <div class="modal-icon" aria-hidden="true">✉️</div>
+    <h3 id="codeTitle">Verifique su nuevo correo</h3>
+    <p class="sub" id="codeSub">Enviamos un código de 6 dígitos a <b id="codeEmail">-</b>. Ingréselo para confirmar el cambio.</p>
+    <input class="code-input" id="codeInput" maxlength="6" inputmode="numeric" placeholder="· · · · · ·" autocomplete="one-time-code" aria-label="Código de verificación de 6 dígitos">
+    <span class="err-msg" id="eCode" style="margin-top:8px">Código incorrecto. Verifique e inténtelo nuevamente.</span>
     <div class="modal-actions">
-      <button class="btn-modal close" id="btnCodeCancel">Cancelar</button>
-      <button class="btn-modal ok" id="btnVerify">Verificar</button>
+      <button type="button" class="btn-modal close" id="btnCodeCancel">Cancelar</button>
+      <button type="button" class="btn-modal ok" id="btnVerify">Verificar</button>
     </div>
-    <button class="link-btn" id="btnResend">Reenviar código</button>
+    <button type="button" class="link-btn" id="btnResend">Reenviar código</button>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- Modal: Mensaje aclaratorio -->
+<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-icon" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+    </div>
+    <h3 id="avisoTitle">Mensaje aclaratorio</h3>
+    <div class="aviso-txt" id="avisoContent">
+      <p>
+        <b>Mindzyxs</b> es una plataforma diseñada exclusivamente para el <b>monitoreo y apoyo del bienestar emocional</b>.
+        Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.
+      </p>
+      <p style="margin-top:10px">
+        Ante un <b>riesgo alto o una situación de urgencia</b>, busque ayuda profesional o utilice las <b>líneas de ayuda disponibles</b> en su país (por ejemplo, servicios de emergencia o líneas de crisis locales).
+      </p>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal btn-close" id="btnCerrar">Cerrar</button>
+      <button type="button" class="btn-modal btn-ok" id="btnEntendido">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-  const viewScreen=document.getElementById('viewScreen'), editScreen=document.getElementById('editScreen');
-  const toast=document.getElementById('toast');
-  const codeModal=document.getElementById('codeModal'), codeInput=document.getElementById('codeInput'), codeEmail=document.getElementById('codeEmail');
-  const CURRENT={nombres:'Camila',apellidos:'Rojas',fechaNac:'2002-05-10',genero:'Femenino',correo:'paciente@test.com'};
-  const EXISTENTES=['admin@test.com','psico@test.com'];
-  const DEMO_CODE='123456';
-  let pending=null;
+(function(){
+  var viewScreen = document.getElementById('viewScreen');
+  var editScreen = document.getElementById('editScreen');
+  var toast = document.getElementById('toast');
+  var codeModal = document.getElementById('codeModal');
+  var codeInput = document.getElementById('codeInput');
+  var codeEmail = document.getElementById('codeEmail');
+  var eCode = document.getElementById('eCode');
+  var formPerfil = document.getElementById('formPerfil');
+  var inCorreo = document.getElementById('inCorreo');
+  var eCorreo = document.getElementById('eCorreo');
+  var avisoModal = document.getElementById('avisoModal');
 
-  function addLog(tag,msg){ console.log(tag, new Date().toLocaleTimeString(), msg); }
-  function showToast(m){ toast.textContent=m; toast.classList.add('show'); clearTimeout(showToast._t); showToast._t=setTimeout(()=>toast.classList.remove('show'),2600); }
-  function show(which){ viewScreen.classList.toggle('active',which==='view'); editScreen.classList.toggle('active',which==='edit'); }
-  function setErr(input,el,on,msg){ input.classList.toggle('invalid',on); el.classList.toggle('show',on); if(msg) el.textContent=msg; }
-  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  var CURRENT = { nombres: 'Camila', apellidos: 'Rojas', fechaNac: '2002-05-10', genero: 'Femenino', correo: 'paciente@test.com' };
+  var EXISTENTES = ['admin@test.com', 'psico@test.com'];
+  var DEMO_CODE = '123456';
+  var pendingCorreo = null;
 
-  function edadDesde(f){ const n=new Date(f+'T00:00:00'), h=new Date(); let e=h.getFullYear()-n.getFullYear(); const m=h.getMonth()-n.getMonth(); if(m<0||(m===0&&h.getDate()<n.getDate())) e--; return e; }
-  function fmtFecha(f){ const p=f.split('-'); return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:f; }
-  function fillForm(){ document.getElementById('inNombres').value=CURRENT.nombres; document.getElementById('inApellidos').value=CURRENT.apellidos; document.getElementById('inEdad').value=CURRENT.fechaNac; document.getElementById('inGenero').value=CURRENT.genero; document.getElementById('inCorreo').value=CURRENT.correo; }
-  function renderView(){
-    document.getElementById('vNombres').textContent=CURRENT.nombres;
-    document.getElementById('vApellidos').textContent=CURRENT.apellidos;
-    document.getElementById('vEdad').textContent=`${fmtFecha(CURRENT.fechaNac)} (${edadDesde(CURRENT.fechaNac)} años)`;
-    document.getElementById('vGenero').textContent=CURRENT.genero;
-    document.getElementById('vCorreo').textContent=CURRENT.correo;
-    document.getElementById('vCorreoSub').textContent=CURRENT.correo+' • Paciente';
-    document.getElementById('vNombre').textContent=CURRENT.nombres+' '+CURRENT.apellidos;
-    document.getElementById('avatarIni').textContent=(CURRENT.nombres[0]||'C')+((CURRENT.apellidos[0])||'R');
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function(){ toast.classList.remove('show'); }, 2600);
   }
+  function show(which){
+    viewScreen.classList.toggle('active', which === 'view');
+    editScreen.classList.toggle('active', which === 'edit');
+  }
+  function setErr(input, el, on, msg){
+    input.classList.toggle('invalid', on);
+    el.classList.toggle('show', on);
+    if (msg) el.textContent = msg;
+  }
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function edadDesde(f){
+    var n = new Date(f + 'T00:00:00'), h = new Date(), e = h.getFullYear() - n.getFullYear();
+    var m = h.getMonth() - n.getMonth();
+    if (m < 0 || (m === 0 && h.getDate() < n.getDate())) e--;
+    return e;
+  }
+  function fmtFecha(f){ var p = f.split('-'); return p.length === 3 ? (p[2] + '/' + p[1] + '/' + p[0]) : f; }
+  function openModal(m){ m.classList.add('open'); m.setAttribute('aria-hidden', 'false'); }
+  function closeModal(m){ m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); }
 
-  document.getElementById('btnEditar').addEventListener('click',()=>{
-    fillForm(); show('edit');
-    addLog('[HU1-PB10]','EDITAR iniciado — modo edición activado');
+  function renderView(){
+    document.getElementById('vNombres').textContent = CURRENT.nombres;
+    document.getElementById('vApellidos').textContent = CURRENT.apellidos;
+    document.getElementById('vFechaNacimiento').textContent = fmtFecha(CURRENT.fechaNac) + ' (' + edadDesde(CURRENT.fechaNac) + ' años)';
+    document.getElementById('vGenero').textContent = CURRENT.genero;
+    document.getElementById('vCorreo').textContent = CURRENT.correo;
+    document.getElementById('vCorreoSub').textContent = CURRENT.correo;
+    document.getElementById('vNombre').textContent = CURRENT.nombres + ' ' + CURRENT.apellidos;
+    document.getElementById('avatarIni').textContent = ((CURRENT.nombres[0] || 'U') + (CURRENT.apellidos[0] || '')).toUpperCase();
+  }
+  function fillForm(){ inCorreo.value = CURRENT.correo; setErr(inCorreo, eCorreo, false); }
+
+  document.getElementById('btnEditar').addEventListener('click', function(){
+    fillForm();
+    show('edit');
   });
-  document.getElementById('btnCancelar').addEventListener('click',()=>{
-    fillForm(); ['eNombres','eApellidos','eEdad','eGenero','eCorreo'].forEach(id=>document.getElementById(id).classList.remove('show'));
-    show('view'); pending=null;
-    addLog('[HU1-PB10]','CANCELAR — cambios descartados, vuelve a vista');
+
+  document.getElementById('btnCancelar').addEventListener('click', function(){
+    fillForm();
+    pendingCorreo = null;
+    show('view');
     showToast('Cambios descartados');
   });
 
-  document.getElementById('btnGuardar').addEventListener('click',()=>{
-    const nom=document.getElementById('inNombres'), ape=document.getElementById('inApellidos'), eda=document.getElementById('inEdad'), gen=document.getElementById('inGenero'), cor=document.getElementById('inCorreo');
-    const vNom=nom.value.trim(), vApe=ape.value.trim(), vEda=eda.value.trim(), vGen=gen.value, vCor=cor.value.trim().toLowerCase();
-    let ok=true;
-    if(!vNom){ setErr(nom,document.getElementById('eNombres'),true,'El nombre es obligatorio.'); ok=false; } else setErr(nom,document.getElementById('eNombres'),false);
-    if(!vApe){ setErr(ape,document.getElementById('eApellidos'),true,'El apellido es obligatorio.'); ok=false; } else setErr(ape,document.getElementById('eApellidos'),false);
-    const vEda=eda.value;
-    const fnEda=vEda?new Date(vEda+'T00:00:00'):null;
-    if(!vEda||isNaN(fnEda)||fnEda>new Date()){ setErr(eda,document.getElementById('eEdad'),true,'Ingresa una fecha válida.'); ok=false; }
-    else if(edadDesde(vEda)<14){ setErr(eda,document.getElementById('eEdad'),true,'Ingresa una edad válida.'); ok=false; }
-    else setErr(eda,document.getElementById('eEdad'),false);
-    if(!vGen){ setErr(gen,document.getElementById('eGenero'),true); ok=false; } else setErr(gen,document.getElementById('eGenero'),false);
-    if(!vCor||!validEmail(vCor)){ setErr(cor,document.getElementById('eCorreo'),true,'Ingresa un correo válido.'); ok=false; }
-    else if(vCor!==CURRENT.correo.toLowerCase()&&EXISTENTES.includes(vCor)){ setErr(cor,document.getElementById('eCorreo'),true,'El correo ya se encuentra registrado'); addLog('[HU1-PB10]','ERROR correo duplicado: '+vCor); ok=false; }
-    else setErr(cor,document.getElementById('eCorreo'),false);
-    if(!ok){ addLog('[HU1-PB10]','VALIDACIÓN fallida en Guardar cambios'); return; }
+  formPerfil.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var vCor = inCorreo.value.trim().toLowerCase();
+    if (!vCor || !validEmail(vCor)){
+      setErr(inCorreo, eCorreo, true, 'Ingrese un correo válido.');
+      return;
+    }
+    if (vCor !== CURRENT.correo.toLowerCase() && EXISTENTES.indexOf(vCor) !== -1){
+      setErr(inCorreo, eCorreo, true, 'El correo ya se encuentra registrado. Intente con otro.');
+      return;
+    }
+    setErr(inCorreo, eCorreo, false);
+    if (vCor === CURRENT.correo.toLowerCase()){
+      show('view');
+      showToast('Su correo actual ya es ese. No se requieren cambios.');
+      return;
+    }
+    pendingCorreo = vCor;
+    codeEmail.textContent = vCor;
+    codeInput.value = '';
+    eCode.classList.remove('show');
+    openModal(codeModal);
+    codeInput.focus();
+  });
 
-    pending={nombres:vNom,apellidos:vApe,fechaNac:vEda,genero:vGen,correo:vCor};
-    if(vCor===CURRENT.correo.toLowerCase()){
-      Object.assign(CURRENT,pending); renderView(); show('view'); pending=null;
-      addLog('[HU1-PB10]','ÉXITO Perfil actualizado correctamente (sin cambio de correo)');
-      showToast('Perfil actualizado correctamente ✓');
+  document.getElementById('btnVerify').addEventListener('click', function(){
+    var code = codeInput.value.trim();
+    if (code === DEMO_CODE){
+      CURRENT.correo = pendingCorreo;
+      pendingCorreo = null;
+      renderView();
+      show('view');
+      closeModal(codeModal);
+      showToast('Su correo fue actualizado correctamente ✓');
     } else {
-      codeEmail.textContent=vCor; codeInput.value=''; document.getElementById('eCode').classList.remove('show');
-      codeModal.classList.add('open');
-      addLog('[HU1-PB10]','CAMBIO DE CORREO detectado — código de verificación enviado a '+vCor+' (demo 123456)');
+      eCode.classList.add('show');
     }
   });
 
-  document.getElementById('btnVerify').addEventListener('click',()=>{
-    const code=codeInput.value.trim();
-    addLog('[HU1-PB10]','INTENTO verificar código: '+code);
-    if(code===DEMO_CODE){
-      Object.assign(CURRENT,pending); renderView(); show('view');
-      codeModal.classList.remove('open'); pending=null;
-      addLog('[HU1-PB10]','ÉXITO Perfil actualizado correctamente (correo verificado)');
-      showToast('Perfil actualizado correctamente ✓');
-    } else {
-      document.getElementById('eCode').classList.add('show');
-      addLog('[HU1-PB10]','ERROR Código incorrecto. Verifica e intenta nuevamente');
-    }
+  document.getElementById('btnResend').addEventListener('click', function(){
+    showToast('Código reenviado a su correo ✓');
   });
-  document.getElementById('btnResend').addEventListener('click',()=>{
-    addLog('[HU1-PB10]','REENVIAR código a '+(pending?pending.correo:'?'));
-    showToast('Código reenviado ✓');
-  });
-  document.getElementById('btnCodeCancel').addEventListener('click',()=>{
-    codeModal.classList.remove('open');
-    addLog('[HU1-PB10]','VERIFICACIÓN cancelada — correo no cambiado');
-  });
-  codeModal.addEventListener('click',(e)=>{ if(e.target===codeModal){ codeModal.classList.remove('open'); addLog('[HU1-PB10]','VERIFICACIÓN cerrada por overlay'); } });
 
-  document.getElementById('chipDup').addEventListener('click',()=>{
-    if(!editScreen.classList.contains('active')){ fillForm(); show('edit'); }
-    document.getElementById('inCorreo').value='admin@test.com';
-    addLog('[HU1-PB10]','DEMO simular correo duplicado → admin@test.com');
-    showToast('Demo: correo duplicado cargado');
+  document.getElementById('btnCodeCancel').addEventListener('click', function(){
+    closeModal(codeModal);
   });
-  document.getElementById('chipNew').addEventListener('click',()=>{
-    if(!editScreen.classList.contains('active')){ fillForm(); show('edit'); }
-    document.getElementById('inCorreo').value='nuevo.correo@test.com';
-    addLog('[HU1-PB10]','DEMO simular cambio de correo → nuevo.correo@test.com');
-    showToast('Demo: correo nuevo cargado');
+  codeModal.addEventListener('click', function(e){ if (e.target === codeModal) closeModal(codeModal); });
+
+  document.getElementById('footerAviso').addEventListener('click', function(e){
+    e.preventDefault();
+    openModal(avisoModal);
+  });
+  document.getElementById('btnCerrar').addEventListener('click', function(){ closeModal(avisoModal); });
+  document.getElementById('btnEntendido').addEventListener('click', function(){ closeModal(avisoModal); });
+  avisoModal.addEventListener('click', function(e){ if (e.target === avisoModal) closeModal(avisoModal); });
+
+  document.getElementById('btn-logout').addEventListener('click', function(){
+    showToast('Sesión cerrada (demostración)');
   });
 
   renderView();
-  addLog('[HU1-PB10]','Sistema listo — perfil Camila Rojas visible');
+})();
 </script>
 </body>
 </html>

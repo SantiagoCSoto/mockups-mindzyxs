@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Panel del paciente - Mindzyxs</title>
+<style>
+:root{--cyan:#6ECFD4;--cyan-hover:#5ABCC2;--text:#1E293B;--muted:#64748B;--error:#E85D7A;--warning:#E8A347;--violet:#6B5BCE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;opacity:.55}
+.blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+.blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+.header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,.9);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
+.logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
+.logo-container .logo-img{height:38px;width:auto;border-radius:8px}
+.main-nav ul{display:flex;list-style:none;gap:24px}
+.main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+.btn-logout{background:#EB5771;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer}
+.wrap{width:100%;max-width:900px;margin:0 auto;padding:28px 20px 40px;flex:1}
+.card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px}
+.card h1{font-size:20px}
+.sub{color:var(--muted,#64748B);font-size:13px;margin-top:4px}
+.dash-invitado{margin-top:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid-avail{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tile{border:1px solid #DFDAEE;border-radius:14px;padding:22px 16px;background:#fff;text-align:center;display:flex;flex-direction:column;align-items:center}
+.tile-icon{width:46px;height:46px;border-radius:12px;background:#E6F7F8;display:grid;place-items:center;font-size:22px;margin-bottom:12px}
+.tile-icon-cyan{background:#E6F7F8}
+.tile-icon-yellow{background:#FFF6DE}
+.tile-icon-sos{background:#FFF1F3}
+.tile h3{font-size:14px}
+.tile p{font-size:12px;color:#8E91A3;margin:6px 0 16px;flex:1}
+.btn{font-family:inherit;cursor:pointer}
+.btn-tile{width:100%;height:38px;border-radius:20px;border:none;background:var(--cyan);color:#fff;font-weight:700;font-size:12.5px;cursor:pointer}
+.btn-tile:hover{background:var(--cyan-hover)}
+.footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+.footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+.footer-in a{color:var(--muted);text-decoration:none}
+.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;text-decoration:none}
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999}
+.modal-overlay.open{display:flex}
+.modal{width:min(480px,100%);background:#fff;border-radius:16px;padding:26px 22px;text-align:center;max-height:90vh;overflow:auto;position:relative}
+.modal-wide{width:min(560px,100%)}
+.modal-icon{width:52px;height:52px;border-radius:14px;background:#FFF9E6;color:var(--warning);display:grid;place-items:center;margin:0 auto 14px}
+.modal-icon-err{background:#FFF1F3;color:var(--error)}
+.modal h3{font-size:17px}
+.aviso-txt{font-size:12.5px;color:#475569;line-height:1.65;margin-top:12px;text-align:left;background:#F8FAFC;padding:16px;border-radius:12px;border:1px solid #E2E8F0}
+.highlight{color:var(--error);font-weight:700;background:#FFF1F3;padding:2px 4px;border-radius:4px}
+.err-desc{font-size:13px;color:var(--muted);margin-top:10px}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer}
+.btn-modal.btn-ok{background:var(--cyan);color:#fff}
+.btn-modal.btn-close{border:1px solid #DFDAEE;background:#fff}
+.modal-x{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;border:1px solid #DFDAEE;background:#fff;cursor:pointer}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10000;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:760px){.main-nav{display:none}.grid,.grid-avail{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"><span>Mindzyxs</span></a>
+  </div>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <ul>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout-top" class="btn-logout">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card section-sensibles">
+    <h1>Mi panel</h1>
+    <p class="sub">Sus acciones frecuentes primero.</p>
+    <div class="dash-invitado" id="dashPaciente">
+      <div class="grid grid-avail">
+        <article class="tile">
+          <div class="tile-icon tile-icon-cyan" aria-hidden="true">🌿</div>
+          <h3>Responder cuestionario</h3>
+          <p>Cuestionario de bienestar emocional</p>
+          <button type="button" class="btn btn-tile" id="btn-paciente-cuestionario" data-feature="Responder cuestionario">Entrar</button>
+        </article>
+        <article class="tile">
+          <div class="tile-icon" aria-hidden="true">📝</div>
+          <h3>Registrar estado</h3>
+          <p>Registra cómo te sientes hoy</p>
+          <button type="button" class="btn btn-tile" id="btn-paciente-registro" data-feature="Registrar estado">Entrar</button>
+        </article>
+        <article class="tile">
+          <div class="tile-icon" aria-hidden="true">🧠</div>
+          <h3>Historial emocional</h3>
+          <p>Consulta tus registros anteriores</p>
+          <button type="button" class="btn btn-tile" id="btn-paciente-historial">Abrir</button>
+        </article>
+        <article class="tile">
+          <div class="tile-icon" aria-hidden="true">👤</div>
+          <h3>Mi perfil</h3>
+          <p>Actualiza tu información personal</p>
+          <button type="button" class="btn btn-tile" id="btn-paciente-perfil">Abrir</button>
+        </article>
+        <article class="tile">
+          <div class="tile-icon tile-icon-yellow" aria-hidden="true">⏰</div>
+          <h3>Recordatorios</h3>
+          <p>Configura tus avisos</p>
+          <button type="button" class="btn btn-tile" id="btn-paciente-recordatorios">Abrir</button>
+        </article>
+        <article class="tile">
+          <div class="tile-icon tile-icon-sos" aria-hidden="true">💬</div>
+          <h3>Chat de apoyo</h3>
+          <p>Habla con tu psicólogo</p>
+          <button type="button" class="btn btn-tile" id="btn-paciente-chat">Abrir</button>
+        </article>
+        <article class="tile">
+          <div class="tile-icon" aria-hidden="true">🧑‍⚕️</div>
+          <h3>Psicólogos</h3>
+          <p>Especialidades y pacientes asignados</p>
+          <button type="button" class="btn btn-tile" id="btn-paciente-directorio">Abrir</button>
+        </article>
+        <article class="tile">
+          <div class="tile-icon tile-icon-sos" aria-hidden="true">🆘</div>
+          <h3>Líneas de ayuda</h3>
+          <p>Contactos de emergencia y apoyo</p>
+          <button type="button" class="btn btn-tile" id="btn-paciente-ayuda" data-feature="Líneas de ayuda">Abrir</button>
+        </article>
+        <article class="tile">
+          <div class="tile-icon" aria-hidden="true">⚠️</div>
+          <h3>Aviso importante</h3>
+          <p>Información clave de la plataforma</p>
+          <button type="button" class="btn btn-tile" id="btn-paciente-aviso">Leer</button>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Privacidad</a><a href="#">Cookies</a><a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-icon" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+    </div>
+    <h3 id="avisoTitle">Mensaje aclaratorio</h3>
+    <div class="aviso-txt" id="avisoContent">
+      <p><b>Mindzyxs</b> es una plataforma diseñada exclusivamente para el <b>monitoreo y apoyo del bienestar emocional</b>. Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.</p>
+      <p>Ante un <b>riesgo alto o una situación de urgencia</b>, busque ayuda profesional o utilice las <b>líneas de ayuda disponibles</b> en su país.</p>
+      <p>Mindzyxs es solo una <b>herramienta de apoyo y monitoreo emocional</b> y <b>no reemplaza la atención profesional</b>.</p>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal btn-close" id="btnCerrar">Cerrar</button>
+      <button type="button" class="btn-modal btn-ok" id="btnEntendido">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="errModal" role="alertdialog" aria-modal="true" aria-labelledby="errTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-icon modal-icon-err" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+    </div>
+    <h3 id="errTitle">Mensaje aclaratorio</h3>
+    <p class="err-desc" id="errDesc">No fue posible cargar el mensaje aclaratorio. Intente nuevamente</p>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal btn-ok" id="errOk">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalLineasAyuda" role="dialog" aria-modal="true" aria-labelledby="ayudaTitle" aria-hidden="true">
+  <div class="modal modal-wide">
+    <button type="button" class="modal-x" id="btnXAyuda" aria-label="Cerrar">✕</button>
+    <div class="modal-icon" style="background:#FFF1F3;color:#EB5771;" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+    </div>
+    <h3 id="ayudaTitle">Líneas de ayuda y apoyo emocional</h3>
+    <div class="aviso-txt" style="text-align:left;">
+      <p>Si se encuentra en una situación de crisis emocional o necesita orientación profesional inmediata, puede comunicarse a:</p>
+      <ul style="margin:10px 0 10px 20px;line-height:1.8;">
+        <li>📞 <b>Línea 106:</b> Ayuda psicológica y crisis emocional (24 horas, gratuita).</li>
+        <li>📞 <b>Línea 192:</b> Orientación en salud mental y apoyo psicosocial.</li>
+        <li>🚨 <b>Línea 123:</b> Emergencias y urgencias generales.</li>
+      </ul>
+      <p style="font-size:11.5px;color:#8E91A3;">Recuerde que no está solo y siempre hay ayuda disponible.</p>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal btn-ok" id="btnCerrarAyuda">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var toast=document.getElementById('toast');
+  var avisoModal=document.getElementById('avisoModal');
+  var errModal=document.getElementById('errModal');
+  var lineasModal=document.getElementById('modalLineasAyuda');
+  var avisoVisto=false;
+  var pendiente=null;
+
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(function(){toast.classList.remove('show');},2400);}
+  function log(m){console.log('[panel-paciente]',m);}
+  function openModal(el){el.classList.add('open');el.setAttribute('aria-hidden','false');}
+  function closeModal(el){el.classList.remove('open');el.setAttribute('aria-hidden','true');}
+
+  function gateAviso(feature,continuar){
+    if(avisoVisto){continuar();return;}
+    pendiente=continuar;
+    try{openModal(avisoModal);log('Aviso mostrado antes de: '+feature);}
+    catch(e){openModal(errModal);}
+  }
+
+  document.getElementById('btn-paciente-cuestionario').addEventListener('click',function(){
+    gateAviso('Responder cuestionario',function(){showToast('Abriendo cuestionario (demo)');log('Entrar cuestionario');});
+  });
+  document.getElementById('btn-paciente-registro').addEventListener('click',function(){
+    gateAviso('Registrar estado',function(){showToast('Abriendo registro emocional (demo)');});
+  });
+  document.getElementById('btn-paciente-historial').addEventListener('click',function(){showToast('Abriendo historial (demo)');});
+  document.getElementById('btn-paciente-perfil').addEventListener('click',function(){showToast('Abriendo perfil (demo)');});
+  document.getElementById('btn-paciente-recordatorios').addEventListener('click',function(){showToast('Abriendo recordatorios (demo)');});
+  document.getElementById('btn-paciente-chat').addEventListener('click',function(){showToast('Abriendo chat de apoyo (demo)');});
+  document.getElementById('btn-paciente-directorio').addEventListener('click',function(){showToast('Abriendo directorio de psicólogos (demo)');});
+  document.getElementById('btn-paciente-ayuda').addEventListener('click',function(){openModal(lineasModal);log('Líneas de ayuda abiertas');});
+  document.getElementById('btn-paciente-aviso').addEventListener('click',function(){openModal(avisoModal);});
+
+  document.getElementById('btnCerrar').addEventListener('click',function(){closeModal(avisoModal);pendiente=null;});
+  document.getElementById('btnEntendido').addEventListener('click',function(){
+    closeModal(avisoModal);avisoVisto=true;showToast('Aviso comprendido');
+    if(pendiente){var f=pendiente;pendiente=null;f();}
+  });
+  document.getElementById('errOk').addEventListener('click',function(){closeModal(errModal);});
+  document.getElementById('btnXAyuda').addEventListener('click',function(){closeModal(lineasModal);});
+  document.getElementById('btnCerrarAyuda').addEventListener('click',function(){closeModal(lineasModal);showToast('Líneas de ayuda cerradas');});
+  document.getElementById('btn-logout-top').addEventListener('click',function(){showToast('Sesión cerrada (demo)');log('Salir');});
+  document.getElementById('footerAviso').addEventListener('click',function(e){e.preventDefault();openModal(avisoModal);});
+  [avisoModal,errModal,lineasModal].forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModal(m);});});
+})();
+</script>
+</body>
+</html>

@@ -3,17 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU1-PB13 | Historial emocional</title>
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Historial emocional — Mindzyxs</title>
 <style>
-  /* Unificado al estilo ACTUAL del front (base.css + inicio.css) */
   :root{
     --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#1E293B; --muted:#64748B;
-    --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B; --purple-accent:#6B5BCE; --violet:#6B5BCE;
+    --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B; --purple-accent:#6B5BCE;
   }
   *{box-sizing:border-box}
   body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#FFFFFF;margin:0;padding:0;color:var(--text);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow-x:hidden}
-  body::before{content:'';position:fixed;top:-120px;left:-130px;width:580px;height:520px;background-color:#fdebee;border-radius:50%;z-index:-1;pointer-events:none}
-  body::after{content:'';position:fixed;top:30px;right:-160px;width:680px;height:680px;background-color:#f1ecfe;border-radius:50%;z-index:-1;pointer-events:none}
   .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
   .blob{position:absolute;border-radius:50%;opacity:0.55;filter:blur(2px)}
   .blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
@@ -23,60 +21,18 @@
   .logo-container .logo-img{height:38px;width:auto;object-fit:contain;border-radius:8px;display:block}
   .main-nav ul{display:flex;list-style:none;gap:24px;margin:0;padding:0}
   .main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500;transition:color 0.2s ease}
-  .main-nav a:hover,.main-nav a.active{color:var(--text);font-weight:600}
+  .main-nav a:hover{color:var(--text);font-weight:600}
   .header-right{display:flex;align-items:center;gap:16px}
   .header-auth-buttons{display:flex;gap:10px}
   .btn-logout{background-color:#EB5771;color:white;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;transition:background-color 0.2s ease,transform 0.15s ease}
   .btn-logout:hover{background-color:#D63A54;transform:translateY(-1px)}
   .wrap{width:100%;max-width:800px;margin:0 auto;padding:28px 20px 40px;flex:1}
+  .btn-volver-landing{background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px}
+  .btn-volver-landing:hover{background:#F1F5F9;border-color:#94A3B8;color:#1E293B}
   .card{background:#FFFFFF;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.05);padding:24px 22px;margin-bottom:20px}
-  .card.hero{text-align:center;padding:32px 24px}
-  .hero h1{font-size:26px;font-weight:700;color:var(--text);margin-bottom:8px}
-  .hero p{font-size:13.5px;color:var(--muted);line-height:1.6;max-width:620px;margin:0 auto 14px}
-  .badge-guest-hero{display:inline-block;background:#FFF4E5;color:#B45309;border:1px solid #FDE68A;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:12px}
-  .section-header{margin-bottom:12px}
-  .section-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--purple-accent);background:#F9F7FF;padding:6px 12px;border-radius:20px;border:1px solid #ECE7FB;display:inline-block}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px;margin-bottom:8px}
-  .tile{border:1px solid #DFDAEE;border-radius:14px;padding:22px 16px;background:#FFFFFF;text-align:center;display:flex;flex-direction:column;align-items:center;transition:transform 0.2s ease,box-shadow 0.2s ease,border-color 0.2s ease}
-  .tile:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(107,91,206,0.08);border-color:#C8BEDE}
-  .tile-icon{width:46px;height:46px;border-radius:12px;background:#E6F7F8;color:#56C5C0;display:grid;place-items:center;margin-bottom:12px}
-  .tile h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
-  .tile p{font-size:12px;color:#8E91A3;line-height:1.45;margin-bottom:16px;flex:1}
-  .btn-tile{width:100%;height:38px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:12.5px;cursor:pointer;transition:background-color 0.2s ease,transform 0.15s ease,box-shadow 0.2s ease}
-  .btn-tile:hover{background:var(--cyan-hover);transform:translateY(-1px);box-shadow:0 4px 10px rgba(110,207,212,0.35)}
-  a.btn-tile{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;line-height:38px}
-  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
-  .footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
-  .footer-in a{color:var(--muted);text-decoration:none;transition:color 0.2s ease}
-  .footer-in a:hover{color:var(--text)}
-  .footer-in a.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;text-decoration:none;font-size:12px;transition:all 0.2s ease;box-shadow:0 2px 8px rgba(107,91,206,0.15)}
-  .footer-in a.aviso-link:hover{background:#E7DDFF;border-color:#B9A3F2;color:#4A38B0;box-shadow:0 4px 12px rgba(107,91,206,0.25);transform:translateY(-1px)}
-  .aviso-ico{font-size:13px}
-  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:white;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all 0.3s ease;pointer-events:none;z-index:10000;box-shadow:0 6px 20px rgba(0,0,0,0.2);max-width:90vw;text-align:center}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-  .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,0.45);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999;animation:fadeIn 0.2s ease}
-  .modal-overlay.open{display:flex}
-  .modal{width:min(480px,100%);background:#FFFFFF;border-radius:16px;padding:26px 22px;box-shadow:0 12px 36px rgba(0,0,0,0.18);text-align:center;max-height:90vh;overflow-y:auto;animation:slideUp 0.25s ease}
-  .modal-icon{width:52px;height:52px;border-radius:14px;background:#FFF9E6;color:var(--warning);display:grid;place-items:center;margin:0 auto 14px}
-  .modal-icon-err{background:#FFF1F3;color:var(--error)}
-  .modal h3{font-size:17px;font-weight:700;color:var(--text);margin-bottom:12px}
-  .aviso-txt{font-size:12.5px;color:#475569;line-height:1.65;margin-top:12px;text-align:left;background:#F8FAFC;padding:16px;border-radius:12px;border:1px solid #E2E8F0}
-  .highlight{color:var(--error);font-weight:700;background:#FFF1F3;padding:2px 4px;border-radius:4px}
-  .err-desc{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.5}
-  .modal-actions{display:flex;gap:10px;margin-top:20px}
-  .btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer;transition:all 0.2s ease}
-  .btn-modal.btn-ok,.btn-modal.ok{background:var(--cyan);color:white}
-  .btn-modal.btn-ok:hover,.btn-modal.ok:hover{background:var(--cyan-hover);box-shadow:0 4px 10px rgba(110,207,212,0.3)}
-  .btn-modal.btn-close,.btn-modal.close{border:1px solid #DFDAEE;background:white;color:var(--text)}
-  .btn-modal.btn-close:hover,.btn-modal.close:hover{background:#F8FAFC;border-color:#B8AEE0}
-  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-  /* Especifico PB13 conservado (sin equivalente en el front) */
-  .user-pill{font-size:11px;font-weight:700;color:#6B5BCE;background:#EDE7FF;padding:6px 12px;border-radius:20px;white-space:nowrap}
   .panel-head{text-align:center}
-  .panel-head h2{font-size:20px;font-weight:700}
-  .panel-head p.sub{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
-  .badge{display:inline-block;font-size:11px;font-weight:700;color:var(--violet);background:#EDE7FF;padding:5px 12px;border-radius:20px;margin-bottom:8px}
+  .panel-head h1{font-size:22px;font-weight:700;margin:0 0 6px}
+  .panel-head p.sub{font-size:12.5px;color:var(--muted);margin:0;line-height:1.55}
   .filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;background:#F9F7FF;border:1px solid #EDE8F0;border-radius:12px;padding:12px}
   .filter-field{flex:1;min-width:140px;display:flex;flex-direction:column;gap:4px}
   .filter-field label{font-size:11px;font-weight:700;color:#5A5D72}
@@ -85,7 +41,8 @@
   .btn-filter{height:38px;padding:0 18px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:12px;cursor:pointer}
   .btn-filter:hover{background:var(--cyan-hover)}
   .btn-clear{height:38px;padding:0 14px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:12px;cursor:pointer}
-  .count{font-size:11px;color:var(--muted);margin-top:10px}
+  .btn-clear:hover{background:#F8FAFC}
+  .count{font-size:11.5px;color:var(--muted);margin-top:10px;min-height:16px}
   .list{display:flex;flex-direction:column;gap:12px;margin-top:12px}
   .record{border:1px solid #EDE8F0;border-radius:12px;padding:14px;display:flex;gap:12px;align-items:flex-start;background:#FFF}
   .record-ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:20px;flex-shrink:0}
@@ -96,269 +53,281 @@
   .val-pos{background:#E8FFF1;color:#0E9B52} .val-neu{background:#FFF6DE;color:#B97E0C} .val-low{background:#FFE9EE;color:#D13A5E}
   .record-sum{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
   .record-btns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-  .btn-sm{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:var(--cyan);color:white}
+  .btn-sm{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:var(--cyan);color:white;font-family:inherit}
   .btn-sm:hover{background:var(--cyan-hover)}
-  .btn-sm.ghost{background:white;border:1px solid #DFDAEE;color:var(--text)}
-  .empty{text-align:center;padding:34px 20px;border:1px dashed #D8CFF2;border-radius:12px;background:#FBFAFF;margin-top:12px;display:none}
-  .empty.show{display:block}
+  .empty{text-align:center;padding:34px 20px;border:1px dashed #D8CFF2;border-radius:12px;background:#FBFAFF;margin-top:12px}
   .empty .big{font-size:34px}
-  .empty h3{font-size:15px;margin-top:8px}
-  .empty p{font-size:12px;color:var(--muted);margin-top:6px}
-  .btn-register{margin-top:14px;height:42px;padding:0 22px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
-  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
-  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
-  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
-  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
-  .back-row{text-align:center;margin-top:16px}
-  .modal .meta{font-size:12px;color:var(--muted);margin-top:4px}
+  .empty h3{font-size:15px;margin:8px 0 0}
+  .empty p{font-size:12px;color:var(--muted);margin:6px auto 0;max-width:460px;line-height:1.55}
+  .btn-register{display:inline-flex;align-items:center;justify-content:center;margin-top:14px;min-height:42px;padding:10px 22px;border-radius:20px;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:13px;text-decoration:none;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
+  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+  .footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+  .footer-in a{color:var(--muted);text-decoration:none;transition:color 0.2s ease}
+  .footer-in a:hover{color:var(--text)}
+  .footer-in a.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;text-decoration:none;font-size:12px;box-shadow:0 2px 8px rgba(107,91,206,0.15)}
+  .aviso-ico{font-size:13px}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:white;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all 0.3s ease;pointer-events:none;z-index:10000;box-shadow:0 6px 20px rgba(0,0,0,0.2);max-width:90vw;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,0.45);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999}
+  .modal-overlay.open{display:flex}
+  .modal{width:min(480px,100%);background:#FFFFFF;border-radius:16px;padding:26px 22px;box-shadow:0 12px 36px rgba(0,0,0,0.18);text-align:center;max-height:90vh;overflow-y:auto}
+  .modal-icon{width:52px;height:52px;border-radius:14px;background:#FFF9E6;color:var(--warning);display:grid;place-items:center;margin:0 auto 14px;font-size:24px}
+  .modal h3{font-size:17px;font-weight:700;color:var(--text);margin:0 0 4px}
+  .modal .meta{font-size:12px;color:var(--muted);margin:4px 0 0}
   .detail-row{font-size:12.5px;line-height:1.6;text-align:left;margin-top:12px;background:#F9F7FF;border:1px solid #EDE8F0;border-radius:10px;padding:10px 12px}
-  .detail-row b{color:var(--text)}
-  @media(max-width:768px){
-    .header-nav{padding:12px 20px}
-    .main-nav{display:none}
-  }
+  .detail-label{font-weight:700;color:var(--text);margin-bottom:4px}
+  .detail-val{color:#334155}
+  .aviso-txt{font-size:12.5px;color:#475569;line-height:1.65;margin-top:12px;text-align:left;background:#F8FAFC;padding:16px;border-radius:12px;border:1px solid #E2E8F0}
+  .highlight{color:var(--error);font-weight:700;background:#FFF1F3;padding:2px 4px;border-radius:4px}
+  .modal-actions{display:flex;gap:10px;margin-top:20px}
+  .btn-modal{flex:1;min-height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;padding:10px 14px}
+  .btn-modal.ok{background:var(--cyan);color:white}
+  .btn-modal.ok:hover{background:var(--cyan-hover)}
+  .btn-modal.close{border:1px solid #DFDAEE;background:white;color:var(--text)}
+  .btn-modal.close:hover{background:#F8FAFC}
+  @media(max-width:768px){ .header-nav{padding:12px 20px} .main-nav{display:none} }
   @media(max-width:680px){
     .header-nav{padding:10px 16px}
-    .grid{grid-template-columns:1fr}
-    .filter-actions{width:100%}
-    .btn-filter,.btn-clear{flex:1}
-    .record{flex-direction:column}
-    .modal-actions{flex-direction:column}
-  }
-  @media(max-width:480px){
-    .wrap{padding:20px 14px 30px}
+    .filter-actions{width:100%} .btn-filter,.btn-clear{flex:1}
+    .record{flex-direction:column} .modal-actions{flex-direction:column}
   }
 </style>
 </head>
 <body>
-<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
 
 <header class="header-nav">
   <div class="logo-container">
     <a href="#" class="logo-link">
-      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img">
       <span>Mindzyxs</span>
     </a>
   </div>
   <nav class="main-nav" aria-label="Navegación principal">
     <ul>
+      <li class="nav-inicio"><a href="#">Inicio</a></li>
       <li><a href="#">Nosotros</a></li>
       <li><a href="#">Ayuda</a></li>
     </ul>
   </nav>
   <div class="header-right">
-    <span class="user-pill">Paciente demo</span>
-    <button type="button" class="btn-logout" id="headerPanel">Panel</button>
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
+  <a href="#" class="btn-volver-landing" id="btnBackPanelTop">&larr; Volver al panel</a>
   <div class="card">
     <div class="panel-head">
-      <span class="badge">HU1-PB13 · Paciente</span>
-      <h2>Historial emocional</h2>
+      <h1>Historial emocional</h1>
       <p class="sub">Consulta tus registros ordenados por fecha, del más reciente al más antiguo.</p>
     </div>
 
     <div class="filter-bar">
       <div class="filter-field">
         <label for="dateFrom">Desde</label>
-        <input type="date" id="dateFrom" value="2026-09-01">
+        <input type="date" id="dateFrom">
       </div>
       <div class="filter-field">
         <label for="dateTo">Hasta</label>
-        <input type="date" id="dateTo" value="2026-09-24">
+        <input type="date" id="dateTo">
       </div>
       <div class="filter-actions">
-        <button class="btn-filter" id="btnFilter">Filtrar</button>
-        <button class="btn-clear" id="btnClear">Limpiar</button>
+        <button type="button" class="btn-filter" id="btnFilter">Filtrar</button>
+        <button type="button" class="btn-clear" id="btnClear">Limpiar</button>
       </div>
     </div>
-    <p class="count" id="countLabel"></p>
 
-    <div class="list" id="recordList"></div>
+    <p class="count" id="countLabel" aria-live="polite"></p>
 
-    <div class="empty" id="emptyState">
-      <div class="big">🫧</div>
+    <div class="list" id="recordList" role="feed" aria-label="Lista de registros emocionales"></div>
+
+    <div class="empty" id="emptyState" style="display:none;">
+      <div class="big" aria-hidden="true">📋</div>
       <h3>Aún no tienes registros emocionales</h3>
-      <p>Cuando registres tu estado emocional, aparecerá aquí tu historial.</p>
-      <button class="btn-register" id="btnRegister">Registrar estado emocional</button>
+      <p>Cuando registres tu estado emocional o respondas un cuestionario, aparecerá aquí tu historial.</p>
+      <a href="#" class="btn-register" id="btnRegister">Registrar estado emocional</a>
     </div>
-
-    <div class="back-row">
-      <button class="btn-sm ghost" id="btnBackPanel">← Volver al panel</button>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:14px">
-    <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
-    <div class="controls">
-      <button class="chip" id="emptyChip">Simular vacío (sin registros)</button>
-      <button class="chip active" id="restoreChip">Restaurar 3 registros</button>
-    </div>
-    <p class="hint">El filtro por rango de fechas reduce la lista. El detalle se abre en modal. Todo es simulado: sin fetch, solo JS + logs en consola.</p>
   </div>
 </main>
 
 <footer class="footer">
   <div class="footer-in">
-    <a href="#">Inicio</a>
-    <a href="#">Nosotros</a>
-    <a href="#">Ayuda</a>
-    <a href="#" class="aviso-link">
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
       <span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico
     </a>
   </div>
 </footer>
 
-<div class="modal-overlay" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+<div class="modal-overlay" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle" aria-hidden="true">
   <div class="modal">
+    <div class="modal-icon" id="detailIcon" aria-hidden="true">📝</div>
     <h3 id="detailTitle">Detalle del registro</h3>
-    <p class="meta" id="detailMeta"></p>
-    <div class="detail-row" id="detailValue"></div>
-    <div class="detail-row" id="detailNotes"></div>
-    <div class="detail-row" id="detailQuiz"></div>
+    <p class="meta" id="detailMeta">-</p>
+    <div class="detail-row" id="detailValue">
+      <div class="detail-label">Valor / Estado emocional:</div>
+      <div class="detail-val" id="detailValueText">-</div>
+    </div>
+    <div class="detail-row" id="detailNotes">
+      <div class="detail-label">Cómo me sentí (nota personal):</div>
+      <div class="detail-val" id="detailNotesText">-</div>
+    </div>
+    <div class="detail-row" id="detailQuiz">
+      <div class="detail-label">Resultado / Respuestas:</div>
+      <div class="detail-val" id="detailQuizText">-</div>
+    </div>
+    <div class="detail-row" id="detailSupport" style="display:none;">
+      <div class="detail-label">Observaciones del psicólogo:</div>
+      <div class="detail-val" id="detailSupportText">-</div>
+    </div>
     <div class="modal-actions">
-      <button class="btn-modal close" id="btnBackHistory">Volver al historial</button>
-      <button class="btn-modal ok" id="btnGoPanel">Volver al panel</button>
+      <button type="button" class="btn-modal close" id="btnBackHistory">Volver al historial</button>
+      <a href="#" class="btn-modal ok" id="btnGoPanel">Volver al panel</a>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-icon" aria-hidden="true">ℹ️</div>
+    <h3 id="avisoTitle">Mensaje aclaratorio</h3>
+    <div class="aviso-txt" id="avisoContent">
+      <p><b>Mindzyxs</b> es una plataforma diseñada exclusivamente para el <b>monitoreo y apoyo del bienestar emocional</b>. Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención de un profesional de la salud mental</span>.</p>
+      <p>Ante un <b>riesgo alto o una situación de urgencia</b>, busque ayuda profesional o utilice las <b>líneas de ayuda disponibles</b> en su país.</p>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal close" id="btnCerrar">Cerrar</button>
+      <button type="button" class="btn-modal ok" id="btnEntendido">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-  const toast = document.getElementById('toast');
-  const recordList = document.getElementById('recordList');
-  const emptyState = document.getElementById('emptyState');
-  const countLabel = document.getElementById('countLabel');
-  const detailModal = document.getElementById('detailModal');
-  const emptyChip = document.getElementById('emptyChip');
-  const restoreChip = document.getElementById('restoreChip');
+(function(){
+  var toast = document.getElementById('toast');
+  var recordList = document.getElementById('recordList');
+  var emptyState = document.getElementById('emptyState');
+  var countLabel = document.getElementById('countLabel');
+  var detailModal = document.getElementById('detailModal');
+  var avisoModal = document.getElementById('avisoModal');
 
-  const ALL_RECORDS = [
-    { id: 1, fecha: '22/09/2026', hora: '20:35', iso: '2026-09-22', valor: 'Positivo (4/5)', nivel: 'pos',
-      resumen: 'Día tranquilo, dormí bien y me sentí con energía.',
-      notas: 'Jornada estable. Buen descanso nocturno y ánimo alto durante la tarde.',
-      quiz: 'Cuestionario bienestar: 18/25 · Nivel: estable · Recomendación: mantener rutina de sueño.' },
-    { id: 2, fecha: '18/09/2026', hora: '09:15', iso: '2026-09-18', valor: 'Neutral (3/5)', nivel: 'neu',
-      resumen: 'Mañana con algo de cansancio, ánimo regular.',
-      notas: 'Desperté con poca energía. El ánimo mejoró levemente después de caminar.',
-      quiz: 'Cuestionario bienestar: 13/25 · Nivel: regular · Recomendación: pausas activas y descanso.' },
-    { id: 3, fecha: '10/09/2026', hora: '21:05', iso: '2026-09-10', valor: 'Bajo (2/5)', nivel: 'low',
-      resumen: 'Día pesado, preocupación por el trabajo.',
-      notas: 'Noche con ansiedad leve. Me costó concentrarme durante el día.',
-      quiz: 'Cuestionario bienestar: 8/25 · Nivel: bajo · Recomendación: ejercicios de respiración y apoyo.' }
+  var ALL_RECORDS = [
+    { id: 1, tipo: 'RegistroEmocional', fecha: '22/09/2026', hora: '20:35', iso: '2026-09-22', emoji: '😊', categoria: 'pos', valorTexto: 'Positivo (4/5)', resumen: 'Día tranquilo, descansó bien y se sintió con energía.', nota: 'Jornada estable. Su descanso nocturno fue bueno y su ánimo se mantuvo alto.', quizHtml: 'No aplica (registro directo de estado emocional).', observaciones: [] },
+    { id: 2, tipo: 'Cuestionario', fecha: '18/09/2026', hora: '09:15', iso: '2026-09-18', emoji: '😐', categoria: 'neu', valorTexto: 'Neutral (3/5)', resumen: 'Cuestionario de bienestar con resultado regular.', nota: '', quizHtml: '<b>Cuestionario de bienestar</b> · Puntaje: 13/25', observaciones: [] },
+    { id: 3, tipo: 'RegistroEmocional', fecha: '10/09/2026', hora: '21:05', iso: '2026-09-10', emoji: '😟', categoria: 'low', valorTexto: 'Bajo (2/5)', resumen: 'Día pesado, con preocupación por el trabajo.', nota: 'Noche con ansiedad leve. Le costó concentrarse durante el día.', quizHtml: 'No aplica (registro directo de estado emocional).', observaciones: [{ contenido: 'Se recomienda mantener ejercicios de respiración y consultar en su próxima sesión.', firma: 'Psic. de apoyo', fecha: '11/09/2026' }] }
   ];
-  let visibleRecords = [...ALL_RECORDS];
-  let simulateEmpty = false;
+  var visibleRecords = ALL_RECORDS.slice();
 
-  function addLog(tag, msg){ console.log(tag, new Date().toLocaleTimeString(), msg); }
   function showToast(msg){
     toast.textContent = msg; toast.classList.add('show');
     clearTimeout(showToast._t);
-    showToast._t = setTimeout(()=>toast.classList.remove('show'), 2400);
+    showToast._t = setTimeout(function(){ toast.classList.remove('show'); }, 2400);
   }
-  function icoFor(n){ return n==='pos' ? ['ico-pos','😊'] : n==='neu' ? ['ico-neu','😐'] : ['ico-low','😟']; }
-  function valClass(n){ return n==='pos' ? 'val-pos' : n==='neu' ? 'val-neu' : 'val-low'; }
+  function icoClass(n){ return n === 'pos' ? 'ico-pos' : n === 'low' ? 'ico-low' : 'ico-neu'; }
+  function valClass(n){ return n === 'pos' ? 'val-pos' : n === 'low' ? 'val-low' : 'val-neu'; }
 
   function render(){
     recordList.innerHTML = '';
-    const showEmpty = simulateEmpty || visibleRecords.length === 0;
-    emptyState.classList.toggle('show', showEmpty);
-    recordList.style.display = showEmpty ? 'none' : 'flex';
-    countLabel.textContent = showEmpty ? '' : visibleRecords.length + ' registro(s) · ordenados: recientes primero';
-    visibleRecords.forEach(r => {
-      const [cls, emoji] = icoFor(r.nivel);
-      const el = document.createElement('div');
+    if (visibleRecords.length === 0) {
+      recordList.style.display = 'none';
+      emptyState.style.display = 'block';
+      countLabel.textContent = '';
+      return;
+    }
+    emptyState.style.display = 'none';
+    recordList.style.display = 'flex';
+    countLabel.textContent = visibleRecords.length + ' registro(s) · ordenados: recientes primero';
+    visibleRecords.forEach(function(r){
+      var el = document.createElement('article');
       el.className = 'record';
+      el.setAttribute('data-id', r.id);
       el.innerHTML =
-        '<div class="record-ico ' + cls + '">' + emoji + '</div>' +
+        '<div class="record-ico ' + icoClass(r.categoria) + '" aria-hidden="true">' + r.emoji + '</div>' +
         '<div class="record-body"><div class="record-date">' + r.fecha + ' · ' + r.hora + '</div>' +
-        '<span class="record-val ' + valClass(r.nivel) + '">' + r.valor + '</span>' +
+        '<span class="record-val ' + valClass(r.categoria) + '">' + r.valorTexto + '</span>' +
         '<p class="record-sum">' + r.resumen + '</p>' +
-        '<div class="record-btns"><button class="btn-sm" data-detail="' + r.id + '">Ver detalle</button>' +
-        '<button class="btn-sm ghost" data-back="1">Volver</button></div></div>';
+        '<div class="record-btns"><button type="button" class="btn-sm" data-action="detail" data-id="' + r.id + '">Ver detalle</button></div></div>';
       recordList.appendChild(el);
     });
-    recordList.querySelectorAll('[data-detail]').forEach(b => b.addEventListener('click', () => openDetail(+b.dataset.detail)));
-    recordList.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', () => {
-      addLog('[HU1-PB13]', 'Volver al panel desde item del historial (simulado)');
-      showToast('Volviendo al panel (simulado) ←');
-    }));
+    Array.prototype.forEach.call(recordList.querySelectorAll('[data-action="detail"]'), function(b){
+      b.addEventListener('click', function(){ openDetail(Number(b.getAttribute('data-id'))); });
+    });
   }
 
   function openDetail(id){
-    const r = ALL_RECORDS.find(x => x.id === id);
-    if(!r) return;
-    document.getElementById('detailMeta').textContent = r.fecha + ' · ' + r.hora + 'hs';
-    document.getElementById('detailValue').innerHTML = '<b>Valor:</b> ' + r.valor;
-    document.getElementById('detailNotes').innerHTML = '<b>Notas:</b> ' + r.notas;
-    document.getElementById('detailQuiz').innerHTML = '<b>Resultado cuestionario:</b> ' + r.quiz;
+    var r = null;
+    ALL_RECORDS.forEach(function(x){ if (x.id === id) r = x; });
+    if (!r) return;
+    document.getElementById('detailIcon').textContent = r.emoji;
+    document.getElementById('detailTitle').textContent = 'Detalle del registro #' + r.id;
+    document.getElementById('detailMeta').textContent = r.fecha + ' · ' + r.hora + ' hs';
+    var tipoLabel = r.tipo === 'RegistroEmocional' ? 'Registro de estado de ánimo' : 'Cuestionario de bienestar';
+    document.getElementById('detailValueText').innerHTML = '<b>' + r.valorTexto + '</b> — <small>' + tipoLabel + '</small>';
+    var notesRow = document.getElementById('detailNotesText').closest('.detail-row');
+    if (r.tipo === 'RegistroEmocional') {
+      notesRow.style.display = '';
+      document.getElementById('detailNotesText').textContent = r.nota || 'Sin notas registradas para este evento.';
+    } else {
+      notesRow.style.display = 'none';
+    }
+    document.getElementById('detailQuizText').innerHTML = r.quizHtml;
+    var support = document.getElementById('detailSupport');
+    var supportText = document.getElementById('detailSupportText');
+    if (r.observaciones && r.observaciones.length) {
+      support.style.display = 'block';
+      supportText.innerHTML = r.observaciones.map(function(o){ return '<p style="margin:0 0 4px;font-style:italic;">“' + o.contenido + '”</p><small>' + o.firma + ' · ' + o.fecha + '</small>'; }).join('<hr>');
+    } else {
+      support.style.display = 'none';
+      supportText.innerHTML = '';
+    }
     detailModal.classList.add('open');
-    addLog('[HU1-PB13]', 'Ver detalle registro id=' + id + ' (' + r.fecha + ' ' + r.hora + ')');
+    detailModal.setAttribute('aria-hidden', 'false');
   }
+  function closeDetail(){ detailModal.classList.remove('open'); detailModal.setAttribute('aria-hidden', 'true'); }
 
-  document.getElementById('btnFilter').addEventListener('click', () => {
-    const from = document.getElementById('dateFrom').value;
-    const to = document.getElementById('dateTo').value;
-    addLog('[HU1-PB13]', 'Filtrar por rango desde=' + (from||'—') + ' hasta=' + (to||'—'));
-    if(simulateEmpty){ showToast('Filtro simulado (lista vacía)'); return; }
-    visibleRecords = ALL_RECORDS.filter(r => (!from || r.iso >= from) && (!to || r.iso <= to));
+  document.getElementById('btnFilter').addEventListener('click', function(){
+    var from = document.getElementById('dateFrom').value;
+    var to = document.getElementById('dateTo').value;
+    if (from && to && from > to) { showToast('La fecha "Desde" no puede ser posterior a "Hasta".'); return; }
+    visibleRecords = ALL_RECORDS.filter(function(r){ return (!from || r.iso >= from) && (!to || r.iso <= to); });
     render();
-    addLog('[HU1-PB13]', 'Filtro aplicado: ' + visibleRecords.length + ' registro(s) visible(s)');
-    showToast('Filtro aplicado: ' + visibleRecords.length + ' registro(s) ✓');
-    if(visibleRecords.length === 0) addLog('[HU1-PB13]', 'Estado vacío por filtro sin resultados');
+    showToast('Filtro aplicado: ' + visibleRecords.length + ' registro(s)');
   });
-
-  document.getElementById('btnClear').addEventListener('click', () => {
-    document.getElementById('dateFrom').value = '2026-09-01';
-    document.getElementById('dateTo').value = '2026-09-24';
-    visibleRecords = [...ALL_RECORDS];
+  document.getElementById('btnClear').addEventListener('click', function(){
+    document.getElementById('dateFrom').value = '';
+    document.getElementById('dateTo').value = '';
+    visibleRecords = ALL_RECORDS.slice();
     render();
-    addLog('[HU1-PB13]', 'Filtro limpiado — se muestran los 3 registros');
-    showToast('Filtro limpiado ✓');
+    showToast('Filtro limpiado');
   });
+  document.getElementById('btnBackHistory').addEventListener('click', closeDetail);
+  document.getElementById('btnGoPanel').addEventListener('click', function(e){ e.preventDefault(); closeDetail(); showToast('Volviendo a su panel…'); });
+  detailModal.addEventListener('click', function(e){ if (e.target === detailModal) closeDetail(); });
+  document.getElementById('btnBackPanelTop').addEventListener('click', function(e){ e.preventDefault(); showToast('Volviendo a su panel…'); });
+  document.getElementById('btnRegister').addEventListener('click', function(e){ e.preventDefault(); showToast('Diríjase al cuestionario para registrar su estado emocional…'); });
+  document.getElementById('btn-logout').addEventListener('click', function(){ if (confirm('¿Está seguro de que desea cerrar sesión?')) showToast('Su sesión se ha cerrado.'); });
 
-  document.getElementById('btnBackHistory').addEventListener('click', () => {
-    detailModal.classList.remove('open');
-    addLog('[HU1-PB13]', 'Volver al historial desde detalle');
-  });
-  document.getElementById('btnGoPanel').addEventListener('click', () => {
-    detailModal.classList.remove('open');
-    addLog('[HU1-PB13]', 'Volver al panel desde detalle (simulado)');
-    showToast('Volviendo al panel (simulado) ←');
-  });
-  detailModal.addEventListener('click', e => { if(e.target === detailModal) detailModal.classList.remove('open'); });
-
-  document.getElementById('btnBackPanel').addEventListener('click', () => {
-    addLog('[HU1-PB13]', 'Volver al panel desde historial (simulado)');
-    showToast('Volviendo al panel (simulado) ←');
-  });
-  document.getElementById('headerPanel').addEventListener('click', () => {
-    addLog('[HU1-PB13]', 'Volver al panel desde header (simulado)');
-    showToast('Volviendo al panel (simulado) ←');
-  });
-  document.getElementById('btnRegister').addEventListener('click', () => {
-    addLog('[HU1-PB13]', 'Ir a Registrar estado emocional (simulado)');
-    showToast('Ir a Registrar estado emocional (simulado)');
-  });
-
-  emptyChip.addEventListener('click', () => {
-    simulateEmpty = true;
-    emptyChip.classList.add('active'); restoreChip.classList.remove('active');
-    render();
-    addLog('[HU1-PB13]', 'DEMO: estado vacío ACTIVADO — "Aún no tienes registros emocionales"');
-  });
-  restoreChip.addEventListener('click', () => {
-    simulateEmpty = false; visibleRecords = [...ALL_RECORDS];
-    restoreChip.classList.add('active'); emptyChip.classList.remove('active');
-    render();
-    addLog('[HU1-PB13]', 'DEMO: 3 registros restaurados (recientes primero)');
+  var footerAviso = document.getElementById('footerAviso');
+  footerAviso.addEventListener('click', function(e){ e.preventDefault(); avisoModal.classList.add('open'); avisoModal.setAttribute('aria-hidden', 'false'); });
+  document.getElementById('btnCerrar').addEventListener('click', function(){ avisoModal.classList.remove('open'); avisoModal.setAttribute('aria-hidden', 'true'); });
+  document.getElementById('btnEntendido').addEventListener('click', function(){ avisoModal.classList.remove('open'); avisoModal.setAttribute('aria-hidden', 'true'); showToast('Gracias por su confirmación.'); });
+  avisoModal.addEventListener('click', function(e){ if (e.target === avisoModal) { avisoModal.classList.remove('open'); avisoModal.setAttribute('aria-hidden', 'true'); } });
+  window.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') {
+      if (detailModal.classList.contains('open')) closeDetail();
+      if (avisoModal.classList.contains('open')) { avisoModal.classList.remove('open'); avisoModal.setAttribute('aria-hidden', 'true'); }
+    }
   });
 
   render();
-  addLog('[HU1-PB13]', 'Sistema listo — Historial emocional con 3 registros (recientes primero)');
+})();
 </script>
 </body>
 </html>
