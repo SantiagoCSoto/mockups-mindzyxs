@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Mis cuestionarios - Mindzyxs</title>
+<style>
+:root{--cyan:#6ECFD4;--cyan-fuerte:#0E7490;--text:#1E293B;--muted:#64748B;--error:#E85D7A}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;opacity:.55}
+.blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+.blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+.header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,.9);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
+.logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
+.logo-container .logo-img{height:38px;width:auto;border-radius:8px}
+.main-nav ul{display:flex;list-style:none;gap:24px}
+.main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+.btn-logout{background:#E85D7A;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.wrap{width:100%;max-width:900px;margin:0 auto;padding:28px 20px 40px;flex:1}
+.back{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;text-decoration:none;margin-bottom:14px}
+.card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px;margin-bottom:14px}
+.card h1{font-size:20px}
+.card h2{font-size:16px}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.screen{display:none}
+.screen.active{display:block}
+.buscar{width:100%;padding:10px 14px;border:1.5px solid #CBD5E1;border-radius:12px;font-size:13.5px;margin:14px 0;font-family:inherit}
+.lista-item{border:1px solid #EDE8F0;border-radius:12px;padding:12px 14px;margin-bottom:10px;display:flex;gap:10px;align-items:center;background:#fff;flex-wrap:wrap}
+.lista-item .info{flex:1;min-width:180px}
+.lista-item b{font-size:13.5px}
+.lista-item small{display:block;color:var(--muted);font-size:12px}
+.est{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.est-b{background:#FFF7E6;color:#B7791F}
+.est-p{background:#E6F7F0;color:#1F7A4D}
+.btn{font-family:inherit;cursor:pointer;border-radius:18px;padding:9px 20px;min-height:44px;font-weight:700;font-size:12.5px;border:none;background:var(--cyan-fuerte);color:#fff}
+.btn-sec{background:#fff;color:var(--text);border:1.5px solid #DFDAEE}
+.btn-danger{background:#fff;color:var(--error);border:1.5px solid var(--error)}
+.btn-sm{padding:6px 14px;min-height:36px;font-size:12px}
+.p-item{border:1px solid #EDE8F0;border-radius:10px;padding:10px 12px;margin:8px 0;background:#FBFDFF;font-size:13px}
+.p-item small{display:block;color:var(--muted)}
+input[type=text],textarea{width:100%;padding:10px 12px;border:1.5px solid #CBD5E1;border-radius:10px;font-size:13.5px;font-family:inherit}
+textarea{resize:vertical;min-height:60px}
+label.fl{display:block;font-size:12.5px;font-weight:600;margin:12px 0 6px}
+.err-msg{display:none;color:var(--error);font-size:12px;margin-top:6px}
+.err-msg.show{display:block}
+.empty{border:1px dashed #CBD5E1;border-radius:12px;padding:20px;text-align:center;color:var(--muted);font-size:13px}
+.footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+.footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+.footer-in a{color:var(--muted);text-decoration:none}
+.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;text-decoration:none}
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999}
+.modal-overlay.open{display:flex}
+.modal{width:min(440px,100%);background:#fff;border-radius:16px;padding:26px 22px;text-align:center}
+.modal h3{font-size:17px}
+.modal p{font-size:13px;color:var(--muted);margin-top:8px}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.btn-modal{flex:1;min-height:44px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.btn-modal.ok{background:var(--cyan-fuerte);color:#fff}
+.btn-modal.close{background:#fff;border:1px solid #DFDAEE}
+.btn-modal.danger{background:#fff;color:var(--error);border:1.5px solid var(--error)}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10000;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--cyan-fuerte);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"><span>Mindzyxs</span></a>
+  </div>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <ul>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a href="#" class="back">← Volver al panel</a>
+
+  <section class="card screen active" id="screenLista">
+    <h1>Mis cuestionarios</h1>
+    <p class="sub">Borrador o Publicado. Búsquelos en orden.</p>
+    <input type="text" class="buscar" id="buscarC" placeholder="Buscar por título..." aria-label="Buscar cuestionario por título">
+    <div id="listaC"></div>
+  </section>
+
+  <section class="card screen" id="screenDetalle">
+    <h2 id="detTitulo">Detalle</h2>
+    <p class="sub" id="detSub"></p>
+    <div id="detPreg"></div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button type="button" class="btn" id="btnEditar">Editar</button>
+      <button type="button" class="btn btn-danger" id="btnEliminar">Eliminar</button>
+      <button type="button" class="btn btn-sec" id="btnVolverLista">Volver a cuestionarios</button>
+    </div>
+  </section>
+
+  <section class="card screen" id="screenEditar">
+    <h2>Editar cuestionario</h2>
+    <label class="fl" for="eTitulo">Título *</label>
+    <input type="text" id="eTitulo">
+    <label class="fl" for="eDesc">Descripción</label>
+    <textarea id="eDesc"></textarea>
+    <div id="ePreg"></div>
+    <div style="margin-top:10px"><button type="button" class="btn btn-sec" id="btnAddPreg">+ Agregar pregunta</button></div>
+    <span class="err-msg" id="eForm">El cuestionario debe tener al menos una pregunta.</span>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button type="button" class="btn btn-sec" id="btnGuardarB">Guardar como borrador</button>
+      <button type="button" class="btn" id="btnPublicarE">Publicar</button>
+      <button type="button" class="btn btn-sec" id="btnCancelarE">Cancelar</button>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso"><span>ℹ️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="modal">
+    <h3 id="confirmTitle">Confirmar</h3>
+    <p id="confirmText"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal close" id="btnNo">No</button>
+      <button type="button" class="btn-modal danger" id="btnSi">Sí, continuar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const lista=[
+    {id:1002,titulo:'Chequeo de energía semanal',desc:'Seguimiento semanal.',estado:'Publicado',preg:[{t:'¿Cómo estuvo su energía?',o:['Sin energía (1)','Total (5)']},{t:'¿Descansó bien?',o:['Nada (1)','Bien (4)']}]},
+    {id:1003,titulo:'Borrador sueño',desc:'',estado:'Borrador',preg:[{t:'¿Durmió bien?',o:['No (1)','Sí (4)']}]}
+  ];
+  const box=document.getElementById('listaC');
+  const toast=document.getElementById('toast');
+  const modal=document.getElementById('confirmModal');
+  let sel=null, acc=null;
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),2600);}
+  function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+  function render(f=''){
+    box.innerHTML='';
+    const items=lista.filter(c=>c.titulo.toLowerCase().includes(f.toLowerCase()));
+    if(!items.length){box.innerHTML='<div class="empty">Sin cuestionarios.</div>';return;}
+    items.forEach(c=>{
+      const d=document.createElement('div');
+      d.className='lista-item';
+      d.innerHTML='<div class="info"><b>'+c.titulo+'</b><small>'+c.preg.length+' pregunta(s)</small></div>'+
+        '<span class="est '+(c.estado==='Publicado'?'est-p':'est-b')+'">'+c.estado+'</span>';
+      const b=document.createElement('button');
+      b.type='button';b.className='btn btn-sec btn-sm';b.textContent='Ver detalle';
+      b.addEventListener('click',()=>abrirDetalle(c.id));
+      d.appendChild(b);
+      box.appendChild(d);
+    });
+  }
+  function abrirDetalle(id){
+    sel=lista.find(c=>c.id===id);
+    document.getElementById('detTitulo').textContent=sel.titulo;
+    document.getElementById('detSub').textContent=(sel.desc||'Sin descripción.')+' · '+sel.estado;
+    document.getElementById('detPreg').innerHTML=sel.preg.map((p,i)=>'<div class="p-item"><b>'+(i+1)+'. '+p.t+'</b><small>'+p.o.join(' / ')+'</small></div>').join('');
+    show('screenDetalle');
+  }
+  function preguntar(accion,texto,si){
+    acc=accion;
+    document.getElementById('confirmTitle').textContent='Confirmar';
+    document.getElementById('confirmText').textContent=texto;
+    document.getElementById('btnSi').textContent=si;
+    modal.classList.add('open');
+  }
+  document.getElementById('btnEditar').addEventListener('click',()=>{
+    if(sel.estado==='Publicado'){
+      preguntar('ablandar','Está publicado. Para editarlo debe pasar a Borrador. ¿Desea continuar?','Sí, pasar a Borrador');
+    } else {
+      abrirEdicion();
+    }
+  });
+  document.getElementById('btnEliminar').addEventListener('click',()=>{
+    preguntar('eliminar','¿Desea eliminar "'+sel.titulo+'"? Dejará de tomarse en cuenta para los análisis.','Sí, eliminar');
+  });
+  document.getElementById('btnSi').addEventListener('click',()=>{
+    modal.classList.remove('open');
+    if(acc==='ablandar'){sel.estado='Borrador';abrirEdicion();}
+    if(acc==='eliminar'){
+      const i=lista.indexOf(sel);
+      lista.splice(i,1);
+      render(document.getElementById('buscarC').value);
+      show('screenLista');
+      showToast('Cuestionario eliminado');
+    }
+  });
+  document.getElementById('btnNo').addEventListener('click',()=>modal.classList.remove('open'));
+  function abrirEdicion(){
+    document.getElementById('eTitulo').value=sel.titulo;
+    document.getElementById('eDesc').value=sel.desc;
+    const ep=document.getElementById('ePreg');
+    ep.innerHTML='';
+    sel.preg.forEach((p,i)=>{
+      const d=document.createElement('div');
+      d.className='p-item';
+      d.innerHTML='<b>'+(i+1)+'. '+p.t+'</b><small>'+p.o.join(' / ')+'</small>';
+      ep.appendChild(d);
+    });
+    show('screenEditar');
+  }
+  document.getElementById('btnAddPreg').addEventListener('click',()=>{
+    const ep=document.getElementById('ePreg');
+    const d=document.createElement('div');
+    d.className='p-item';
+    d.innerHTML='<input type="text" placeholder="Nueva pregunta..." aria-label="Nueva pregunta">';
+    ep.appendChild(d);
+  });
+  function guardar(estado){
+    if(!document.getElementById('eTitulo').value.trim()){showToast('El título es obligatorio.');return;}
+    sel.titulo=document.getElementById('eTitulo').value.trim();
+    sel.desc=document.getElementById('eDesc').value.trim();
+    sel.estado=estado;
+    showToast('Cuestionario actualizado correctamente');
+    render(document.getElementById('buscarC').value);
+    show('screenLista');
+  }
+  document.getElementById('btnGuardarB').addEventListener('click',()=>guardar('Borrador'));
+  document.getElementById('btnPublicarE').addEventListener('click',()=>guardar('Publicado'));
+  document.getElementById('btnCancelarE').addEventListener('click',()=>show('screenDetalle'));
+  document.getElementById('btnVolverLista').addEventListener('click',()=>show('screenLista'));
+  document.getElementById('buscarC').addEventListener('input',(e)=>render(e.target.value));
+  document.getElementById('btn-logout').addEventListener('click',()=>{if(confirm('¿Está seguro de que desea cerrar sesión?'))showToast('Sesión cerrada (demo)');});
+  document.getElementById('footerAviso').addEventListener('click',(e)=>{e.preventDefault();showToast('Mindzyxs no realiza diagnósticos clínicos');});
+  render();
+</script>
+</body>
+</html>

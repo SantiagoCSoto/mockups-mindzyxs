@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Nuevo cuestionario - Mindzyxs</title>
+<style>
+:root{--cyan:#6ECFD4;--cyan-fuerte:#0E7490;--text:#1E293B;--muted:#64748B;--error:#E85D7A;--violet:#6B5BCE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;opacity:.55}
+.blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+.blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+.header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,.9);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
+.logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
+.logo-container .logo-img{height:38px;width:auto;border-radius:8px}
+.main-nav ul{display:flex;list-style:none;gap:24px}
+.main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+.btn-logout{background:#E85D7A;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.wrap{width:100%;max-width:900px;margin:0 auto;padding:28px 20px 40px;flex:1}
+.back{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;text-decoration:none;margin-bottom:14px}
+.card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px;margin-bottom:14px}
+.card h1{font-size:20px}
+.card h2{font-size:16px}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.screen{display:none}
+.screen.active{display:block}
+label.fl{display:block;font-size:12.5px;font-weight:600;margin:12px 0 6px}
+input[type=text],textarea{width:100%;padding:10px 12px;border:1.5px solid #CBD5E1;border-radius:10px;font-size:13.5px;font-family:inherit}
+textarea{resize:vertical;min-height:70px}
+.preg{border:1px solid #EDE8F0;border-radius:12px;padding:14px;background:#FBFDFF;margin:10px 0}
+.opc{display:flex;gap:8px;margin-top:8px}
+.opc input:first-child{flex:1}
+.opc input:last-child{width:90px}
+.btn{font-family:inherit;cursor:pointer;border-radius:18px;padding:9px 20px;min-height:44px;font-weight:700;font-size:12.5px;border:none;background:var(--cyan-fuerte);color:#fff}
+.btn-sec{background:#fff;color:var(--text);border:1.5px solid #DFDAEE}
+.btn-danger{background:#fff;color:var(--error);border:1.5px solid var(--error)}
+.btn-sm{padding:6px 14px;min-height:36px;font-size:12px}
+.rangos{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.rango{border:1px solid #EDE8F0;border-radius:10px;padding:10px;text-align:center}
+.rango b{font-size:12px;display:block;margin-bottom:6px}
+.rango input{width:70px;text-align:center}
+.err-msg{display:none;color:var(--error);font-size:12px;margin-top:6px}
+.err-msg.show{display:block}
+.lista-item{border:1px solid #EDE8F0;border-radius:12px;padding:12px 14px;margin-bottom:10px;display:flex;gap:10px;align-items:center;background:#fff}
+.lista-item .info{flex:1}
+.lista-item b{font-size:13.5px}
+.lista-item small{display:block;color:var(--muted);font-size:12px}
+.est{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.est-b{background:#FFF7E6;color:#B7791F}
+.est-p{background:#E6F7F0;color:#1F7A4D}
+.footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+.footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+.footer-in a{color:var(--muted);text-decoration:none}
+.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;text-decoration:none}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10000;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--cyan-fuerte);outline-offset:2px}
+@media(max-width:640px){.rangos{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"><span>Mindzyxs</span></a>
+  </div>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <ul>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a href="#" class="back">← Volver al panel</a>
+
+  <section class="card screen active" id="screenLista">
+    <h1>Gestión de cuestionarios</h1>
+    <p class="sub">Sus cuestionarios (Borrador o Publicado).</p>
+    <div style="margin:14px 0"><button type="button" class="btn" id="btnNuevo">+ Crear cuestionario</button></div>
+    <div id="listaC"></div>
+  </section>
+
+  <section class="card screen" id="screenNuevo">
+    <h2>Nuevo cuestionario</h2>
+    <label class="fl" for="fTitulo">Título *</label>
+    <input type="text" id="fTitulo" placeholder="Ej. Chequeo de ansiedad">
+    <label class="fl" for="fDesc">Descripción</label>
+    <textarea id="fDesc" placeholder="Descripción del cuestionario..."></textarea>
+    <div id="pregBox"></div>
+    <div style="margin-top:10px"><button type="button" class="btn btn-sec" id="btnAddPreg">+ Agregar pregunta</button></div>
+    <h2 style="margin-top:16px">Cálculo de riesgo</h2>
+    <p class="sub">Asigne un nivel a cada intervalo según su preferencia.</p>
+    <div class="rangos">
+      <div class="rango"><b style="color:#1F7A4D">Bajo</b>De <input type="number" id="rBajo" value="1" aria-label="Bajo desde"> a <input type="number" id="rBajoH" value="2" aria-label="Bajo hasta"></div>
+      <div class="rango"><b style="color:#B7791F">Medio</b>De <input type="number" id="rMedio" value="3" aria-label="Medio desde"> a <input type="number" id="rMedioH" value="3" aria-label="Medio hasta"></div>
+      <div class="rango"><b style="color:#C2274F">Alto</b>De <input type="number" id="rAlto" value="4" aria-label="Alto desde"> en adelante</div>
+    </div>
+    <span class="err-msg" id="eForm">Debe agregar al menos una pregunta.</span>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button type="button" class="btn btn-sec" id="btnBorrador">Guardar como borrador</button>
+      <button type="button" class="btn" id="btnPublicar">Publicar</button>
+      <button type="button" class="btn btn-sec" id="btnVolverLista">Volver a cuestionarios</button>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso"><span>ℹ️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const lista=[
+    {id:1002,titulo:'Chequeo de energía semanal',estado:'Publicado',preg:3},
+    {id:1003,titulo:'Borrador sueño',estado:'Borrador',preg:2}
+  ];
+  const box=document.getElementById('listaC');
+  const pregBox=document.getElementById('pregBox');
+  const toast=document.getElementById('toast');
+  let np=0;
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),2600);}
+  function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+  function renderLista(){
+    box.innerHTML='';
+    lista.forEach(c=>{
+      const d=document.createElement('div');
+      d.className='lista-item';
+      d.innerHTML='<div class="info"><b>'+c.titulo+'</b><small>'+c.preg+' pregunta(s)</small></div>'+
+        '<span class="est '+(c.estado==='Publicado'?'est-p':'est-b')+'">'+c.estado+'</span>';
+      box.appendChild(d);
+    });
+  }
+  function addPreg(){
+    np++;
+    const d=document.createElement('div');
+    d.className='preg';
+    d.innerHTML='<label class="fl">Pregunta '+np+' *</label>'+
+      '<input type="text" placeholder="Escriba la pregunta..." aria-label="Texto pregunta '+np+'">'+
+      '<div class="opc"><input type="text" value="Nunca" aria-label="Opción 1"><input type="number" value="1" aria-label="Valor opción 1"></div>'+
+      '<div class="opc"><input type="text" value="Siempre" aria-label="Opción 2"><input type="number" value="4" aria-label="Valor opción 2"></div>'+
+      '<div style="margin-top:8px"><button type="button" class="btn btn-danger btn-sm">Quitar pregunta</button></div>';
+    d.querySelector('.btn-danger').addEventListener('click',()=>{d.remove();np--;});
+    pregBox.appendChild(d);
+  }
+  function guardar(estado){
+    const t=document.getElementById('fTitulo').value.trim();
+    if(!t){showToast('El título es obligatorio.');document.getElementById('fTitulo').focus();return;}
+    if(!pregBox.querySelector('.preg')){
+      document.getElementById('eForm').classList.add('show');return;
+    }
+    document.getElementById('eForm').classList.remove('show');
+    lista.push({id:Date.now(),titulo:t,estado:estado,preg:pregBox.querySelectorAll('.preg').length});
+    showToast('Cuestionario guardado correctamente');
+    renderLista();
+    show('screenLista');
+  }
+  document.getElementById('btnNuevo').addEventListener('click',()=>show('screenNuevo'));
+  document.getElementById('btnVolverLista').addEventListener('click',()=>show('screenLista'));
+  document.getElementById('btnAddPreg').addEventListener('click',addPreg);
+  document.getElementById('btnBorrador').addEventListener('click',()=>guardar('Borrador'));
+  document.getElementById('btnPublicar').addEventListener('click',()=>guardar('Publicado'));
+  document.getElementById('btn-logout').addEventListener('click',()=>{if(confirm('¿Está seguro de que desea cerrar sesión?'))showToast('Sesión cerrada (demo)');});
+  document.getElementById('footerAviso').addEventListener('click',(e)=>{e.preventDefault();showToast('Mindzyxs no realiza diagnósticos clínicos');});
+  addPreg();
+  renderLista();
+</script>
+</body>
+</html>
