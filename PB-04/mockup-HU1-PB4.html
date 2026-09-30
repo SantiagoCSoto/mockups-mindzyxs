@@ -80,7 +80,7 @@
 <div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
 
 <header class="header">
-  <div class="logo"><img src="../Logo1.png" alt="Mindzyx Logo" class="logo-img"></div>
+  <div class="logo"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"><span>Mindzyxs</span></div>
   <nav class="nav">
     <a href="#" class="active">Inicio</a>
     <a href="#">Nosotros</a>
@@ -98,9 +98,8 @@
 
 <main class="wrap">
   <div class="card hero">
-    <h1>Bienvenido a Mindzyx</h1>
+    <h1>Mensaje aclaratorio (demo)</h1>
     <p>Sistema de apoyo y <b>monitoreo emocional</b>. Antes de usar cualquier funcionalidad sensible se muestra el <b>Mensaje aclaratorio</b>.</p>
-    <div style="margin-top:10px"><span class="badge-role" id="roleBadge">Invitado</span></div>
   </div>
 
   <div class="card">
@@ -142,10 +141,10 @@
 
 <footer class="footer">
   <div class="footer-in">
-    <a href="#">Inicio</a>
-    <a href="#">Nosotros</a>
-    <a href="#">Ayuda</a>
-    <a href="#" class="aviso" id="footerAviso"><span class="ico">⚠️</span> Aviso: no diagnóstico</a>
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso" id="footerAviso"><span class="ico">ℹ️</span> Aviso: no diagnóstico</a>
   </div>
 </footer>
 
@@ -190,7 +189,8 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const roleSel=document.getElementById('roleSel'), roleBadge=document.getElementById('roleBadge');
+  const roleSel=document.getElementById('roleSel');
+  function rolActual(){ return roleSel.options[roleSel.selectedIndex].text; }
   const avisoModal=document.getElementById('avisoModal'), errModal=document.getElementById('errModal');
   const btnEntendido=document.getElementById('btnEntendido'), btnCerrar=document.getElementById('btnCerrar'), errOk=document.getElementById('errOk');
   const footerAviso=document.getElementById('footerAviso');
@@ -211,23 +211,22 @@
   }
 
   roleSel.addEventListener('change', ()=>{
-    roleBadge.textContent=roleSel.options[roleSel.selectedIndex].text;
-    addLog('Rol actual: '+roleBadge.textContent);
+    addLog('Rol actual: '+rolActual());
   });
 
   function openAviso(fromSensitive){
     // se intenta cargar el contenido del mensaje: puede fallar
     if(loadError){
       errModal.classList.add('open');
-      addLog('ERROR: no fue posible cargar el mensaje aclaratorio (rol '+roleBadge.textContent+')');
+      addLog('ERROR: no fue posible cargar el mensaje aclaratorio (rol '+rolActual()+')');
       return;
     }
     pendingAction = fromSensitive ? pendingAction : null;
     avisoModal.classList.add('open');
     if(fromSensitive){
-      addLog('VISUALIZACIÓN auto (primera vez, antes de '+fromSensitive+') rol '+roleBadge.textContent);
+      addLog('VISUALIZACIÓN auto (primera vez, antes de '+fromSensitive+') rol '+rolActual());
     } else {
-      addLog('VISUALIZACIÓN por enlace "Aviso: no diagnóstico" rol '+roleBadge.textContent);
+      addLog('VISUALIZACIÓN por enlace "Aviso: no diagnóstico" rol '+rolActual());
     }
   }
 
