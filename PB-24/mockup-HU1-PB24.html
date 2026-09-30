@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Perfil profesional - Mindzyxs</title>
+<style>
+:root{--cyan:#6ECFD4;--cyan-fuerte:#0E7490;--text:#1E293B;--muted:#64748B;--error:#E85D7A}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;opacity:.55}
+.blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+.blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+.header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,.9);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
+.logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
+.logo-container .logo-img{height:38px;width:auto;border-radius:8px}
+.main-nav ul{display:flex;list-style:none;gap:24px}
+.main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+.btn-logout{background:#E85D7A;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.wrap{width:100%;max-width:900px;margin:0 auto;padding:28px 20px 40px;flex:1}
+.back{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;text-decoration:none;margin-bottom:14px}
+.card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px;margin-bottom:14px}
+.card h1{font-size:20px}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.screen{display:none}
+.screen.active{display:block}
+.perfil-top{display:flex;gap:14px;align-items:center;margin:14px 0}
+.avatar{width:56px;height:56px;border-radius:50%;background:#EDE7FF;color:#4A38B0;display:grid;place-items:center;font-weight:700;font-size:20px}
+.campo{margin:10px 0;font-size:13.5px}
+.campo b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.chips span{background:#EDE7FF;color:#4A38B0;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:20px}
+label.fl{display:block;font-size:12.5px;font-weight:600;margin:12px 0 6px}
+input[type=text],input[type=email],input[type=number],textarea{width:100%;padding:10px 12px;border:1.5px solid #CBD5E1;border-radius:10px;font-size:13.5px;font-family:inherit}
+textarea{resize:vertical;min-height:70px}
+.checks{max-height:150px;overflow-y:auto;border:1.5px solid #E3E6F3;border-radius:10px;padding:8px 10px;background:#fff}
+.checks label{display:flex;gap:8px;align-items:center;font-size:13px;padding:4px 2px;cursor:pointer}
+.err-msg{display:none;color:var(--error);font-size:12px;margin-top:6px}
+.err-msg.show{display:block}
+.btn{font-family:inherit;cursor:pointer;border-radius:18px;padding:9px 20px;min-height:44px;font-weight:700;font-size:12.5px;border:none;background:var(--cyan-fuerte);color:#fff}
+.btn-sec{background:#fff;color:var(--text);border:1.5px solid #DFDAEE}
+.footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+.footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+.footer-in a{color:var(--muted);text-decoration:none}
+.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;text-decoration:none}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10000;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--cyan-fuerte);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"><span>Mindzyxs</span></a>
+  </div>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <ul>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a href="#" class="back">← Volver al panel</a>
+
+  <section class="card screen active" id="screenVer">
+    <h1>Perfil profesional</h1>
+    <p class="sub">Su información visible para los pacientes.</p>
+    <div class="perfil-top">
+      <div class="avatar" aria-hidden="true">MG</div>
+      <div><b style="font-size:16px">María Garzón</b><br><small style="color:var(--muted)">garzon@correo.com</small></div>
+    </div>
+    <div class="campo"><b>Especialidades</b><div class="chips" id="verEsp"><span>Psicología clínica</span><span>Psicología de la salud</span></div></div>
+    <div class="campo"><b>Años de experiencia</b><span id="verExp">8</span></div>
+    <div class="campo"><b>Descripción profesional</b><span id="verDesc">Psicóloga clínica con enfoque en ansiedad y bienestar emocional.</span></div>
+    <div class="campo"><b>Datos de contacto</b><span id="verCont">garzon@correo.com</span></div>
+    <div class="campo"><b>Tarjeta profesional</b><span>✓ Verificada por el administrador</span></div>
+    <div style="margin-top:14px"><button type="button" class="btn" id="btnEditar">Editar</button></div>
+  </section>
+
+  <section class="card screen" id="screenEditar">
+    <h1>Editar perfil profesional</h1>
+    <label class="fl">Especialidades (una, varias o ninguna)</label>
+    <input type="text" id="buscarEsp" placeholder="Buscar especialidad..." aria-label="Buscar especialidad">
+    <div class="checks" id="listaEsp" style="margin-top:8px"></div>
+    <label class="fl" for="fExp">Años de experiencia *</label>
+    <input type="number" id="fExp" min="0" max="60" value="8">
+    <label class="fl" for="fDesc">Descripción profesional</label>
+    <textarea id="fDesc">Psicóloga clínica con enfoque en ansiedad y bienestar emocional.</textarea>
+    <label class="fl" for="fCorreo">Correo de contacto *</label>
+    <input type="email" id="fCorreo" value="garzon@correo.com">
+    <span class="err-msg" id="eCorreo">El correo ya se encuentra registrado.</span>
+    <label class="fl">Tarjeta profesional</label>
+    <input type="file" id="fTarjeta" accept=".pdf" aria-label="Tarjeta profesional en PDF">
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button type="button" class="btn" id="btnGuardar">Guardar cambios</button>
+      <button type="button" class="btn btn-sec" id="btnCancelar">Cancelar</button>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso"><span>ℹ️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const todas=['Psicología clínica','Psicología de la salud','Neuropsicología','Psicología familiar','Psicología del trauma','Psicología infantil'];
+  const mias=new Set(['Psicología clínica','Psicología de la salud']);
+  const box=document.getElementById('listaEsp');
+  const toast=document.getElementById('toast');
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),2600);}
+  function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+  function renderEsp(f=''){
+    box.innerHTML='';
+    todas.filter(e=>e.toLowerCase().includes(f.toLowerCase())).forEach(e=>{
+      const l=document.createElement('label');
+      const c=document.createElement('input');
+      c.type='checkbox';c.value=e;c.checked=mias.has(e);
+      c.addEventListener('change',()=>{c.checked?mias.add(e):mias.delete(e);});
+      l.appendChild(c);
+      l.appendChild(document.createTextNode(e));
+      box.appendChild(l);
+    });
+    if(!box.children.length)box.innerHTML='<small style="color:var(--muted)">Sin coincidencias. Las nuevas especialidades requieren validación del administrador.</small>';
+  }
+  document.getElementById('buscarEsp').addEventListener('input',(e)=>renderEsp(e.target.value));
+  document.getElementById('btnEditar').addEventListener('click',()=>{renderEsp('');show('screenEditar');});
+  document.getElementById('btnCancelar').addEventListener('click',()=>show('screenVer'));
+  document.getElementById('btnGuardar').addEventListener('click',()=>{
+    const correo=document.getElementById('fCorreo').value.trim().toLowerCase();
+    if(!correo||!correo.includes('@')){showToast('Ingrese un correo válido.');return;}
+    if(correo==='usado@correo.com'){document.getElementById('eCorreo').classList.add('show');showToast('El correo ya se encuentra registrado.');return;}
+    document.getElementById('eCorreo').classList.remove('show');
+    const exp=Number(document.getElementById('fExp').value);
+    if(!Number.isFinite(exp)||exp<0){showToast('Ingrese años válidos.');return;}
+    document.getElementById('verEsp').innerHTML=[...mias].map(e=>'<span>'+e+'</span>').join('')||'<span style="background:#F1F5F9;color:#64748B">Sin especialidad registrada</span>';
+    document.getElementById('verExp').textContent=exp;
+    document.getElementById('verDesc').textContent=document.getElementById('fDesc').value.trim()||'—';
+    document.getElementById('verCont').textContent=correo;
+    showToast('Información profesional actualizada correctamente');
+    show('screenVer');
+  });
+  document.getElementById('btn-logout').addEventListener('click',()=>{if(confirm('¿Está seguro de que desea cerrar sesión?'))showToast('Sesión cerrada (demo)');});
+  document.getElementById('footerAviso').addEventListener('click',(e)=>{e.preventDefault();showToast('Mindzyxs no realiza diagnósticos clínicos');});
+  renderEsp('');
+</script>
+</body>
+</html>

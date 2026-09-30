@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Gestión de accesos - Mindzyxs</title>
+<style>
+:root{--cyan:#6ECFD4;--cyan-fuerte:#0E7490;--text:#1E293B;--muted:#64748B;--error:#E85D7A;--ok:#1BBF6B;--violet:#6B5BCE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;opacity:.55}
+.blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+.blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+.header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,.9);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
+.logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
+.logo-container .logo-img{height:38px;width:auto;border-radius:8px}
+.main-nav ul{display:flex;list-style:none;gap:24px}
+.main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+.btn-logout{background:#E85D7A;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.wrap{width:100%;max-width:900px;margin:0 auto;padding:28px 20px 40px;flex:1}
+.back{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;text-decoration:none;margin-bottom:14px}
+.card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px}
+.card h1{font-size:20px}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.buscar{width:100%;padding:10px 14px;border:1.5px solid #CBD5E1;border-radius:12px;font-size:13.5px;margin:14px 0;font-family:inherit}
+.fila{display:flex;align-items:center;gap:12px;border:1px solid #EDE8F0;border-radius:12px;padding:12px 14px;background:#FBFDFF;margin-bottom:10px}
+.avatar{width:44px;height:44px;border-radius:50%;background:#EDE7FF;color:#4A38B0;display:grid;place-items:center;font-weight:700;flex-shrink:0}
+.info{flex:1;min-width:0}
+.info b{font-size:14px}
+.info small{display:block;color:var(--muted);font-size:12px}
+.est{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;white-space:nowrap}
+.est-ok{background:#E6F7F0;color:#1F7A4D}
+.est-no{background:#F1F5F9;color:#64748B}
+.btn{font-family:inherit;cursor:pointer;border-radius:18px;padding:9px 20px;min-height:44px;font-weight:700;font-size:12.5px;border:none}
+.btn-aut{background:var(--cyan-fuerte);color:#fff}
+.btn-rev{background:#fff;color:var(--text);border:1.5px solid #DFDAEE}
+.empty{border:1px dashed #CBD5E1;border-radius:12px;padding:20px;text-align:center;color:var(--muted);font-size:13px}
+.footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+.footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+.footer-in a{color:var(--muted);text-decoration:none}
+.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;text-decoration:none}
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999}
+.modal-overlay.open{display:flex}
+.modal{width:min(440px,100%);background:#fff;border-radius:16px;padding:26px 22px;text-align:center}
+.modal h3{font-size:17px}
+.modal p{font-size:13px;color:var(--muted);margin-top:8px}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.btn-modal{flex:1;min-height:44px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.btn-modal.ok{background:var(--cyan-fuerte);color:#fff}
+.btn-modal.close{background:#fff;border:1px solid #DFDAEE}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10000;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--cyan-fuerte);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"><span>Mindzyxs</span></a>
+  </div>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <ul>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a href="#" class="back">← Volver al panel</a>
+  <section class="card">
+    <h1>Gestión de accesos</h1>
+    <p class="sub">Autorice o revoque el acceso de psicólogos a su información emocional.</p>
+    <input type="text" class="buscar" id="buscar" placeholder="Buscar por nombre o correo..." aria-label="Buscar psicólogo por nombre o correo">
+    <div id="lista"></div>
+    <div class="empty" id="vacio" style="display:none">No hay psicólogos disponibles para autorizar en este momento.</div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso"><span>ℹ️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="modal">
+    <h3 id="confirmTitle">Confirmar</h3>
+    <p id="confirmText"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal close" id="btnNo">No</button>
+      <button type="button" class="btn-modal ok" id="btnSi">Sí, autorizar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const lista=[
+    {id:1,nombre:'Dra. Ana Torres',esp:'Psicología clínica',correo:'ana@correo.com',aut:false},
+    {id:2,nombre:'Dr. Carlos Mendoza',esp:'Psicología de la salud',correo:'carlos@correo.com',aut:true},
+    {id:3,nombre:'Dra. Sofía Martínez',esp:'Sin especialidad registrada',correo:'sofia@correo.com',aut:false}
+  ];
+  const box=document.getElementById('lista'), vacio=document.getElementById('vacio');
+  const modal=document.getElementById('confirmModal'), cTitle=document.getElementById('confirmTitle');
+  const cText=document.getElementById('confirmText'), btnSi=document.getElementById('btnSi');
+  const toast=document.getElementById('toast');
+  let sel=null, accion=null;
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),2600);}
+  function iniciales(n){return n.split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase();}
+  function render(f=''){
+    box.innerHTML='';
+    const items=lista.filter(p=>(p.nombre+' '+p.correo).toLowerCase().includes(f.toLowerCase()));
+    vacio.style.display=items.length?'none':'block';
+    items.forEach(p=>{
+      const d=document.createElement('div');
+      d.className='fila';
+      d.innerHTML='<div class="avatar" aria-hidden="true">'+iniciales(p.nombre)+'</div>'+
+        '<div class="info"><b>'+p.nombre+'</b><small>'+p.esp+'</small></div>'+
+        '<span class="est '+(p.aut?'est-ok':'est-no')+'">'+(p.aut?'Autorizado':'No autorizado')+'</span>';
+      const b=document.createElement('button');
+      b.type='button';
+      b.className='btn '+(p.aut?'btn-rev':'btn-aut');
+      b.textContent=p.aut?'Revocar':'Autorizar';
+      b.addEventListener('click',()=>preguntar(p));
+      d.appendChild(b);
+      box.appendChild(d);
+    });
+  }
+  function preguntar(p){
+    sel=p; accion=p.aut?'revocar':'autorizar';
+    cTitle.textContent=accion==='autorizar'?'Autorizar psicólogo':'Revocar acceso';
+    cText.textContent=accion==='autorizar'
+      ? '¿Desea autorizar a '+p.nombre+' para acceder a sus registros?'
+      : '¿Desea revocar el acceso de '+p.nombre+'?';
+    btnSi.textContent=accion==='autorizar'?'Sí, autorizar':'Sí, revocar';
+    modal.classList.add('open');
+  }
+  document.getElementById('btnNo').addEventListener('click',()=>modal.classList.remove('open'));
+  btnSi.addEventListener('click',()=>{
+    sel.aut=(accion==='autorizar');
+    modal.classList.remove('open');
+    showToast(accion==='autorizar'?'Acceso autorizado correctamente':'Acceso revocado correctamente');
+    render(document.getElementById('buscar').value);
+  });
+  document.getElementById('buscar').addEventListener('input',(e)=>render(e.target.value));
+  document.getElementById('btn-logout').addEventListener('click',()=>{if(confirm('¿Está seguro de que desea cerrar sesión?'))showToast('Sesión cerrada (demo)');});
+  document.getElementById('footerAviso').addEventListener('click',(e)=>{e.preventDefault();showToast('Mindzyxs no realiza diagnósticos clínicos');});
+  render();
+</script>
+</body>
+</html>
