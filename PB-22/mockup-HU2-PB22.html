@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Asignar cuestionario - Mindzyxs</title>
+<style>
+:root{--cyan:#6ECFD4;--cyan-fuerte:#0E7490;--text:#1E293B;--muted:#64748B;--error:#E85D7A}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;opacity:.55}
+.blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+.blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+.header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,.9);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
+.logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
+.logo-container .logo-img{height:38px;width:auto;border-radius:8px}
+.main-nav ul{display:flex;list-style:none;gap:24px}
+.main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+.btn-logout{background:#E85D7A;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.wrap{width:100%;max-width:900px;margin:0 auto;padding:28px 20px 40px;flex:1}
+.back{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;text-decoration:none;margin-bottom:14px}
+.card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px;margin-bottom:14px}
+.card h1{font-size:20px}
+.card h2{font-size:16px}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.screen{display:none}
+.screen.active{display:block}
+.lista-item{border:1px solid #EDE8F0;border-radius:12px;padding:12px 14px;margin-bottom:10px;display:flex;gap:10px;align-items:center;background:#fff}
+.lista-item .info{flex:1}
+.lista-item b{font-size:13.5px}
+.lista-item small{display:block;color:var(--muted);font-size:12px}
+.est{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.est-p{background:#E6F7F0;color:#1F7A4D}
+.fila-check{display:flex;gap:10px;align-items:center;border:1px solid #EDE8F0;border-radius:12px;padding:10px 14px;margin-bottom:8px;background:#FBFDFF;cursor:pointer;font-size:13.5px}
+.fila-check input{width:18px;height:18px;accent-color:var(--cyan-fuerte)}
+.fila-check small{display:block;color:var(--muted);font-size:12px}
+.btn{font-family:inherit;cursor:pointer;border-radius:18px;padding:9px 20px;min-height:44px;font-weight:700;font-size:12.5px;border:none;background:var(--cyan-fuerte);color:#fff}
+.btn-sec{background:#fff;color:var(--text);border:1.5px solid #DFDAEE}
+.err-msg{display:none;color:var(--error);font-size:12px;margin-top:6px}
+.err-msg.show{display:block}
+.footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+.footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+.footer-in a{color:var(--muted);text-decoration:none}
+.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;text-decoration:none}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10000;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--cyan-fuerte);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"><span>Mindzyxs</span></a>
+  </div>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <ul>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a href="#" class="back">← Volver a cuestionarios</a>
+
+  <section class="card screen active" id="screenLista">
+    <h1>Asignar cuestionario</h1>
+    <p class="sub">Elija un cuestionario publicado para asignarlo.</p>
+    <div id="listaC" style="margin-top:14px"></div>
+  </section>
+
+  <section class="card screen" id="screenAsignar">
+    <h2 id="asigTitulo">Asignar</h2>
+    <p class="sub">Solo pacientes que le autorizaron. Marque con las casillas.</p>
+    <div id="listaPac" style="margin-top:14px"></div>
+    <span class="err-msg" id="eSel">Debe seleccionar al menos un paciente.</span>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button type="button" class="btn" id="btnAsignar">Asignar cuestionario</button>
+      <button type="button" class="btn btn-sec" id="btnVolver">Volver</button>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso"><span>ℹ️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const cuests=[
+    {id:1002,titulo:'Chequeo de energía semanal',estado:'Publicado'},
+    {id:1,titulo:'Cuestionario Base Prueba',estado:'Publicado'}
+  ];
+  const pacs=[
+    {id:12,nombre:'Santiago Cortés',correo:'santiago@correo.com'},
+    {id:6,nombre:'Paciente Nuevo',correo:'nuevo@correo.com'}
+  ];
+  const box=document.getElementById('listaC');
+  const boxP=document.getElementById('listaPac');
+  const toast=document.getElementById('toast');
+  let sel=null;
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),2600);}
+  function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+  function renderC(){
+    box.innerHTML='';
+    cuests.forEach(c=>{
+      const d=document.createElement('div');
+      d.className='lista-item';
+      d.innerHTML='<div class="info"><b>'+c.titulo+'</b><small>'+c.estado+'</small></div>'+
+        '<span class="est est-p">'+c.estado+'</span>';
+      const b=document.createElement('button');
+      b.type='button';b.className='btn btn-sec';b.textContent='Asignar';
+      b.addEventListener('click',()=>abrirAsignar(c.id));
+      d.appendChild(b);
+      box.appendChild(d);
+    });
+  }
+  function abrirAsignar(id){
+    sel=cuests.find(c=>c.id===id);
+    document.getElementById('asigTitulo').textContent='Asignar: '+sel.titulo;
+    boxP.innerHTML='';
+    pacs.forEach(p=>{
+      const l=document.createElement('label');
+      l.className='fila-check';
+      l.innerHTML='<input type="checkbox" value="'+p.id+'"><span><b>'+p.nombre+'</b><small>'+p.correo+'</small></span>';
+      boxP.appendChild(l);
+    });
+    document.getElementById('eSel').classList.remove('show');
+    show('screenAsignar');
+  }
+  document.getElementById('btnAsignar').addEventListener('click',()=>{
+    const n=boxP.querySelectorAll('input[type=checkbox]:checked').length;
+    if(!n){document.getElementById('eSel').classList.add('show');return;}
+    showToast('Cuestionario asignado correctamente');
+    show('screenLista');
+  });
+  document.getElementById('btnVolver').addEventListener('click',()=>show('screenLista'));
+  document.getElementById('btn-logout').addEventListener('click',()=>{if(confirm('¿Está seguro de que desea cerrar sesión?'))showToast('Sesión cerrada (demo)');});
+  document.getElementById('footerAviso').addEventListener('click',(e)=>{e.preventDefault();showToast('Mindzyxs no realiza diagnósticos clínicos');});
+  renderC();
+</script>
+</body>
+</html>

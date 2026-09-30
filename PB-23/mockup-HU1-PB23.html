@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Estadísticas de pacientes - Mindzyxs</title>
+<style>
+:root{--cyan:#6ECFD4;--cyan-fuerte:#0E7490;--text:#1E293B;--muted:#64748B;--error:#E85D7A;--violet:#6B5BCE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;opacity:.55}
+.blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+.blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+.header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,.9);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
+.logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
+.logo-container .logo-img{height:38px;width:auto;border-radius:8px}
+.main-nav ul{display:flex;list-style:none;gap:24px}
+.main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+.btn-logout{background:#E85D7A;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.wrap{width:100%;max-width:900px;margin:0 auto;padding:28px 20px 40px;flex:1}
+.back{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;text-decoration:none;margin-bottom:14px}
+.card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px;margin-bottom:14px}
+.card h1{font-size:20px}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.filtros{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin:14px 0;align-items:end}
+.filtros label{font-size:12px;font-weight:600;display:block;margin-bottom:4px}
+select,input[type=date]{padding:9px 12px;border:1.5px solid #CBD5E1;border-radius:10px;font-size:13px;font-family:inherit;width:100%}
+.btn{font-family:inherit;cursor:pointer;border-radius:18px;padding:9px 20px;min-height:44px;font-weight:700;font-size:12.5px;border:none;background:var(--cyan-fuerte);color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.kpi{border:1px solid #EDE8F0;border-radius:12px;padding:12px;text-align:center;background:#FBFDFF}
+.kpi b{display:block;font-size:22px}
+.kpi small{color:var(--muted);font-size:11.5px}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:12.5px}
+th{text-align:left;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:8px;border-bottom:2px solid #EDE8F0}
+td{padding:8px;border-bottom:1px solid #F1F5F9}
+.barras{display:flex;align-items:flex-end;gap:8px;height:140px;margin-top:12px;padding:10px;border:1px solid #EDE8F0;border-radius:12px;background:#FBFDFF}
+.barra{flex:1;background:linear-gradient(180deg,#6ECFD4,#0E7490);border-radius:6px 6px 0 0;min-height:8px;position:relative}
+.barra span{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--muted)}
+.leyenda{font-size:11.5px;color:var(--muted);margin-top:26px}
+.empty{border:1px dashed #CBD5E1;border-radius:12px;padding:20px;text-align:center;color:var(--muted);font-size:13px}
+.footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+.footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+.footer-in a{color:var(--muted);text-decoration:none}
+.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;text-decoration:none}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10000;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--cyan-fuerte);outline-offset:2px}
+@media(max-width:640px){.filtros{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"><span>Mindzyxs</span></a>
+  </div>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <ul>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a href="#" class="back">← Volver al panel</a>
+  <section class="card">
+    <h1>Estadísticas de pacientes</h1>
+    <p class="sub">Evolución, promedios y tendencias de sus pacientes autorizados.</p>
+    <div class="filtros">
+      <div><label for="selPac">Paciente autorizado</label><select id="selPac"></select></div>
+      <div><label for="fDesde">Desde</label><input type="date" id="fDesde"></div>
+      <div><label for="fHasta">Hasta</label><input type="date" id="fHasta"></div>
+      <div><button type="button" class="btn" id="btnGenerar">Generar</button></div>
+    </div>
+    <div id="resultados" style="display:none">
+      <div class="kpis">
+        <div class="kpi"><b id="kProm">—</b><small>Promedio estado</small></div>
+        <div class="kpi"><b id="kTend">—</b><small>Tendencia</small></div>
+        <div class="kpi"><b id="kReg">—</b><small>Registros</small></div>
+        <div class="kpi"><b id="kNiv">—</b><small>Nivel frecuente</small></div>
+      </div>
+      <h2 style="font-size:14px;margin-top:8px">Registros por semana</h2>
+      <div class="barras" id="barras" role="img" aria-label="Gráfico de registros por semana"></div>
+      <p class="leyenda">Rangos: 1 = muy bajo · 3 = estable · 5 = excelente.</p>
+      <h2 style="font-size:14px;margin-top:14px">Distribución por niveles</h2>
+      <table>
+        <thead><tr><th>Nivel</th><th>Cantidad</th></tr></thead>
+        <tbody id="distBody"></tbody>
+      </table>
+    </div>
+    <div class="empty" id="sinDatos" style="display:none">El paciente no tiene datos suficientes para generar estadísticas.</div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso"><span>ℹ️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const pacs=[{id:12,nombre:'Santiago Cortés'},{id:6,nombre:'Paciente Nuevo'}];
+  const datos={12:{serie:[3,4,3,5,4,4],niveles:[['Bajo',1],['Medio',3],['Alto',2]]},6:{serie:[],niveles:[]}};
+  const sel=document.getElementById('selPac');
+  const res=document.getElementById('resultados');
+  const sin=document.getElementById('sinDatos');
+  const toast=document.getElementById('toast');
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),2600);}
+  pacs.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nombre;sel.appendChild(o);});
+  document.getElementById('btnGenerar').addEventListener('click',()=>{
+    const d=document.getElementById('fDesde').value, h=document.getElementById('fHasta').value;
+    if(d&&h&&d>h){showToast('La fecha inicial no puede ser posterior a la final.');return;}
+    const info=datos[sel.value];
+    if(!info||!info.serie.length){
+      res.style.display='none';sin.style.display='block';return;
+    }
+    sin.style.display='none';res.style.display='block';
+    const prom=(info.serie.reduce((a,b)=>a+b,0)/info.serie.length);
+    const mit=Math.floor(info.serie.length/2);
+    const antes=info.serie.slice(0,mit).reduce((a,b)=>a+b,0)/mit;
+    const desp=info.serie.slice(mit).reduce((a,b)=>a+b,0)/(info.serie.length-mit);
+    document.getElementById('kProm').textContent=prom.toFixed(1);
+    document.getElementById('kTend').textContent=desp-antes>0.5?'Sube':(antes-desp>0.5?'Baja':'Estable');
+    document.getElementById('kReg').textContent=info.serie.length;
+    document.getElementById('kNiv').textContent=info.niveles.sort((a,b)=>b[1]-a[1])[0][0];
+    const max=Math.max(...info.serie);
+    document.getElementById('barras').innerHTML=info.serie.map((v,i)=>'<div class="barra" style="height:'+Math.round(v/max*100)+'%"><span>S'+(i+1)+'</span></div>').join('');
+    document.getElementById('distBody').innerHTML=info.niveles.map(n=>'<tr><td>'+n[0]+'</td><td>'+n[1]+'</td></tr>').join('');
+  });
+  document.getElementById('btn-logout').addEventListener('click',()=>{if(confirm('¿Está seguro de que desea cerrar sesión?'))showToast('Sesión cerrada (demo)');});
+  document.getElementById('footerAviso').addEventListener('click',(e)=>{e.preventDefault();showToast('Mindzyxs no realiza diagnósticos clínicos');});
+</script>
+</body>
+</html>
