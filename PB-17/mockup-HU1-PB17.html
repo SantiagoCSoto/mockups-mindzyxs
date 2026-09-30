@@ -78,11 +78,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 <main class="wrap">
   <a href="#" class="back">← Volver al panel</a>
   <section class="card">
-    <h1>Gestión de accesos</h1>
-    <p class="sub">Autorice o revoque el acceso de psicólogos a su información emocional.</p>
-    <input type="text" class="buscar" id="buscar" placeholder="Buscar por nombre o correo..." aria-label="Buscar psicólogo por nombre o correo">
+    <h1>Mis psicólogos</h1>
+    <p class="sub">Autorice o revoque el acceso a su información emocional.</p>
     <div id="lista"></div>
-    <div class="empty" id="vacio" style="display:none">No hay psicólogos disponibles para autorizar en este momento.</div>
   </section>
 </main>
 
@@ -114,18 +112,17 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
     {id:2,nombre:'Dr. Carlos Mendoza',esp:'Psicología de la salud',correo:'carlos@correo.com',aut:true},
     {id:3,nombre:'Dra. Sofía Martínez',esp:'Sin especialidad registrada',correo:'sofia@correo.com',aut:false}
   ];
-  const box=document.getElementById('lista'), vacio=document.getElementById('vacio');
+  const box=document.getElementById('lista');
   const modal=document.getElementById('confirmModal'), cTitle=document.getElementById('confirmTitle');
   const cText=document.getElementById('confirmText'), btnSi=document.getElementById('btnSi');
   const toast=document.getElementById('toast');
   let sel=null, accion=null;
   function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),2600);}
   function iniciales(n){return n.split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase();}
-  function render(f=''){
+  function render(){
     box.innerHTML='';
-    const items=lista.filter(p=>(p.nombre+' '+p.correo).toLowerCase().includes(f.toLowerCase()));
-    vacio.style.display=items.length?'none':'block';
-    items.forEach(p=>{
+    if(!lista.length){box.innerHTML='<div class="empty">Aún no tiene psicólogos vinculados. Acepte un chat para vincular uno.</div>';return;}
+    lista.forEach(p=>{
       const d=document.createElement('div');
       d.className='fila';
       d.innerHTML='<div class="avatar" aria-hidden="true">'+iniciales(p.nombre)+'</div>'+
@@ -154,9 +151,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
     sel.aut=(accion==='autorizar');
     modal.classList.remove('open');
     showToast(accion==='autorizar'?'Acceso autorizado correctamente':'Acceso revocado correctamente');
-    render(document.getElementById('buscar').value);
+    render();
   });
-  document.getElementById('buscar').addEventListener('input',(e)=>render(e.target.value));
   document.getElementById('btn-logout').addEventListener('click',()=>{if(confirm('¿Está seguro de que desea cerrar sesión?'))showToast('Sesión cerrada (demo)');});
   document.getElementById('footerAviso').addEventListener('click',(e)=>{e.preventDefault();showToast('Mindzyxs no realiza diagnósticos clínicos');});
   render();
