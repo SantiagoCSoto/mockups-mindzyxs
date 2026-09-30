@@ -3,311 +3,345 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU2-PB1 | Validación datos personales</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Registrarse - Mindzyxs</title>
 <style>
   :root{
-    --bg:#FFFFFF;
-    --pink:#FDEAF2;
-    --lav:#EDE7FF;
-    --cyan:#6ECFD4;
-    --cyan-hover:#5ABCC2;
-    --text:#2E2E33;
-    --muted:#8E91A3;
-    --line:#EFE9F5;
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
     --error:#E85D7A;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    font-family:'Inter',Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    min-height:100vh;
-  }
-  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
-  .blob{position:absolute;border-radius:50%;opacity:0.6}
-  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
-  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
-  .header{
-    height:60px;display:flex;align-items:center;justify-content:space-between;
-    padding:0 20px;max-width:1100px;margin:0 auto;
-    border-bottom:1px solid #F0EAF6;
-  }
-  .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
-  .logo-mark{width:30px;height:30px;border-radius:8px;background:#7ED6E8;display:grid;place-items:center;color:white;font-size:14px}
-  .nav{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
-  .nav a{color:var(--muted);text-decoration:none}
-  .nav a.active{color:var(--text);font-weight:600}
-  .btn-ghost{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:white;color:var(--text);font-weight:600;font-size:12px;cursor:pointer}
-  .btn-primary{padding:7px 16px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:600;font-size:12px;cursor:pointer}
-  .wrap{max-width:680px;margin:0 auto;padding:0 16px 30px}
-  .card{
-    background:white;border:1px solid #EDE8F0;border-radius:16px;
-    box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px 18px;
-  }
-  .card-head{text-align:center;margin-bottom:16px}
-  .card-head h2{font-size:22px;font-weight:700}
-  .card-head p{font-size:12px;color:var(--muted);margin-top:4px}
-  .form{display:flex;flex-direction:column;gap:12px;margin-top:6px}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .field{display:flex;flex-direction:column;gap:5px}
-  .field label{font-size:11px;font-weight:600;color:#5A5D72}
-  .control input, .control select{
-    width:100%;height:40px;padding:0 12px;border:1px solid #DFDAEE;background:#FFF;
-    border-radius:10px;font-size:13px;color:var(--text);outline:none;
-  }
-  .control input:focus, .control select:focus{border-color:var(--cyan)}
-  .control.has-error input, .control.has-error select{border-color:var(--error);background:#FFF6F7}
-  .select-wrap{position:relative}
-  .select-wrap::after{content:"▾";position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#9AA0BF;font-size:11px;pointer-events:none}
-  .select-wrap select{appearance:none;-webkit-appearance:none;padding-right:30px;cursor:pointer}
-  .hint{font-size:11px;color:var(--muted)}
-  .error-msg{
-    display:none;align-items:center;gap:6px;font-size:11px;color:var(--error);
-    background:#FFF1F3;border:1px solid #FFE0E6;padding:6px 8px;border-radius:8px;margin-top:2px;
-  }
-  .error-msg.show{display:flex}
-  .actions{display:flex;gap:10px;margin-top:4px}
-  .btn-continuar{flex:1;height:42px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer}
-  .btn-continuar:hover{background:var(--cyan-hover)}
-  .btn-cancel{height:42px;padding:0 18px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  body{font-family:Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
+  .header-nav{height:60px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
+  .logo-container .logo-link{display:flex;align-items:center;gap:8px;font-weight:700;
+    font-size:18px;color:var(--text);text-decoration:none}
+  .logo-img{width:30px;height:30px;border-radius:8px}
+  .main-nav ul{display:flex;gap:18px;list-style:none}
+  .main-nav a{color:var(--muted);text-decoration:none;font-size:13px}
+  .header-auth-buttons{display:flex;gap:10px}
+  .btn-login{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:#fff;
+    color:var(--text);font-weight:600;font-size:12px;text-decoration:none}
+  .btn-signup-header{padding:7px 16px;border-radius:20px;border:none;background:var(--cyan);
+    color:#fff;font-weight:600;font-size:12px;text-decoration:none}
+  main{max-width:680px;margin:28px auto;padding:0 16px 30px}
+  .registro-card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);padding:22px 20px 18px}
+  .registro-card h1{font-size:22px;font-weight:700;text-align:center;margin-bottom:6px}
+  .nota-validacion{font-size:12px;color:var(--muted);text-align:center;margin-bottom:14px}
+  .alerta-error{display:none;background:#FFF1F3;border:1px solid #FFE0E6;color:var(--error);
+    padding:8px 10px;border-radius:10px;font-size:12px;text-align:center;margin-bottom:12px}
+  .alerta-error.show{display:block}
+  .form-registro{display:flex;flex-direction:column;gap:12px}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .form-group{display:flex;flex-direction:column;gap:5px}
+  .form-group label{font-size:11px;font-weight:600;color:#5A5D72}
+  .form-group input,.form-group select{width:100%;height:40px;padding:0 12px;
+    border:1px solid #DFDAEE;border-radius:10px;font-size:13px;outline:none;background:#fff}
+  .form-group input:focus,.form-group select:focus{border-color:var(--cyan)}
+  .form-group input.campo-error,.form-group select.campo-error{border-color:var(--error);background:#FFF6F7}
+  #seccion-credenciales-psicologo{display:none;flex-direction:column;gap:12px;
+    background:#F9F7FF;border:1px dashed #D8D0F0;border-radius:10px;padding:12px}
+  .credenciales-header{display:flex;align-items:center;gap:8px}
+  .credenciales-header h3{font-size:12px;font-weight:700}
+  .label-tarjeta{font-size:11px;font-weight:600;color:#5A5D72}
+  .file-upload-box{display:flex;align-items:center;gap:10px;background:#fff;
+    border:1px solid #DFDAEE;border-radius:10px;padding:8px 10px}
+  .file-upload-box.error{border-color:var(--error);background:#FFF6F7}
+  .file-input-real{display:none}
+  .btn-custom-file{padding:6px 10px;border-radius:20px;border:1px solid #DFDAEE;background:#fff;
+    font-size:11px;font-weight:600;cursor:pointer}
+  .file-name-text{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .formato-ayuda{font-size:11px;color:var(--muted)}
+  .mensaje-error{display:none;font-size:11px;color:var(--error);margin-top:4px}
+  #buscar-especialidad{width:100%;padding:9px 12px;border:1.5px solid #CBD5E1;border-radius:10px;font-size:13.5px}
+  #lista-especialidades{max-height:170px;overflow-y:auto;border:1.5px solid #E3E6F3;
+    border-radius:10px;padding:8px 10px;background:#fff}
+  #lista-especialidades label{display:flex;align-items:center;gap:8px;font-size:13.5px;
+    color:#334155;padding:4px 2px;cursor:pointer}
+  .form-actions{display:flex;gap:10px;margin-top:4px}
+  .btn-cancel{height:42px;padding:0 18px;border-radius:20px;border:1px solid #DFDAEE;
+    background:#fff;font-weight:600;font-size:13px;cursor:pointer}
+  .btn-submit{flex:1;height:42px;border-radius:20px;border:none;background:var(--cyan);
+    color:#fff;font-weight:700;font-size:13px;cursor:pointer}
+  .btn-submit:hover{background:var(--cyan-hover)}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;
+    align-items:center;justify-content:center;padding:16px;z-index:50}
   .modal-overlay.open{display:flex}
-  .modal{width:min(400px,100%);background:white;border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-align:center}
-  .modal-icon{width:40px;height:40px;border-radius:10px;background:#E8FFF1;display:grid;place-items:center;margin:0 auto 12px;color:#1BBF6B}
-  .modal h3{font-size:15px;font-weight:700}
-  .modal p{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
-  .modal-actions{display:flex;gap:10px;margin-top:16px}
-  .btn-modal-ok{flex:1;height:38px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;cursor:pointer}
-  @media(max-width:640px){.row{grid-template-columns:1fr}.header{padding:0 14px}.card{padding:18px 14px}}
+  .modal-contenido{width:min(400px,100%);background:#fff;border-radius:14px;padding:20px;text-align:center}
+  .modal-badge-icon{width:40px;height:40px;border-radius:10px;background:#FFF1F3;display:grid;
+    place-items:center;margin:0 auto 12px;color:var(--error);font-weight:700}
+  .modal-contenido h2{font-size:15px;font-weight:700}
+  .modal-contenido p{font-size:12px;color:var(--muted);margin-top:6px}
+  .modal-acciones{display:flex;gap:10px;margin-top:16px}
+  .btn-modal-cancel{flex:1;height:38px;border-radius:20px;border:1px solid #DFDAEE;background:#fff;font-weight:600;cursor:pointer}
+  .btn-modal-confirm{flex:1;height:38px;border-radius:20px;border:none;background:var(--error);color:#fff;font-weight:700;cursor:pointer}
+  @media(max-width:640px){.form-row{grid-template-columns:1fr}.header-nav{padding:0 14px}}
 </style>
 </head>
 <body>
-<div class="bg-blobs">
-  <div class="blob blob-pink"></div>
-  <div class="blob blob-lav"></div>
-</div>
 
-<header class="header">
-  <div class="logo"><div class="logo-mark">◐</div> Mindzyx</div>
-  <nav class="nav">
-    <a href="#" class="active">Inicio</a>
-    <a href="#">Nosotros</a>
-    <a href="#">Ayuda</a>
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link">
+      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img">
+      Mindzyxs
+    </a>
+  </div>
+  <nav class="main-nav">
+    <ul>
+      <li><a href="#">Inicio</a></li>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
   </nav>
-  <div style="display:flex;gap:10px">
-    <button class="btn-ghost">Iniciar sesión</button>
-    <button class="btn-primary">Registrarse</button>
+  <div class="header-auth-buttons">
+    <a href="../PB-02/mockup-HU1-PB2.html" class="btn-login">Iniciar sesión</a>
+    <a href="../PB-01/mockup-HU1-PB1.html" class="btn-signup-header">Registrarse</a>
   </div>
 </header>
 
-<main class="wrap" style="margin-top:28px">
-  <div class="card">
-    <div class="card-head">
-      <h2>Registrarse</h2>
-      <p>HU2-PB1 — Datos personales en orden y con validación</p>
-    </div>
+<main>
+  <section class="registro-card">
+    <h1>Registrarse</h1>
+    <p class="nota-validacion">Complete todos los campos obligatorios. Los errores se muestran en el banner superior.</p>
 
-    <form class="form" id="registerForm" novalidate>
-      <!-- ORDEN EXACTO: Nombres, Apellidos, Fecha de nacimiento, Género, Correo, Contraseña -->
-      <div class="field">
-        <label for="nombres">Nombres</label>
-        <div class="control" id="c-nombres"><input id="nombres" type="text" placeholder="Ej. Sofía"></div>
-        <div class="error-msg" id="e-nombres">Este campo es obligatorio</div>
+    <div id="banner-error-registro" class="alerta-error"></div>
+
+    <form action="#" method="POST" enctype="multipart/form-data" class="form-registro" id="form-registro" novalidate>
+      <div class="form-group">
+        <label for="tipo-usuario">Tipo de usuario *</label>
+        <select id="tipo-usuario" name="tipo_usuario" required>
+          <option value="" disabled selected>Selecciona una opción</option>
+          <option value="Paciente">Paciente</option>
+          <option value="Psicologo">Psicólogo</option>
+        </select>
       </div>
 
-      <div class="field">
-        <label for="apellidos">Apellidos</label>
-        <div class="control" id="c-apellidos"><input id="apellidos" type="text" placeholder="Ej. Martínez"></div>
-        <div class="error-msg" id="e-apellidos">Este campo es obligatorio</div>
-      </div>
-
-      <div class="row">
-        <div class="field">
-          <label for="fecha-nacimiento">Fecha de nacimiento</label>
-          <div class="control" id="c-fecha-nacimiento"><input id="fecha-nacimiento" type="date" max=""></div>
-          <div class="error-msg" id="e-fecha-nacimiento">Ingresa una fecha de nacimiento válida</div>
+      <div id="seccion-credenciales-psicologo">
+        <div class="credenciales-header">
+          <span>🎓</span>
+          <h3>Credenciales profesionales</h3>
         </div>
-        <div class="field">
-          <label for="genero">Género</label>
-          <div class="control select-wrap" id="c-genero">
-            <select id="genero">
-              <option value="" disabled selected>Selecciona</option>
-              <option>Masculino</option>
-              <option>Femenino</option>
-              <option>Otro</option>
-              <option>Prefiero no decir</option>
-            </select>
+        <div>
+          <label class="label-tarjeta" for="tarjeta-profesional">Subir tarjeta profesional *</label>
+          <div class="file-upload-box" id="file-upload-box">
+            <input type="file" id="tarjeta-profesional" name="tarjeta_profesional" accept=".pdf,application/pdf" class="file-input-real">
+            <label for="tarjeta-profesional" class="btn-custom-file"><span>↗</span><span>Seleccionar archivo</span></label>
+            <span id="file-name-display" class="file-name-text">Ningún archivo seleccionado</span>
           </div>
-          <div class="error-msg" id="e-genero">Este campo es obligatorio</div>
+          <small class="formato-ayuda">Formatos permitidos: PDF — Tamaño máximo 5MB</small>
+          <span id="error-tarjeta" class="mensaje-error">Por favor, sube tu tarjeta profesional para continuar.</span>
+        </div>
+        <div>
+          <label class="label-tarjeta" for="buscar-especialidad">Especialidades (una, varias o ninguna)</label>
+          <input type="text" id="buscar-especialidad" placeholder="Buscar especialidad..." autocomplete="off" aria-label="Buscar especialidad">
+          <div id="lista-especialidades">
+            <label><input type="checkbox" value="1" data-especialidad="1"> Ansiedad</label>
+            <label><input type="checkbox" value="2" data-especialidad="2"> Depresión</label>
+            <label><input type="checkbox" value="3" data-especialidad="3"> Estrés</label>
+            <label><input type="checkbox" value="4" data-especialidad="4"> Terapia de pareja</label>
+          </div>
+          <small class="formato-ayuda">Si su especialidad no está, se solicitará aparte con validación del administrador.</small>
         </div>
       </div>
 
-      <div class="field">
-        <label for="correo">Correo</label>
-        <div class="control" id="c-correo"><input id="correo" type="email" placeholder="tu@correo.com"></div>
-        <div class="error-msg" id="e-correo">Ingresa un correo válido</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nombres">Nombres *</label>
+          <input type="text" id="nombres" name="nombres" placeholder="Ej. Sofía" required>
+        </div>
+        <div class="form-group">
+          <label for="apellidos">Apellidos *</label>
+          <input type="text" id="apellidos" name="apellidos" placeholder="Ej. Martínez" required>
+        </div>
       </div>
 
-      <div class="field">
-        <label for="contrasena">Contraseña</label>
-        <div class="control" id="c-contrasena"><input id="contrasena" type="password" placeholder="Mín. 6 caracteres, 1 letra y 1 número"></div>
-        <div class="error-msg" id="e-contrasena">La contraseña debe tener mínimo 6 caracteres e incluir al menos una letra y un número</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fecha-nacimiento">Fecha de nacimiento *</label>
+          <input type="date" id="fecha-nacimiento" name="fecha_nacimiento" required>
+          <small class="formato-ayuda">Debe ser mayor de 14 años</small>
+        </div>
+        <div class="form-group">
+          <label for="genero">Género *</label>
+          <select id="genero" name="genero" required>
+            <option value="" disabled selected>Selecciona</option>
+            <option value="1">Masculino</option>
+            <option value="2">Femenino</option>
+            <option value="3">Otro</option>
+            <option value="4">Prefiero no decir</option>
+          </select>
+        </div>
       </div>
 
-      <div class="actions">
-        <button type="button" class="btn-cancel" id="cancelBtn">Cancelar</button>
-        <button type="submit" class="btn-continuar">Continuar</button>
+      <div class="form-group">
+        <label for="correo">Correo *</label>
+        <input type="email" id="correo" name="correo" placeholder="tu@correo.com" required>
       </div>
-      <p class="hint" style="text-align:center;margin-top:4px">Prueba: deja vacío, pon fecha futura, fecha que te haga menor de 14, correo sin @, o contraseña "123" para ver errores. Correo <b>existente@correo.com</b> simula duplicado.</p>
+
+      <div class="form-group">
+        <label for="contrasena">Contraseña *</label>
+        <input type="password" id="contrasena" name="contrasena" placeholder="Mín. 6 caracteres (letras y números)" minlength="6" required>
+      </div>
+
+      <div class="form-group">
+        <label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;font-weight:400;cursor:pointer;">
+          <input type="checkbox" id="acepta-privacidad" style="margin-top:3px;">
+          <span>He leído y acepto la <a href="#">Política de Privacidad</a>, la <a href="#">Política de Cookies</a> y los <a href="#">Términos y Condiciones</a>. *</span>
+        </label>
+        <span id="error-privacidad" class="mensaje-error">Debes aceptar las políticas para registrarte.</span>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel">Cancelar / Volver</button>
+        <button type="submit" class="btn-submit">Continuar &rarr;</button>
+      </div>
     </form>
-  </div>
+  </section>
 </main>
 
-<div class="modal-overlay" id="successModal">
-  <div class="modal">
-    <div class="modal-icon">✓</div>
-    <h3>Registro creado</h3>
-    <p>Tu registro se creó en estado <b>Pendiente de verificación</b>. Revisa tu correo para activar tu cuenta.</p>
-    <div class="modal-actions">
-      <button class="btn-modal-ok" id="okBtn">Entendido</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="cancelModal">
-  <div class="modal">
-    <div class="modal-icon" style="background:#FFF1F3;color:var(--error)">!</div>
-    <h3>¿Deseas cancelar el registro?</h3>
-    <p>Se perderán los datos no guardados.</p>
-    <div class="modal-actions" style="display:flex;gap:10px;margin-top:16px">
-      <button class="btn-cancel" style="flex:1" id="stayBtn">No, continuar</button>
-      <button class="btn-continuar" style="flex:1;background:var(--error)" id="leaveBtn">Sí, cancelar</button>
+<div id="modal-cancelar" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-cancelar-titulo">
+  <div class="modal-contenido">
+    <div class="modal-badge-icon"><span>!</span></div>
+    <h2 id="modal-cancelar-titulo">¿Deseas cancelar el registro?</h2>
+    <p>Se perderán los datos no guardados y volverás al inicio sin crear la cuenta.</p>
+    <div class="modal-acciones">
+      <button type="button" id="btn-no-cancelar" class="btn-modal-cancel">No, continuar</button>
+      <button type="button" id="btn-si-cancelar" class="btn-modal-confirm">Sí, cancelar</button>
     </div>
   </div>
 </div>
 
 <script>
-  const form = document.getElementById('registerForm');
-  const cancelBtn = document.getElementById('cancelBtn');
-  const cancelModal = document.getElementById('cancelModal');
-  const successModal = document.getElementById('successModal');
+  var form = document.getElementById('form-registro');
+  var banner = document.getElementById('banner-error-registro');
+  var selectTipo = document.getElementById('tipo-usuario');
+  var seccionCred = document.getElementById('seccion-credenciales-psicologo');
+  var inputTarjeta = document.getElementById('tarjeta-profesional');
+  var nombreArchivo = document.getElementById('file-name-display');
+  var errorTarjeta = document.getElementById('error-tarjeta');
+  var boxArchivo = document.getElementById('file-upload-box');
+  var modalCancelar = document.getElementById('modal-cancelar');
 
-  // Bloquear fechas futuras en el date input
-  (()=>{
-    const hoy = new Date();
-    const mm = String(hoy.getMonth()+1).padStart(2,'0');
-    const dd = String(hoy.getDate()).padStart(2,'0');
-    document.getElementById('fecha-nacimiento').setAttribute('max', `${hoy.getFullYear()}-${mm}-${dd}`);
+  (function fijarMaxFecha() {
+    var hoy = new Date();
+    var mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    var dd = String(hoy.getDate()).padStart(2, '0');
+    document.getElementById('fecha-nacimiento').setAttribute('max', hoy.getFullYear() + '-' + mm + '-' + dd);
   })();
 
-  const fields = {
-    nombres: { input: document.getElementById('nombres'), control: document.getElementById('c-nombres'), error: document.getElementById('e-nombres') },
-    apellidos: { input: document.getElementById('apellidos'), control: document.getElementById('c-apellidos'), error: document.getElementById('e-apellidos') },
-    fechaNacimiento: { input: document.getElementById('fecha-nacimiento'), control: document.getElementById('c-fecha-nacimiento'), error: document.getElementById('e-fecha-nacimiento') },
-    genero: { input: document.getElementById('genero'), control: document.getElementById('c-genero'), error: document.getElementById('e-genero') },
-    correo: { input: document.getElementById('correo'), control: document.getElementById('c-correo'), error: document.getElementById('e-correo') },
-    contrasena: { input: document.getElementById('contrasena'), control: document.getElementById('c-contrasena'), error: document.getElementById('e-contrasena') },
-  };
+  function mostrarBanner(msg) { banner.textContent = msg; banner.classList.add('show'); }
+  function ocultarBanner() { banner.classList.remove('show'); banner.textContent = ''; }
+  function marcar(id) { document.getElementById(id).classList.add('campo-error'); }
+  function limpiarMarcas() {
+    ['tipo-usuario','nombres','apellidos','fecha-nacimiento','genero','correo','contrasena'].forEach(function (id) {
+      document.getElementById(id).classList.remove('campo-error');
+    });
+  }
 
-  function showError(key, msg){
-    if(msg) fields[key].error.textContent = msg;
-    fields[key].control.classList.add('has-error');
-    fields[key].error.classList.add('show');
-  }
-  function clearError(key){
-    fields[key].control.classList.remove('has-error');
-    fields[key].error.classList.remove('show');
-  }
-  function clearAll(){
-    Object.keys(fields).forEach(k=>clearError(k));
-  }
-  // quitar error al escribir
-  Object.keys(fields).forEach(k=>{
-    fields[k].input.addEventListener('input', ()=> clearError(k));
-    fields[k].input.addEventListener('change', ()=> clearError(k));
+  selectTipo.addEventListener('change', function () {
+    var esPsi = (selectTipo.value || '').toLowerCase() === 'psicologo';
+    seccionCred.style.display = esPsi ? 'flex' : 'none';
+    if (!esPsi) {
+      inputTarjeta.value = '';
+      nombreArchivo.textContent = 'Ningún archivo seleccionado';
+      errorTarjeta.style.display = 'none';
+      boxArchivo.classList.remove('error');
+    }
+    ocultarBanner();
   });
 
-  form.addEventListener('submit', (e)=>{
+  inputTarjeta.addEventListener('change', function () {
+    if (inputTarjeta.files && inputTarjeta.files.length > 0) {
+      nombreArchivo.textContent = inputTarjeta.files[0].name;
+      errorTarjeta.style.display = 'none';
+      boxArchivo.classList.remove('error');
+      ocultarBanner();
+    } else {
+      nombreArchivo.textContent = 'Ningún archivo seleccionado';
+    }
+  });
+
+  document.getElementById('buscar-especialidad').addEventListener('input', function () {
+    var filtro = this.value.trim().toLowerCase();
+    document.querySelectorAll('#lista-especialidades label').forEach(function (et) {
+      et.style.display = (!filtro || et.textContent.toLowerCase().indexOf(filtro) !== -1) ? 'flex' : 'none';
+    });
+  });
+
+  ['nombres','apellidos','fecha-nacimiento','genero','correo','contrasena','tipo-usuario'].forEach(function (id) {
+    document.getElementById(id).addEventListener('input', function () {
+      document.getElementById(id).classList.remove('campo-error');
+      ocultarBanner();
+    });
+  });
+
+  // Validaciones con los mensajes exactos del formulario real.
+  form.addEventListener('submit', function (e) {
     e.preventDefault();
-    clearAll();
-    let valid = true;
-    let firstFocus = null;
+    ocultarBanner();
+    limpiarMarcas();
 
-    const nombres = fields.nombres.input.value.trim();
-    const apellidos = fields.apellidos.input.value.trim();
-    const fechaVal = fields.fechaNacimiento.input.value;
-    const genero = fields.genero.input.value;
-    const correo = fields.correo.input.value.trim();
-    const pass = fields.contrasena.input.value;
-
-    if(!nombres){
-      showError('nombres','Este campo es obligatorio');
-      valid=false; if(!firstFocus) firstFocus=fields.nombres.input;
-    }
-    if(!apellidos){
-      showError('apellidos','Este campo es obligatorio');
-      valid=false; if(!firstFocus) firstFocus=fields.apellidos.input;
-    }
-    // fecha de nacimiento válida: formato yyyy-MM-dd, no futura y >= 14 años
-    let nacimiento = null;
-    if(fechaVal){
-      const partes = fechaVal.split('-').map(Number);
-      if(partes.length === 3) nacimiento = new Date(partes[0], partes[1]-1, partes[2]);
-    }
-    const hoy = new Date();
-    const menor14 = new Date(hoy.getFullYear()-14, hoy.getMonth(), hoy.getDate());
-    if(!fechaVal || !nacimiento || isNaN(nacimiento.getTime())){
-      showError('fechaNacimiento','Ingresa una fecha de nacimiento válida');
-      valid=false; if(!firstFocus) firstFocus=fields.fechaNacimiento.input;
-    } else if(nacimiento > hoy){
-      showError('fechaNacimiento','La fecha de nacimiento no puede ser en el futuro');
-      valid=false; if(!firstFocus) firstFocus=fields.fechaNacimiento.input;
-    } else if(nacimiento > menor14){
-      showError('fechaNacimiento','Debes tener al menos 14 años para registrarte');
-      valid=false; if(!firstFocus) firstFocus=fields.fechaNacimiento.input;
-    }
-    if(!genero){
-      showError('genero','Este campo es obligatorio');
-      valid=false; if(!firstFocus) firstFocus=fields.genero.input;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(!correo || !emailRegex.test(correo)){
-      showError('correo','Ingresa un correo válido');
-      valid=false; if(!firstFocus) firstFocus=fields.correo.input;
-    } else if(correo.toLowerCase() === 'existente@correo.com' || correo.toLowerCase() === 'test@test.com'){
-      showError('correo','El correo ya se encuentra registrado');
-      valid=false; if(!firstFocus) firstFocus=fields.correo.input;
-    }
-    // contraseña: mínimo 6, al menos 1 letra y 1 número
-    const passRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
-    if(!passRegex.test(pass)){
-      showError('contrasena','La contraseña debe tener mínimo 6 caracteres e incluir al menos una letra y un número');
-      valid=false; if(!firstFocus) firstFocus=fields.contrasena.input;
+    function fallar(id, msg) {
+      marcar(id);
+      mostrarBanner(msg);
+      document.getElementById(id).focus();
+      return false;
     }
 
-    if(!valid){
-      if(firstFocus) firstFocus.focus();
+    if (!selectTipo.value) return fallar('tipo-usuario', 'Este campo es obligatorio');
+    if (!document.getElementById('nombres').value.trim()) return fallar('nombres', 'Este campo es obligatorio');
+    if (!document.getElementById('apellidos').value.trim()) return fallar('apellidos', 'Este campo es obligatorio');
+
+    var fechaVal = document.getElementById('fecha-nacimiento').value;
+    if (!fechaVal) return fallar('fecha-nacimiento', 'Este campo es obligatorio');
+    var hoy = new Date();
+    var limite14 = new Date(hoy.getFullYear() - 14, hoy.getMonth(), hoy.getDate());
+    var nacimiento = new Date(fechaVal + 'T00:00:00');
+    if (isNaN(nacimiento.getTime())) return fallar('fecha-nacimiento', 'Ingresa una fecha de nacimiento válida');
+    if (nacimiento > hoy) return fallar('fecha-nacimiento', 'La fecha de nacimiento no puede ser en el futuro');
+    if (nacimiento > limite14) return fallar('fecha-nacimiento', 'Debes tener al menos 14 años para registrarte');
+
+    if (!document.getElementById('genero').value) return fallar('genero', 'Este campo es obligatorio');
+
+    var correo = document.getElementById('correo').value.trim();
+    if (!correo || correo.indexOf('@') === -1) return fallar('correo', 'Ingresa un correo válido');
+
+    if (!/^(?=.*[A-Za-z])(?=.*\d).{6,}$/.test(document.getElementById('contrasena').value)) {
+      return fallar('contrasena', 'La contraseña debe tener mínimo 6 caracteres e incluir al menos una letra y un número.');
+    }
+
+    var esPsi = (selectTipo.value || '').toLowerCase() === 'psicologo';
+    if (esPsi && (!inputTarjeta.files || !inputTarjeta.files.length)) {
+      errorTarjeta.style.display = 'block';
+      boxArchivo.classList.add('error');
+      mostrarBanner('Debes adjuntar tu tarjeta profesional en formato PDF.');
       return;
     }
-    // todo ok -> Pendiente de verificación
-    successModal.classList.add('open');
+
+    if (!document.getElementById('acepta-privacidad').checked) {
+      document.getElementById('error-privacidad').style.display = 'block';
+      mostrarBanner('Debes aceptar la Política de Privacidad y los Términos para registrarte.');
+      document.getElementById('acepta-privacidad').focus();
+      return;
+    }
+    document.getElementById('error-privacidad').style.display = 'none';
+    // Demostración: con datos válidos el sistema real redirige a la verificación de cuenta.
   });
 
-  document.getElementById('okBtn').addEventListener('click', ()=>{
-    successModal.classList.remove('open');
+  document.querySelector('.btn-cancel').addEventListener('click', function () { modalCancelar.classList.add('open'); });
+  document.getElementById('btn-no-cancelar').addEventListener('click', function () { modalCancelar.classList.remove('open'); });
+  document.getElementById('btn-si-cancelar').addEventListener('click', function () {
+    modalCancelar.classList.remove('open');
     form.reset();
-    clearAll();
+    limpiarMarcas();
+    ocultarBanner();
+    seccionCred.style.display = 'none';
   });
-  successModal.addEventListener('click', (e)=>{ if(e.target===successModal) successModal.classList.remove('open') });
-
-  cancelBtn.addEventListener('click', ()=> cancelModal.classList.add('open'));
-  document.getElementById('stayBtn').addEventListener('click', ()=> cancelModal.classList.remove('open'));
-  document.getElementById('leaveBtn').addEventListener('click', ()=>{
-    cancelModal.classList.remove('open');
-    form.reset(); clearAll();
+  modalCancelar.addEventListener('click', function (e) {
+    if (e.target === modalCancelar) modalCancelar.classList.remove('open');
   });
-  cancelModal.addEventListener('click', (e)=>{ if(e.target===cancelModal) cancelModal.classList.remove('open') });
 </script>
 </body>
 </html>

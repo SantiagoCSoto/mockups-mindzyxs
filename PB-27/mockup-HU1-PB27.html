@@ -3,166 +3,249 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU1-PB27 | Administrar BD</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Administración de base de datos - Mindzyxs</title>
 <style>
-  :root{--cyan:#6ECFD4;--text:#2E2E33;--muted:#8E91A3;--error:#E85D7A}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
-  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
-  .blob{position:absolute;border-radius:50%;opacity:0.6}
-  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
-  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
-  .header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
-  .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
-  .logo-mark{width:30px;height:30px;border-radius:8px;background:#7ED6E8;display:grid;place-items:center;color:white;font-size:14px}
-  .wrap{max-width:760px;margin:28px auto;padding:0 16px 30px}
-  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
-  .card h2{font-size:18px;text-align:center}
-  .card p.sub{font-size:12px;color:var(--muted);text-align:center;margin-top:4px}
-  .denied{display:none;background:#FFF1F3;border:1px solid #FFE0E6;padding:14px;border-radius:12px;text-align:center;margin-top:14px}
-  .denied.show{display:block}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-  .tile{border:1px solid #DFDAEE;border-radius:12px;padding:14px;background:#FFF}
-  .tile h3{font-size:13px;font-weight:700}
-  .tile p{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}
-  .btn{width:100%;height:38px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:12px;cursor:pointer;margin-top:10px}
-  .btn.secondary{background:white;color:var(--text);border:1px solid #DFDAEE}
-  .btn.danger{background:var(--error)}
-  .list{margin-top:14px;border:1px solid #EDE8F0;border-radius:12px;overflow:hidden}
-  .list-head{display:flex;justify-content:space-between;padding:10px 12px;background:#F9F7FF;font-size:11px;font-weight:700;color:#5A5D72}
-  .row{display:flex;justify-content:space-between;padding:10px 12px;border-top:1px solid #F0EAF6;font-size:11px}
-  .progress{display:none;margin-top:10px;background:#F0EAF6;border-radius:20px;overflow:hidden;height:10px}
-  .progress.show{display:block}
-  .bar{height:100%;width:0%;background:var(--cyan);transition:width .3s}
-  .msg{display:none;margin-top:10px;padding:8px 10px;border-radius:10px;font-size:12px;text-align:center}
-  .msg.ok{display:block;background:#E8FFF1;border:1px solid #C6F5D9;color:#0E8F4B}
-  .msg.err{display:block;background:#FFF1F3;border:1px solid #FFE0E6;color:var(--error)}
-  .log{margin-top:12px;background:#F9F7FF;border:1px solid #EDE6FF;border-radius:10px;padding:10px;font-size:10px;color:var(--muted);max-height:100px;overflow:auto}
-  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+:root{--cyan:#6ECFD4;--cyan-hover:#5ABCC2;--text:#1E293B;--muted:#64748B;--error:#E85D7A;--ok:#1BBF6B;--warning:#E8A347;--violet:#6B5BCE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;opacity:.55}
+.blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+.blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+.header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
+.logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
+.logo-container .logo-img{height:38px;width:auto;border-radius:8px}
+.main-nav ul{display:flex;list-style:none;gap:24px}
+.main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+.header-auth-buttons{display:flex;align-items:center;gap:10px}
+.header-tag{font-size:13px;color:#64748b;font-weight:500;margin-right:8px}
+.btn-logout{background:#EB5771;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer}
+main{width:100%;max-width:900px;margin:0 auto;padding:28px 20px 40px;flex:1}
+.inicio-hero{margin-bottom:18px}
+.hero-contenido{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}
+.saludo-principal h1{font-size:22px;font-weight:700}
+.mensaje-bienvenida{font-size:12.5px;color:var(--muted);margin-top:4px}
+.tarjeta-sesion{display:flex;gap:12px;align-items:center;border:1px solid #EDE8F0;border-radius:14px;padding:12px 16px;background:#fff;box-shadow:0 4px 20px rgba(0,0,0,.05)}
+.sesion-icono{width:42px;height:42px;border-radius:12px;background:#EDE7FF;color:var(--violet);display:grid;place-items:center}
+.sesion-icono svg{width:22px;height:22px}
+.sesion-estado{font-size:11px;color:var(--muted)}
+.sesion-rol{font-size:14px;font-weight:700}
+.denied-box{display:none;text-align:center;border:1px solid #FFE0E6;background:#FFF1F3;border-radius:12px;padding:18px;margin-top:14px}
+.denied-box.show{display:block}
+.denied-title{font-size:14px;font-weight:700;color:var(--error);margin-top:6px}
+.denied-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.acceso-rapido h2{font-size:14px;font-weight:700;margin:18px 0 10px}
+.admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.admin-tile{border:1px solid #DFDAEE;border-radius:12px;padding:16px;background:#fff}
+.admin-tile h3{font-size:13px}
+.admin-tile p{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5}
+.btn-admin{width:100%;height:38px;border-radius:20px;border:none;background:var(--cyan);color:#fff;font-weight:700;font-size:12px;cursor:pointer;margin-top:10px}
+.btn-admin:hover{background:var(--cyan-hover)}
+.btn-admin.secondary{background:#fff;color:var(--text);border:1px solid #DFDAEE}
+.progress{display:none;margin-top:10px;background:#F0EAF6;border-radius:20px;overflow:hidden;height:10px}
+.progress.show{display:block}
+.bar{height:100%;width:0%;background:var(--cyan);transition:width .3s}
+.msg-admin{font-size:12px;margin-top:10px;padding:8px 10px;border-radius:10px;display:none;text-align:center}
+.msg-admin.ok{display:block;background:#E8FFF1;border:1px solid #C6F5D9;color:#0E8F4B}
+.backup-list{margin-top:14px;border:1px solid #EDE8F0;border-radius:12px;overflow:hidden;background:#fff}
+.backup-list-head{display:flex;justify-content:space-between;padding:10px 12px;background:#F9F7FF;font-size:11px;font-weight:700;color:#5A5D72}
+.backup-row{display:flex;justify-content:space-between;gap:8px;padding:10px 12px;border-top:1px solid #F0EAF6;font-size:11.5px;align-items:center}
+.backup-empty{padding:16px;text-align:center;font-size:12px;color:var(--muted)}
+.btn-dl{padding:6px 14px;border-radius:20px;border:1px solid #DFDAEE;background:#fff;font-size:11px;font-weight:700;cursor:pointer}
+.audit-console{margin-top:14px;border:1px solid #EDE6FF;border-radius:10px;background:#FBFAFF;padding:10px 12px}
+.audit-console .title{font-size:12px;font-weight:700;color:var(--violet)}
+.log{margin-top:8px;background:#fff;border:1px solid #EDE6FF;border-radius:8px;padding:10px;font-size:11px;color:var(--muted);max-height:120px;overflow:auto;white-space:pre-wrap}
+.footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+.footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+.footer-in a{color:var(--muted);text-decoration:none}
+.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;text-decoration:none}
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999}
+.modal-overlay.open{display:flex}
+.modal{width:min(480px,100%);background:#fff;border-radius:16px;padding:26px 22px;text-align:center}
+.modal h3{font-size:17px}
+.aviso-txt{font-size:12.5px;color:#475569;line-height:1.65;margin-top:12px;text-align:left;background:#F8FAFC;padding:16px;border-radius:12px;border:1px solid #E2E8F0}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer}
+.btn-modal.btn-ok{background:var(--cyan);color:#fff}
+.btn-modal.btn-close{border:1px solid #DFDAEE;background:#fff}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10000;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:680px){.main-nav{display:none}.admin-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="bg"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
-<header class="header">
-  <div class="logo"><div class="logo-mark">◐</div> Mindzyx — Consola administración</div>
-  <div style="display:flex;gap:6px;align-items:center">
-    <span style="font-size:10px;color:#8E91A3;background:#FFF8E6;border:1px dashed #FFE9B8;padding:4px 8px;border-radius:20px">← Prueba: cambia el rol para simular si entra otro usuario</span>
-    <span style="font-size:10px">→</span>
-    <select id="roleSel" style="height:30px;border:1px solid #DFDAEE;border-radius:20px;padding:0 10px;font-size:11px"><option value="admin">Administrador</option><option value="paciente">Paciente</option><option value="psicologo">Psicólogo</option></select>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img">Mindzyxs</a>
+  </div>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <ul>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-auth-buttons">
+    <span id="rol-usuario" class="header-tag">Consola administración</span>
+    <button type="button" id="btn-cerrar-sesion" class="btn-logout">Cerrar sesión</button>
   </div>
 </header>
-<main class="wrap">
-  <div class="card" id="deniedCard">
-    <h2>Administración de base de datos</h2>
-    <p class="sub">Solo rol Administrador — respaldos locales y mantenimiento</p>
 
-    <div class="denied" id="denied">
-      <div style="font-size:18px">🔒</div>
-      <div style="font-size:13px;font-weight:700;color:var(--error);margin-top:6px">Permiso denegado</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px">No tienes permisos para acceder a esta función</div>
-    </div>
-
-    <div id="adminContent">
-      <div class="grid">
-        <div class="tile">
-          <h3>Crear respaldo</h3>
-          <p>Genera un respaldo local (.bak nativo de SQL Server) y lo descarga al equipo, sin nube externa.</p>
-          <button class="btn" id="backupBtn">Generar Respaldo Local</button>
-          <div class="progress" id="progress"><div class="bar" id="bar"></div></div>
-          <div class="msg" id="backupMsg"></div>
+<main>
+  <section class="inicio-hero">
+    <div class="hero-contenido">
+      <div class="saludo-principal">
+        <h1>Administración de base de datos</h1>
+        <p class="mensaje-bienvenida">Respaldos locales y mantenimiento — solo rol Administrador</p>
+      </div>
+      <div class="tarjeta-sesion">
+        <div class="sesion-icono">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
         </div>
-        <div class="tile">
+        <div class="sesion-info">
+          <p class="sesion-estado">Sesión iniciada como:</p>
+          <p class="sesion-rol">Administrador</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="denied-box" id="denied-box">
+    <div style="font-size:20px" aria-hidden="true">🔒</div>
+    <div class="denied-title">Permiso denegado</div>
+    <div class="denied-sub">No tienes permisos para acceder a esta función</div>
+  </div>
+
+  <div id="admin-content">
+    <section class="acceso-rapido" id="acceso">
+      <h2>Acceso Rápido</h2>
+      <div class="admin-grid">
+        <div class="admin-tile" id="respaldo">
+          <h3>Crear respaldo</h3>
+          <p>Genera un respaldo local (.bak de SQL Server) y lo descarga al equipo, sin nube externa.</p>
+          <button class="btn-admin" id="btn-backup">Generar Respaldo Local</button>
+          <div class="progress" id="progress"><div class="bar" id="bar"></div></div>
+          <div class="msg-admin" id="msg-backup"></div>
+        </div>
+        <div class="admin-tile">
           <h3>Ver respaldos</h3>
           <p>Lista con fecha, tamaño e identificador, y descarga de respaldos existentes.</p>
-          <button class="btn secondary" id="viewBtn">Ver respaldos</button>
+          <button class="btn-admin secondary" id="btn-view-backups">Ver respaldos</button>
         </div>
-        <div class="tile">
+        <div class="admin-tile" id="mantenimiento">
           <h3>Mantenimiento</h3>
           <p>Limpia registros temporales obsoletos sin afectar datos de pacientes.</p>
-          <button class="btn secondary" id="maintBtn">Ejecutar mantenimiento</button>
-          <div class="msg" id="maintMsg"></div>
+          <button class="btn-admin secondary" id="btn-maintenance">Ejecutar mantenimiento</button>
+          <div class="msg-admin" id="msg-maintenance"></div>
         </div>
       </div>
 
-      <div class="list" id="backupList" style="display:none">
-        <div class="list-head"><span>Respaldo</span><span>Tamaño</span><span>Fecha/hora</span><span></span></div>
-        <div id="listRows"></div>
+      <div class="backup-list" id="backup-list">
+        <div class="backup-list-head"><span>Respaldo</span><span>Tamaño</span><span>Fecha/hora</span><span></span></div>
+        <div id="backup-rows"></div>
       </div>
 
-      <div style="margin-top:12px;border:1px solid #EDE6FF;border-radius:10px;background:#FBFAFF;padding:8px">
-        <div style="font-size:11px;font-weight:700;color:#6B5BCE;display:flex;align-items:center;gap:6px">▸ Consola de auditoría (visible para el Administrador) <span style="font-weight:400;color:var(--muted)">— logs de respaldos y mantenimiento con fecha/hora y responsable</span></div>
-        <div class="log" id="log" style="margin-top:8px;max-height:100px">LOG: esperando operaciones...</div>
-        <p style="font-size:10px;color:var(--muted);margin-top:6px">Esta consola SÍ la ve el Administrador — es parte de su trabajo para trazabilidad. Los demás roles no acceden a esta pantalla.</p>
+      <div class="audit-console" id="auditoria">
+        <div class="title">▸ Consola de auditoría <span style="font-weight:400;color:#64748b">— respaldos y mantenimiento con fecha/hora y responsable</span></div>
+        <div class="log" id="audit-log">LOG: esperando operaciones...</div>
       </div>
-    </div>
+    </section>
   </div>
 </main>
 
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Privacidad</a><a href="#">Cookies</a><a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span>ℹ️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle" aria-hidden="true">
+  <div class="modal">
+    <h3 id="avisoTitle">Mensaje aclaratorio</h3>
+    <div class="aviso-txt"><p><b>Mindzyxs</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>. Este sistema <b>no realiza diagnósticos clínicos</b> y <b>no sustituye la atención profesional</b>.</p></div>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal btn-close" id="btnCerrar">Cerrar</button>
+      <button type="button" class="btn-modal btn-ok" id="btnEntendido">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
-  const roleSel=document.getElementById('roleSel'), denied=document.getElementById('denied'), adminContent=document.getElementById('adminContent');
-  const log=document.getElementById('log'), backupMsg=document.getElementById('backupMsg'), maintMsg=document.getElementById('maintMsg');
-  const progress=document.getElementById('progress'), bar=document.getElementById('bar'), backupList=document.getElementById('backupList'), listRows=document.getElementById('listRows');
-  let backups=[
-    {name:'mindzyx_full_2026-09-15_18-45.bak',size:'0.9 MB',date:'2026-09-15 18:45'},
-    {name:'mindzyx_full_2026-09-15_16-50.bak',size:'0.9 MB',date:'2026-09-15 16:50'},
-  ];
-  function addLog(msg){
-    const t=new Date().toLocaleString();
-    log.textContent += `\n[${t}] ${msg}`;
-    log.scrollTop=log.scrollHeight;
-  }
-  function updateRole(){
-    const isAdmin=roleSel.value==='admin';
-    denied.classList.toggle('show', !isAdmin);
-    adminContent.style.display=isAdmin?'block':'none';
-    if(!isAdmin) addLog('INTENTO DENEGADO rol '+roleSel.value+' -> Permiso denegado');
-  }
-  roleSel.addEventListener('change', updateRole); updateRole();
+(function(){
+  var backupRows=document.getElementById('backup-rows');
+  var auditLog=document.getElementById('audit-log');
+  var msgBackup=document.getElementById('msg-backup');
+  var msgMaint=document.getElementById('msg-maintenance');
+  var progress=document.getElementById('progress');
+  var bar=document.getElementById('bar');
+  var toast=document.getElementById('toast');
+  var avisoModal=document.getElementById('avisoModal');
+  var respaldosDemo=[];
 
-  function renderList(){
-    listRows.innerHTML=backups.map(b=>`<div class="row"><span>${b.name}</span><span>${b.size}</span><span>${b.date}</span><span><button class="btn secondary" style="width:auto;margin-top:0;padding:2px 10px" onclick="descargarRespaldo('${b.name}')">⬇</button></span></div>`).join('');
-    backupList.style.display='block';
-  }
-  function descargarRespaldo(name){
-    const blob=new Blob(['respaldos SQL Server estilo .bak (simulación)'],{type:'application/octet-stream'});
-    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
-    addLog('DOWNLOAD respaldo por admin: '+name);
-  }
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(function(){toast.classList.remove('show');},2400);}
+  function addLog(m){var t=new Date().toLocaleString('es-ES');if(auditLog.textContent.indexOf('esperando operaciones')!==-1)auditLog.textContent='';auditLog.textContent+='\n['+t+'] Administrador: '+m;auditLog.scrollTop=auditLog.scrollHeight;console.log('[admin]',m);}
 
-  document.getElementById('backupBtn').addEventListener('click', ()=>{
-    backupMsg.className='msg'; backupMsg.textContent='';
-    progress.classList.add('show'); bar.style.width='0%';
-    let p=0; const iv=setInterval(()=>{
-      p+=20; bar.style.width=p+'%';
-      if(p>=100){
-        clearInterval(iv);
-        setTimeout(()=>{
+  function renderBackups(){
+    backupRows.innerHTML='';
+    if(respaldosDemo.length===0){
+      var d=document.createElement('div');d.className='backup-empty';d.textContent='Sin respaldos';backupRows.appendChild(d);return;
+    }
+    respaldosDemo.forEach(function(b){
+      var row=document.createElement('div');row.className='backup-row';
+      var s1=document.createElement('span');s1.textContent=b.nombre;
+      var s2=document.createElement('span');s2.textContent=b.tamano;
+      var s3=document.createElement('span');s3.textContent=b.fecha;
+      var btn=document.createElement('button');btn.className='btn-dl';btn.type='button';btn.textContent='Descargar';
+      btn.addEventListener('click',function(){showToast('Descarga iniciada (demo): '+b.nombre);addLog('Descarga solicitada: '+b.nombre);});
+      row.appendChild(s1);row.appendChild(s2);row.appendChild(s3);row.appendChild(btn);
+      backupRows.appendChild(row);
+    });
+  }
+  renderBackups();
+
+  document.getElementById('btn-backup').addEventListener('click',function(){
+    msgBackup.className='msg-admin';msgBackup.textContent='';
+    progress.classList.add('show');bar.style.width='0%';
+    var p=0;var iv=setInterval(function(){
+      p+=25;bar.style.width=p+'%';
+      if(p>=100){clearInterval(iv);
+        setTimeout(function(){
           progress.classList.remove('show');
-          const now=new Date(); const name='mindzyx_full_'+now.toISOString().slice(0,10)+'_'+String(now.getHours()).padStart(2,'0')+'-'+String(now.getMinutes()).padStart(2,'0')+'.bak';
-          const size=(0.8+Math.random()).toFixed(1)+' MB';
-          const date=now.toLocaleString();
-          backups.unshift({name,size,date});
-          renderList();
-          backupMsg.textContent='Respaldo creado correctamente — backup nativo .bak de SQL Server: '+name+' ('+size+', '+date+')';
-          backupMsg.className='msg ok';
-          descargarRespaldo(name);
-          addLog('BACKUP creado por admin: '+name+' ('+size+') [backup nativo .bak]');
+          var now=new Date();
+          var nombre='mindzyx_respaldo_'+now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0')+'.bak';
+          var item={nombre:nombre,tamano:'1.2 MB',fecha:now.toLocaleString('es-ES')};
+          respaldosDemo.unshift(item);renderBackups();
+          msgBackup.textContent='Respaldo creado correctamente (demo): '+nombre;
+          msgBackup.className='msg-admin ok';
+          showToast('Respaldo creado (demo)');
+          addLog('Respaldo creado: '+nombre);
         },300);
       }
     },250);
   });
-
-  document.getElementById('maintBtn').addEventListener('click', ()=>{
-    maintMsg.className='msg'; maintMsg.textContent='';
-    maintMsg.textContent='Mantenimiento completado — registros temporales eliminados (0 datos de pacientes afectados). Último: '+new Date().toLocaleString();
-    maintMsg.className='msg ok';
-    addLog('MANTENIMIENTO ejecutado por admin — limpia temporales, sin afectar pacientes');
+  document.getElementById('btn-view-backups').addEventListener('click',function(){
+    renderBackups();
+    showToast(respaldosDemo.length===0?'Sin respaldos por mostrar (demo)':'Lista actualizada (demo)');
+    addLog('Consulta de respaldos ('+respaldosDemo.length+')');
   });
-  document.getElementById('viewBtn').addEventListener('click', ()=>{
-    renderList();
-    addLog('VIEW respaldos consultado por admin');
+  document.getElementById('btn-maintenance').addEventListener('click',function(){
+    msgMaint.textContent='Mantenimiento completado (demo). Sin datos de pacientes afectados.';
+    msgMaint.className='msg-admin ok';
+    showToast('Mantenimiento completado (demo)');
+    addLog('Mantenimiento ejecutado');
   });
+  document.getElementById('btn-cerrar-sesion').addEventListener('click',function(){showToast('Sesión cerrada (demo)');addLog('Cierre de sesión');});
+  function openAviso(){avisoModal.classList.add('open');}
+  function closeAviso(){avisoModal.classList.remove('open');}
+  document.getElementById('footerAviso').addEventListener('click',function(e){e.preventDefault();openAviso();});
+  document.getElementById('btnCerrar').addEventListener('click',closeAviso);
+  document.getElementById('btnEntendido').addEventListener('click',function(){closeAviso();showToast('Aviso comprendido');});
+})();
 </script>
 </body>
 </html>

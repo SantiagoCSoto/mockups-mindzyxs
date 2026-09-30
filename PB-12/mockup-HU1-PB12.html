@@ -3,303 +3,280 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU1-PB12 | Registrar estado emocional</title>
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Mindzyx — Registrar estado emocional</title>
 <style>
-  /* Unificado al estilo ACTUAL del front (base.css + inicio.css) */
   :root{
     --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#1E293B; --muted:#64748B;
     --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B; --purple-accent:#6B5BCE;
   }
-  *{box-sizing:border-box}
-  body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#FFFFFF;margin:0;padding:0;color:var(--text);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow-x:hidden}
-  body::before{content:'';position:fixed;top:-120px;left:-130px;width:580px;height:520px;background-color:#fdebee;border-radius:50%;z-index:-1;pointer-events:none}
-  body::after{content:'';position:fixed;top:30px;right:-160px;width:680px;height:680px;background-color:#f1ecfe;border-radius:50%;z-index:-1;pointer-events:none}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#FFFFFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow-x:hidden}
   .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
-  .blob{position:absolute;border-radius:50%;opacity:0.55;filter:blur(2px)}
+  .blob{position:absolute;border-radius:50%;opacity:.55;filter:blur(2px)}
   .blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
   .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
-  .header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,0.9);backdrop-filter:blur(8px);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
+  .header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
   .logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
   .logo-container .logo-img{height:38px;width:auto;object-fit:contain;border-radius:8px;display:block}
   .main-nav ul{display:flex;list-style:none;gap:24px;margin:0;padding:0}
-  .main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500;transition:color 0.2s ease}
+  .main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500;transition:color .2s ease}
   .main-nav a:hover,.main-nav a.active{color:var(--text);font-weight:600}
   .header-right{display:flex;align-items:center;gap:16px}
   .header-auth-buttons{display:flex;gap:10px}
-  .btn-logout{background-color:#EB5771;color:white;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;transition:background-color 0.2s ease,transform 0.15s ease}
+  .btn-logout{background-color:#EB5771;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;transition:background-color .2s ease,transform .15s ease}
   .btn-logout:hover{background-color:#D63A54;transform:translateY(-1px)}
   .wrap{width:100%;max-width:800px;margin:0 auto;padding:28px 20px 40px;flex:1}
-  .card{background:#FFFFFF;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.05);padding:24px 22px;margin-bottom:20px}
+  .btn-volver-landing{background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px}
+  .btn-volver-landing:hover{border-color:#94A3B8;color:#1E293B}
+  .card{background:#FFFFFF;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px;margin-bottom:20px}
   .card.hero{text-align:center;padding:32px 24px}
   .hero h1{font-size:26px;font-weight:700;color:var(--text);margin-bottom:8px}
   .hero p{font-size:13.5px;color:var(--muted);line-height:1.6;max-width:620px;margin:0 auto 14px}
-  .badge-guest-hero{display:inline-block;background:#FFF4E5;color:#B45309;border:1px solid #FDE68A;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:12px}
-  .section-header{margin-bottom:12px}
-  .section-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--purple-accent);background:#F9F7FF;padding:6px 12px;border-radius:20px;border:1px solid #ECE7FB;display:inline-block}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px;margin-bottom:8px}
-  .tile{border:1px solid #DFDAEE;border-radius:14px;padding:22px 16px;background:#FFFFFF;text-align:center;display:flex;flex-direction:column;align-items:center;transition:transform 0.2s ease,box-shadow 0.2s ease,border-color 0.2s ease}
-  .tile:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(107,91,206,0.08);border-color:#C8BEDE}
-  .tile-icon{width:46px;height:46px;border-radius:12px;background:#E6F7F8;color:#56C5C0;display:grid;place-items:center;margin-bottom:12px}
-  .tile h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
-  .tile p{font-size:12px;color:#8E91A3;line-height:1.45;margin-bottom:16px;flex:1}
-  .btn-tile{width:100%;height:38px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:12.5px;cursor:pointer;transition:background-color 0.2s ease,transform 0.15s ease,box-shadow 0.2s ease}
-  .btn-tile:hover{background:var(--cyan-hover);transform:translateY(-1px);box-shadow:0 4px 10px rgba(110,207,212,0.35)}
-  a.btn-tile{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;line-height:38px}
-  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
-  .footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
-  .footer-in a{color:var(--muted);text-decoration:none;transition:color 0.2s ease}
-  .footer-in a:hover{color:var(--text)}
-  .footer-in a.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;text-decoration:none;font-size:12px;transition:all 0.2s ease;box-shadow:0 2px 8px rgba(107,91,206,0.15)}
-  .footer-in a.aviso-link:hover{background:#E7DDFF;border-color:#B9A3F2;color:#4A38B0;box-shadow:0 4px 12px rgba(107,91,206,0.25);transform:translateY(-1px)}
-  .aviso-ico{font-size:13px}
-  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:white;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all 0.3s ease;pointer-events:none;z-index:10000;box-shadow:0 6px 20px rgba(0,0,0,0.2)}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-  .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,0.45);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999;animation:fadeIn 0.2s ease}
-  .modal-overlay.open{display:flex}
-  .modal{width:min(480px,100%);background:#FFFFFF;border-radius:16px;padding:26px 22px;box-shadow:0 12px 36px rgba(0,0,0,0.18);text-align:center;max-height:90vh;overflow-y:auto;animation:slideUp 0.25s ease}
-  .modal-icon{width:52px;height:52px;border-radius:14px;background:#FFF9E6;color:var(--warning);display:grid;place-items:center;margin:0 auto 14px}
-  .modal-icon-err{background:#FFF1F3;color:var(--error)}
-  .modal h3{font-size:17px;font-weight:700;color:var(--text);margin-bottom:12px}
-  .aviso-txt{font-size:12.5px;color:#475569;line-height:1.65;margin-top:12px;text-align:left;background:#F8FAFC;padding:16px;border-radius:12px;border:1px solid #E2E8F0}
-  .highlight{color:var(--error);font-weight:700;background:#FFF1F3;padding:2px 4px;border-radius:4px}
-  .err-desc{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.5}
-  .modal-actions{display:flex;gap:10px;margin-top:20px}
-  .btn-modal{flex:1;height:42px;border-radius:20px;border:none;font-weight:700;font-size:13px;cursor:pointer;transition:all 0.2s ease}
-  .btn-modal.btn-ok{background:var(--cyan);color:white}
-  .btn-modal.btn-ok:hover{background:var(--cyan-hover);box-shadow:0 4px 10px rgba(110,207,212,0.3)}
-  .btn-modal.btn-close{border:1px solid #DFDAEE;background:white;color:var(--text)}
-  .btn-modal.btn-close:hover{background:#F8FAFC;border-color:#B8AEE0}
-  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-  /* Especifico PB12 conservado (sin equivalente en el front) */
-  .user-pill{font-size:11px;font-weight:700;color:#0E6B70;background:#E6F7F8;padding:6px 12px;border-radius:20px;white-space:nowrap}
   .screen{display:none}
   .screen.active{display:block}
   .panel-head{text-align:center}
   .panel-head h2{font-size:20px;font-weight:700}
   .panel-head p.sub{font-size:12px;color:var(--muted);margin-top:4px}
-  .btn-main{width:100%;max-width:340px;height:48px;margin:18px auto 0;display:block;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:white;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,0.35)}
+  .badge-patient{display:inline-block;font-size:12px;font-weight:700;color:#B45309;background:#FFF4E5;border:1px solid #FDE68A;padding:4px 12px;border-radius:20px;margin-bottom:12px}
+  .btn-main{width:100%;max-width:340px;height:48px;margin:18px auto 0;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:20px;border:none;background:linear-gradient(180deg,#6ECFD4,#5ABCC2);color:#fff;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(94,188,196,.35);font-family:inherit}
   .btn-main:hover{filter:brightness(1.05)}
-  .btn-secondary{width:100%;max-width:340px;height:40px;margin-top:8px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
-  .btn-secondary:hover{border-color:var(--cyan);background:#F8FEFF}
-  .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
-  .pill{border:1px solid #DFDAEE;border-radius:12px;padding:12px 6px;background:#FFF;text-align:center;cursor:pointer;transition:.15s;font-family:inherit;color:inherit;}
-  .pill:focus-visible{outline:3px solid #0E7490;outline-offset:2px;}
-  .pill:hover{border-color:var(--cyan);background:#F8FEFF}
-  .pill.selected{border-color:var(--cyan);background:#E6F7F8;box-shadow:0 2px 8px rgba(110,207,212,.35)}
-  .pill .emoji{font-size:24px}
-  .pill .num{font-size:13px;font-weight:700;margin-top:6px}
-  .pill .lbl{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3}
+  .btn-icon{flex:none}
+  .icon-inline{vertical-align:-2px}
   .field-label{font-size:12px;font-weight:700;margin-top:18px;display:block}
   .field-hint{font-size:11px;color:var(--muted);margin-top:4px}
-  textarea{width:100%;min-height:90px;margin-top:8px;border:1px solid #DFDAEE;border-radius:12px;padding:10px 12px;font-family:inherit;font-size:13px;resize:vertical}
+  .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+  .pill{border:1px solid #DFDAEE;border-radius:12px;padding:12px 6px;background:#FFF;text-align:center;cursor:pointer;transition:.15s;font-family:inherit;color:inherit;display:flex;flex-direction:column;align-items:center;gap:2px}
+  .pill:focus-visible{outline:3px solid #0E7490;outline-offset:2px}
+  .pill:hover{border-color:var(--cyan);background:#F8FEFF}
+  .pill.selected{border-color:var(--cyan);background:#E6F7F8;box-shadow:0 2px 8px rgba(110,207,212,.35)}
+  .pill .face{color:#0E7C86;display:grid;place-items:center}
+  .pill.selected .face{color:#0B5E66}
+  .pill .num{font-size:13px;font-weight:700;margin-top:6px}
+  .pill .lbl{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3}
+  textarea{width:100%;min-height:90px;margin-top:8px;border:1px solid #DFDAEE;border-radius:12px;padding:10px 12px;font-family:inherit;font-size:13px;resize:vertical;color:var(--text)}
   textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(110,207,212,.2)}
   .actions{display:flex;gap:10px;margin-top:18px}
-  .btn-save{flex:1;height:44px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:14px;cursor:pointer}
+  .btn-save{flex:1;height:44px;border-radius:20px;border:none;background:var(--cyan);color:#fff;font-weight:700;font-size:14px;cursor:pointer}
   .btn-save:hover{background:var(--cyan-hover)}
-  .btn-cancel{flex:1;height:44px;border-radius:20px;border:1px solid #DFDAEE;background:white;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
-  .err-msg{display:none;font-size:12px;color:var(--error);background:#FFF1F3;border:1px solid #FBD3DC;padding:8px 12px;border-radius:10px;margin-top:12px}
+  .btn-cancel{flex:1;height:44px;border-radius:20px;border:1px solid #DFDAEE;background:#fff;color:var(--text);font-weight:600;font-size:13px;cursor:pointer}
+  .btn-cancel:hover{background:#F8FAFC;border-color:#B8AEE0}
+  .err-msg{display:none;font-size:12px;color:var(--error);background:#FFF1F3;border:1px solid #FBD3DC;padding:8px 12px;border-radius:10px;margin-top:12px;font-weight:600}
   .err-msg.show{display:block}
-  .saved{border:1px solid #C9F0F2;background:#F2FCFD;border-radius:12px;padding:14px;margin-top:14px;display:none}
+  .saved{border:1px solid #C9F0F2;background:#F2FCFD;border-radius:12px;padding:14px;margin-top:14px;display:none;text-align:left}
   .saved.show{display:block}
-  .saved h3{font-size:13px;font-weight:700}
+  .saved h3{font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px}
   .saved p{font-size:12px;color:var(--text);margin-top:6px;line-height:1.5}
   .saved small{font-size:11px;color:var(--muted)}
-  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
-  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:white;font-size:11px;font-weight:600;cursor:pointer}
-  .chip.active{background:var(--cyan);color:white;border-color:var(--cyan)}
-  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
-  @media(max-width:768px){
-    .header-nav{padding:12px 20px}
-    .main-nav{display:none}
-  }
-  @media(max-width:680px){
-    .header-nav{padding:10px 16px}
-    .grid{grid-template-columns:1fr}
-    .modal-actions{flex-direction:column}
-    .scale{grid-template-columns:repeat(5,1fr);gap:6px}
-    .pill .emoji{font-size:20px}
-    .actions{flex-direction:column}
-  }
-  @media(max-width:480px){
-    .wrap{padding:20px 14px 30px}
-  }
+  .empty-note{font-size:12px;color:var(--muted);background:#F8FAFC;border:1px dashed #CBD5E1;border-radius:10px;padding:12px;margin-top:14px;text-align:center;line-height:1.5}
+  .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+  .footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+  .footer-in a{color:var(--muted);text-decoration:none;transition:color .2s ease}
+  .footer-in a:hover{color:var(--text)}
+  .footer-in a.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;text-decoration:none;font-size:12px;box-shadow:0 2px 8px rgba(107,91,206,.15)}
+  .footer-in a.aviso-link:hover{background:#E7DDFF;border-color:#B9A3F2;color:#4A38B0}
+  .aviso-ico{font-size:13px}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s ease;pointer-events:none;z-index:10000;box-shadow:0 6px 20px rgba(0,0,0,.2);max-width:90vw;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media(max-width:768px){.header-nav{padding:12px 20px}.main-nav{display:none}}
+  @media(max-width:680px){.header-nav{padding:10px 16px}.scale{grid-template-columns:repeat(5,1fr);gap:6px}.actions{flex-direction:column}}
+  @media(max-width:480px){.wrap{padding:20px 14px 30px}}
 </style>
 </head>
 <body>
-<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
 
 <header class="header-nav">
   <div class="logo-container">
     <a href="#" class="logo-link">
-      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img">
       <span>Mindzyxs</span>
     </a>
   </div>
   <nav class="main-nav" aria-label="Navegación principal">
     <ul>
+      <li class="nav-inicio"><a href="#">Inicio</a></li>
       <li><a href="#">Nosotros</a></li>
       <li><a href="#">Ayuda</a></li>
     </ul>
   </nav>
   <div class="header-right">
-    <span class="user-pill">😊 Paciente</span>
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
+  <a href="#" class="btn-volver-landing">&larr; Volver al panel</a>
 
-  <!-- PANEL -->
+  <!-- Pantalla del panel del paciente -->
   <div class="screen active" id="panelScreen">
+    <div class="card hero">
+      <h1>Mi panel</h1>
+      <p>Registre cómo se siente hoy. La escala va de <b>1 (Muy mal)</b> a <b>5 (Excelente)</b> y puede agregar una nota opcional.</p>
+      <button class="btn-main" id="goRegister">
+        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+        Registrar estado emocional
+      </button>
+    </div>
+
     <div class="card">
-      <div class="panel-head">
-        <h2>Mi panel</h2>
-        <p class="sub">HU1-PB12 · Sprint 1 — Registra cómo te sientes hoy.</p>
-      </div>
-      <button class="btn-main" id="goRegister">＋ Registrar estado emocional</button>
       <div class="saved" id="savedCard">
-        <h3>Último registro guardado</h3>
+        <h3><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> Último registro guardado</h3>
         <p id="savedText"></p>
         <small id="savedDate"></small>
       </div>
-    </div>
-    <div class="card" style="margin-top:14px">
-      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
-      <div class="controls">
-        <button class="chip" id="chipView">Ver registro guardado</button>
-        <button class="chip" id="chipClear">Limpiar selección</button>
-      </div>
-      <p class="hint">Sin selección, <b>Guardar</b> muestra "Debes seleccionar un estado emocional para guardar" y no guarda. Con selección válida se asigna fecha/hora actual y vuelve al panel con "Registro guardado correctamente". Todo se simula con JS + console.log.</p>
+      <p class="empty-note" id="emptyNote">Aún no tiene registros emocionales. El primero aparecerá aquí cuando lo guarde.</p>
     </div>
   </div>
 
-  <!-- FORMULARIO -->
+  <!-- Pantalla del formulario: registrar estado emocional -->
   <div class="screen" id="formScreen">
     <div class="card">
       <div class="panel-head">
+        <span class="badge-patient">Registro emocional</span>
         <h2>Registrar estado emocional</h2>
-        <p class="sub">¿Cómo te sientes ahora? La fecha y hora se asignan automáticamente al guardar.</p>
+        <p class="sub">¿Cómo se siente ahora? La fecha y hora se asignan automáticamente al guardar.</p>
       </div>
-      <label class="field-label">¿Cómo te sientes? *</label>
-      <div class="scale" id="scale" role="radiogroup" aria-label="Estado emocional del 1 al 5">
-        <button type="button" class="pill" data-val="1" role="radio" aria-checked="false"><div class="emoji">😞</div><div class="num">1</div><div class="lbl">Muy mal</div></button>
-        <button type="button" class="pill" data-val="2" role="radio" aria-checked="false"><div class="emoji">🙁</div><div class="num">2</div><div class="lbl">Mal</div></button>
-        <button type="button" class="pill" data-val="3" role="radio" aria-checked="false"><div class="emoji">😐</div><div class="num">3</div><div class="lbl">Regular</div></button>
-        <button type="button" class="pill" data-val="4" role="radio" aria-checked="false"><div class="emoji">🙂</div><div class="num">4</div><div class="lbl">Bien</div></button>
-        <button type="button" class="pill" data-val="5" role="radio" aria-checked="false"><div class="emoji">😄</div><div class="num">5</div><div class="lbl">Excelente</div></button>
+
+      <label class="field-label" id="scaleLabel">¿Cómo se siente? *</label>
+      <div class="scale" id="scale" role="radiogroup" aria-labelledby="scaleLabel">
+        <button type="button" class="pill" data-val="1" role="radio" aria-checked="false">
+          <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 9.5h2.5"></path><path d="M13 9.5h2.5"></path><path d="M8.5 17q3.5-4 7 0"></path></svg></span>
+          <span class="num">1</span>
+          <span class="lbl">Muy mal</span>
+        </button>
+        <button type="button" class="pill" data-val="2" role="radio" aria-checked="false">
+          <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 9.5h2.5"></path><path d="M13 9.5h2.5"></path><path d="M9 16.5q3-2.5 6 0"></path></svg></span>
+          <span class="num">2</span>
+          <span class="lbl">Mal</span>
+        </button>
+        <button type="button" class="pill" data-val="3" role="radio" aria-checked="false">
+          <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M9 15.5h6"></path></svg></span>
+          <span class="num">3</span>
+          <span class="lbl">Regular</span>
+        </button>
+        <button type="button" class="pill" data-val="4" role="radio" aria-checked="false">
+          <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M9 14.5q3 2 6 0"></path></svg></span>
+          <span class="num">4</span>
+          <span class="lbl">Bien</span>
+        </button>
+        <button type="button" class="pill" data-val="5" role="radio" aria-checked="false">
+          <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M8.5 13.5q3.5 3 7 0"></path></svg></span>
+          <span class="num">5</span>
+          <span class="lbl">Excelente</span>
+        </button>
       </div>
+
       <label class="field-label" for="notes">Notas</label>
-      <p class="field-hint">¿Quieres agregar una nota? (opcional)</p>
-      <textarea id="notes" placeholder="¿Quieres agregar una nota? (opcional)"></textarea>
-      <div class="err-msg" id="errMsg">Debes seleccionar un estado emocional para guardar</div>
+      <p class="field-hint">¿Desea agregar una nota? (opcional)</p>
+      <textarea id="notes" placeholder="Cuéntenos con sus palabras cómo se siente..."></textarea>
+
+      <div class="err-msg" id="errMsg">Debe seleccionar un estado emocional para guardar</div>
+
       <div class="actions">
-        <button class="btn-cancel" id="btnCancel">Cancelar / Volver</button>
+        <button class="btn-cancel" id="btnCancel">Cancelar</button>
         <button class="btn-save" id="btnSave">Guardar</button>
       </div>
     </div>
   </div>
-
 </main>
 
 <footer class="footer">
   <div class="footer-in">
-    <a href="#">Inicio</a>
-    <a href="#">Nosotros</a>
-    <a href="#">Ayuda</a>
-    <a href="#" class="aviso-link">
-      <span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico
-    </a>
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico</a>
   </div>
 </footer>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-  const panelScreen=document.getElementById('panelScreen'), formScreen=document.getElementById('formScreen');
-  const toast=document.getElementById('toast'), errMsg=document.getElementById('errMsg');
-  const notes=document.getElementById('notes'), savedCard=document.getElementById('savedCard');
-  const savedText=document.getElementById('savedText'), savedDate=document.getElementById('savedDate');
-  const pills=document.querySelectorAll('#scale .pill');
-  const labels={1:'Muy mal',2:'Mal',3:'Regular',4:'Bien',5:'Excelente'};
-  const emojis={1:'😞',2:'🙁',3:'😐',4:'🙂',5:'😄'};
-  let selected=null, lastRecord=null;
+(function(){
+  var panelScreen = document.getElementById('panelScreen');
+  var formScreen = document.getElementById('formScreen');
+  var toast = document.getElementById('toast');
+  var errMsg = document.getElementById('errMsg');
+  var notes = document.getElementById('notes');
+  var savedCard = document.getElementById('savedCard');
+  var savedText = document.getElementById('savedText');
+  var savedDate = document.getElementById('savedDate');
+  var emptyNote = document.getElementById('emptyNote');
+  var pills = document.querySelectorAll('#scale .pill');
+  var labels = { 1: 'Muy mal', 2: 'Mal', 3: 'Regular', 4: 'Bien', 5: 'Excelente' };
+  var selected = null;
 
-  function addLog(tag,msg){ console.log(tag, new Date().toLocaleTimeString(), msg); }
   function showToast(msg){
-    toast.textContent=msg; toast.classList.add('show');
+    toast.textContent = msg;
+    toast.classList.add('show');
     clearTimeout(showToast._t);
-    showToast._t=setTimeout(()=>toast.classList.remove('show'),2400);
+    showToast._t = setTimeout(function(){ toast.classList.remove('show'); }, 2400);
   }
   function showScreen(form){
-    panelScreen.classList.toggle('active',!form);
-    formScreen.classList.toggle('active',form);
+    panelScreen.classList.toggle('active', !form);
+    formScreen.classList.toggle('active', form);
   }
   function clearSelection(){
-    selected=null;
-    pills.forEach(p=>{ p.classList.remove('selected'); p.setAttribute('aria-checked','false'); });
+    selected = null;
+    Array.prototype.forEach.call(pills, function(p){
+      p.classList.remove('selected');
+      p.setAttribute('aria-checked', 'false');
+    });
     errMsg.classList.remove('show');
   }
 
-  pills.forEach(p=>{
-    p.addEventListener('click',()=>{
-      pills.forEach(x=>{ x.classList.remove('selected'); x.setAttribute('aria-checked','false'); });
+  Array.prototype.forEach.call(pills, function(p){
+    p.addEventListener('click', function(){
+      Array.prototype.forEach.call(pills, function(x){
+        x.classList.remove('selected');
+        x.setAttribute('aria-checked', 'false');
+      });
       p.classList.add('selected');
-      p.setAttribute('aria-checked','true');
-      selected=parseInt(p.dataset.val,10);
+      p.setAttribute('aria-checked', 'true');
+      selected = parseInt(p.getAttribute('data-val'), 10);
       errMsg.classList.remove('show');
-      addLog('[HU1-PB12]','ESTADO SELECCIONADO: '+selected+' ('+labels[selected]+')');
     });
   });
 
-  document.getElementById('goRegister').addEventListener('click',()=>{
-    clearSelection(); notes.value='';
+  document.getElementById('goRegister').addEventListener('click', function(){
+    clearSelection();
+    notes.value = '';
     showScreen(true);
-    addLog('[HU1-PB12]','APERTURA pantalla "Registrar estado emocional"');
   });
 
-  document.getElementById('btnCancel').addEventListener('click',()=>{
-    addLog('[HU1-PB12]','CANCELADO por el usuario — vuelve al panel sin guardar');
+  document.getElementById('btnCancel').addEventListener('click', function(){
     showScreen(false);
     showToast('Registro cancelado');
   });
 
-  document.getElementById('btnSave').addEventListener('click',()=>{
-    if(!selected){
+  document.getElementById('btnSave').addEventListener('click', function(){
+    if (!selected){
       errMsg.classList.add('show');
-      addLog('[HU1-PB12]','ERROR: intento de guardar sin selección — "Debes seleccionar un estado emocional para guardar"');
       return;
     }
-    const now=new Date();
-    const fechaHora=now.toLocaleDateString('es-ES')+' '+now.toLocaleTimeString('es-ES');
-    const nota=notes.value.trim();
-    lastRecord={valor:selected,etiqueta:labels[selected],emoji:emojis[selected],nota:nota,fechaHora:fechaHora};
-    savedText.textContent=lastRecord.emoji+' '+selected+' — '+lastRecord.etiqueta+(nota?' · "'+nota+'"':' · Sin nota');
-    savedDate.textContent='Registrado el '+fechaHora+' (fecha/hora automática)';
+    var now = new Date();
+    var fechaHora = now.toLocaleDateString('es-ES') + ' ' + now.toLocaleTimeString('es-ES');
+    var nota = notes.value.trim();
+    savedText.textContent = selected + ' — ' + labels[selected] + (nota ? ' · "' + nota + '"' : ' · Sin nota');
+    savedDate.textContent = 'Registrado el ' + fechaHora + ' (fecha/hora automática)';
     savedCard.classList.add('show');
-    addLog('[HU1-PB12]','REGISTRO GUARDADO: '+selected+' ('+labels[selected]+') | nota="'+(nota||'—')+'" | fechaHora='+fechaHora);
+    emptyNote.style.display = 'none';
     showScreen(false);
     showToast('Registro guardado correctamente ✓');
   });
 
-  document.getElementById('chipView').addEventListener('click',()=>{
-    if(!lastRecord){
-      addLog('[HU1-PB12]','DEMO ver registro: aún no hay registro guardado');
-      showToast('Aún no hay registro guardado');
-      return;
-    }
-    savedCard.classList.add('show');
-    showScreen(false);
-    addLog('[HU1-PB12]','DEMO ver registro guardado: '+lastRecord.valor+' ('+lastRecord.etiqueta+') | '+lastRecord.fechaHora);
-    showToast('Registro: '+lastRecord.emoji+' '+lastRecord.etiqueta+' · '+lastRecord.fechaHora);
+  document.getElementById('footerAviso').addEventListener('click', function(e){
+    e.preventDefault();
+    showToast('Mindzyxs apoya su bienestar. No realiza diagnósticos clínicos.');
   });
 
-  document.getElementById('chipClear').addEventListener('click',()=>{
-    clearSelection(); notes.value='';
-    addLog('[HU1-PB12]','DEMO: selección limpiada');
-    showToast('Selección limpiada');
+  document.getElementById('btn-logout').addEventListener('click', function(){
+    showToast('Sesión cerrada (demostración)');
   });
-
-  addLog('[HU1-PB12]','Sistema listo — pantalla "Registrar estado emocional" disponible');
+})();
 </script>
 </body>
 </html>

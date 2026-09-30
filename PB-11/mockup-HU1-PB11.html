@@ -3,16 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU1-PB11 | Cuestionario emocional (Paciente)</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Mindzyx — Cuestionario emocional</title>
 <style>
-  /* Unificado al estilo ACTUAL del front (base.css + inicio.css: panel_invitado) */
   :root{
     --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#1E293B; --muted:#64748B;
     --error:#E85D7A; --warning:#E8A347; --ok:#1BBF6B; --purple-accent:#6B5BCE;
   }
-  *{box-sizing:border-box}
-  body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#FFFFFF;margin:0;padding:0;color:var(--text);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow-x:hidden}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#FFFFFF;color:var(--text);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow-x:hidden}
   .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
   .blob{position:absolute;border-radius:50%;opacity:.55;filter:blur(2px)}
   .blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
@@ -25,12 +24,15 @@
   .main-nav a:hover,.main-nav a.active{color:var(--text);font-weight:600}
   .header-right{display:flex;align-items:center;gap:16px}
   .header-auth-buttons{display:flex;gap:10px}
-  .badge-role{font-size:11px;font-weight:700;color:var(--purple-accent);background:#EDE7FF;padding:4px 10px;border-radius:20px;border:1px solid #DFDAEE;white-space:nowrap}
+  .btn-logout{background-color:#EB5771;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;transition:background-color .2s ease,transform .15s ease}
+  .btn-logout:hover{background-color:#D63A54;transform:translateY(-1px)}
   .wrap{width:100%;max-width:800px;margin:0 auto;padding:28px 20px 40px;flex:1}
+  .btn-volver-landing{background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px}
+  .btn-volver-landing:hover{border-color:#94A3B8;color:#1E293B}
   .card{background:#FFF;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px;margin-bottom:20px}
   .card.hero{text-align:center;padding:32px 24px}
   .hero h1{font-size:26px;font-weight:700;color:var(--text);margin-bottom:8px}
-  .hero p{font-size:13.5px;color:var(--muted);line-height:1.6;max-width:620px;margin:0 auto 14px}
+  .hero p{font-size:13.5px;color:var(--muted);line-height:1.6;max-width:620px;margin:0 auto}
   .screen{display:none}
   .screen.active{display:block}
   .panel-head{text-align:center}
@@ -39,19 +41,21 @@
   .badge-patient{display:inline-block;font-size:12px;font-weight:700;color:#B45309;background:#FFF4E5;border:1px solid #FDE68A;padding:4px 12px;border-radius:20px;margin-bottom:12px}
   .btn-big{width:100%;max-width:340px;height:48px;margin:18px auto 0;display:block;border-radius:20px;border:none;background:var(--cyan);color:#fff;font-weight:700;font-size:15px;cursor:pointer;transition:background-color .2s ease,transform .15s ease,box-shadow .2s ease}
   .btn-big:hover{background:var(--cyan-hover);transform:translateY(-1px);box-shadow:0 4px 10px rgba(110,207,212,.35)}
-  .btn-secondary{width:100%;max-width:340px;height:40px;margin:8px auto 0;display:block;border-radius:20px;border:1px solid #DFDAEE;background:#fff;color:var(--text);font-weight:600;font-size:13px;cursor:pointer;transition:all .2s ease}
-  .btn-secondary:hover{background:#F8FAFC;border-color:#B8AEE0}
   .hist{margin-top:18px;text-align:left}
-  .hist h3{font-size:13px;font-weight:700;color:var(--text)}
+  .hist h3{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
   .hist ul{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:8px;margin-bottom:0;padding:0}
-  .hist li{font-size:12px;border:1px solid #EDE8F0;border-radius:10px;padding:10px 12px;background:#FBFDFF;display:flex;justify-content:space-between;gap:8px;align-items:center}
-  .hist li span.date{color:var(--muted);font-size:11px}
-  .tag{font-size:10px;font-weight:700;background:#E6F7F8;color:#0E7C86;padding:3px 10px;border-radius:20px;white-space:nowrap}
+  .hist li{font-size:12px;border:1px solid #EDE8F0;border-radius:10px;padding:10px 12px;background:#FBFDFF;display:flex;justify-content:space-between;gap:10px;align-items:center}
+  .hist li .asig-title{font-weight:700;color:var(--text);display:block;font-size:12.5px}
+  .hist li span.date{color:var(--muted);font-size:11px;display:block;margin-top:2px}
+  .tag{font-size:10px;font-weight:700;background:#E6F7F8;color:#0E7C86;padding:4px 10px;border-radius:20px;white-space:nowrap}
+  .btn-small{border:none;background:var(--cyan);color:#fff;font-weight:700;font-size:12px;padding:8px 18px;border-radius:20px;cursor:pointer;white-space:nowrap}
+  .btn-small:hover{background:var(--cyan-hover)}
+  .empty-hist{font-size:12px;color:var(--muted);background:#F8FAFC;border:1px dashed #CBD5E1;border-radius:10px;padding:12px;text-align:center;margin-top:10px}
   .progress{height:8px;background:#F1EEF8;border-radius:99px;overflow:hidden;margin-top:14px}
   .progress > div{height:100%;width:0;background:linear-gradient(90deg,#6ECFD4,#6B5BCE);border-radius:99px;transition:width .25s}
   .q-count{font-size:12px;color:var(--muted);margin-top:10px;text-align:center}
   .q-text{font-size:17px;font-weight:700;text-align:center;margin-top:12px;line-height:1.5;color:var(--text)}
-  .q-extra{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--purple-accent);background:#F9F7FF;padding:6px 12px;border-radius:20px;border:1px solid #ECE7FB;display:inline-block;margin-top:8px}
+  .extra-wrap{text-align:center}
   .opts{display:flex;flex-direction:column;gap:10px;margin-top:16px}
   .opt{border:1px solid #DFDAEE;border-radius:12px;padding:13px 14px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:10px;background:#FFF;transition:.15s;text-align:left;width:100%;color:var(--text);font-family:inherit}
   .opt:hover{border-color:var(--cyan);background:#F8FEFF}
@@ -62,15 +66,12 @@
   .err-msg{display:none;font-size:12px;font-weight:600;color:var(--error);background:#FFF1F3;border:1px solid #FBD3DC;border-radius:10px;padding:9px 12px;margin-top:12px;text-align:center}
   .err-msg.show{display:block}
   .quiz-actions{display:flex;gap:10px;margin-top:18px}
-  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
-  .chip{padding:6px 12px;border-radius:20px;border:1px solid #DFDAEE;background:#fff;font-size:11px;font-weight:600;cursor:pointer;color:var(--text)}
-  .chip.active{background:var(--cyan);color:#fff;border-color:var(--cyan)}
-  .chip.warn.active{background:var(--warning);border-color:var(--warning);color:#fff}
-  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
+  .text-center{text-align:center}
   .result-icon{width:52px;height:52px;border-radius:14px;background:#E8FFF1;color:var(--ok);display:grid;place-items:center;margin:0 auto 12px;font-size:26px}
+  .result-title{font-size:20px;font-weight:700}
   .result-list{margin:16px 0 4px;text-align:left;display:flex;flex-direction:column;gap:8px}
   .result-list .row{font-size:12px;border:1px solid #EDE8F0;border-radius:10px;padding:9px 12px;background:#FBFDFF;display:flex;justify-content:space-between;gap:10px}
-  .result-list .row b{color:#0E7C86}
+  .result-list .row b{color:#0E7C86;white-space:nowrap}
   .save-note{font-size:12px;color:#475569;background:#F8FAFC;border:1px solid #E2E8F0;padding:12px 18px;border-radius:12px;margin-top:12px;line-height:1.5;text-align:center}
   .footer{width:100%;border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
   .footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
@@ -79,11 +80,12 @@
   .footer-in a.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;box-shadow:0 2px 8px rgba(107,91,206,.15)}
   .footer-in a.aviso-link:hover{background:#E7DDFF;border-color:#B9A3F2;color:#4A38B0}
   .aviso-ico{font-size:13px}
+  .icon-inline{vertical-align:-2px}
   .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999;animation:fadeIn .2s ease}
   .modal-overlay.open{display:flex}
   .modal{width:min(480px,100%);background:#FFF;border-radius:16px;padding:26px 22px;box-shadow:0 12px 36px rgba(0,0,0,.18);text-align:center;max-height:90vh;overflow-y:auto;animation:slideUp .25s ease}
   .modal-icon{width:52px;height:52px;border-radius:14px;background:#FFF9E6;color:var(--warning);display:grid;place-items:center;margin:0 auto 14px;font-size:24px}
-  .modal-icon.err,.modal-icon-err{background:#FFF1F3;color:var(--error)}
+  .modal-icon.err{background:#FFF1F3;color:var(--error)}
   .modal h3{font-size:17px;font-weight:700;color:var(--text);margin-bottom:12px}
   .modal .aviso-txt{font-size:12.5px;color:#475569;line-height:1.65;margin-top:12px;text-align:left;background:#F8FAFC;padding:16px;border-radius:12px;border:1px solid #E2E8F0}
   .modal .aviso-txt b{color:#0F172A}
@@ -101,79 +103,89 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
   @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-  @media(max-width:680px){.header-nav{padding:10px 16px}.main-nav{display:none}.quiz-actions{flex-direction:column}.modal-actions{flex-direction:column}}
+  @media(max-width:680px){.header-nav{padding:10px 16px}.main-nav{display:none}.quiz-actions{flex-direction:column}.modal-actions{flex-direction:column}.hist li{flex-direction:column;align-items:stretch}}
 </style>
 </head>
 <body>
-<div class="bg-blobs"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
 
 <header class="header-nav">
   <div class="logo-container">
     <a href="#" class="logo-link">
-      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img">
       <span>Mindzyxs</span>
     </a>
   </div>
   <nav class="main-nav" aria-label="Navegación principal">
     <ul>
-      <li><a href="#">Historial</a></li>
+      <li class="nav-inicio"><a href="#">Inicio</a></li>
+      <li><a href="#">Nosotros</a></li>
       <li><a href="#">Ayuda</a></li>
     </ul>
   </nav>
   <div class="header-right">
     <div class="header-auth-buttons">
-      <span class="badge-role">🧑 Paciente autenticado</span>
+      <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
     </div>
   </div>
 </header>
 
 <main class="wrap">
+  <a href="#" class="btn-volver-landing">&larr; Volver al panel</a>
 
-  <!-- HOME PACIENTE -->
+  <!-- Pantalla de inicio del paciente -->
   <div class="screen active" id="homeScreen">
     <div class="card hero">
-      <span class="badge-patient">🧑 Sesión de paciente</span>
       <h1>Cuestionario emocional</h1>
-      <p>Responde 5 preguntas sobre tu bienestar. Tus respuestas se <b>guardan en tu historial</b>.</p>
-      <div style="margin-top:10px;font-size:11px;color:var(--muted)">HU1-PB11 — Sprint 1 • Paciente autenticado</div>
+      <p>Responda las preguntas sobre su bienestar. Sus respuestas se <b>guardan en su historial</b>.</p>
     </div>
-    <div class="card" style="margin-top:14px">
+
+    <div class="card">
       <div class="panel-head">
-        <h2>¿Cómo te has sentido últimamente?</h2>
-        <p class="sub">Escala: Nunca / A veces / A menudo / Casi siempre. Una pregunta a la vez.</p>
+        <h2>¿Cómo se ha sentido últimamente?</h2>
+        <p class="sub">Las opciones las define tu psicólogo. Una pregunta a la vez.</p>
       </div>
       <button class="btn-big" id="startBtn">Responder cuestionario</button>
       <div class="hist" id="histBox">
-        <h3>📋 Mi historial reciente</h3>
-        <ul id="histList">
-          <li><span>Cuestionario 12/09 — 5 respuestas</span><span class="date">guardado ✓</span></li>
-          <li><span>Cuestionario 02/09 — 5 respuestas</span><span class="date">guardado ✓</span></li>
+        <h3><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg> Mi historial reciente</h3>
+        <ul id="histList"></ul>
+        <p class="empty-hist" id="histEmpty">Aún no tiene cuestionarios guardados. Su resultado aparecerá aquí cuando complete uno.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="panel-head">
+        <h2>Mis cuestionarios asignados</h2>
+        <p class="sub">Los que le asignó su psicólogo. Responda los pendientes.</p>
+      </div>
+      <div class="hist" id="asigBox">
+        <ul id="asigList">
+          <li>
+            <span><span class="asig-title">Cuestionario de bienestar general</span><span class="date">Asignado por su psicólogo • Pendiente</span></span>
+            <button type="button" class="btn-small" id="asigResponder">Responder</button>
+          </li>
+          <li>
+            <span><span class="asig-title">Cuestionario de seguimiento</span><span class="date">Completado el 02/09 • Guardado ✓</span></span>
+            <span class="tag">Completada</span>
+          </li>
         </ul>
       </div>
     </div>
-    <div class="card" style="margin-top:14px">
-      <span style="font-size:11px;font-weight:700;color:#5A5D72">Demo:</span>
-      <div class="controls">
-        <button class="chip active" id="avisoChip">Aviso no-diagnóstico obligatorio</button>
-        <button class="chip warn" id="sinResponderChip">Simular pregunta sin responder</button>
-      </div>
-      <p class="hint">Activa <b>Simular pregunta sin responder</b> y pulsa Siguiente para ver “Debes seleccionar una respuesta para continuar.” Todo se registra con <b>addLog</b> en consola.</p>
-    </div>
   </div>
 
-  <!-- QUIZ -->
+  <!-- Pantalla de cuestionario en curso -->
   <div class="screen" id="quizScreen">
     <div class="card">
       <div class="panel-head">
-        <span class="badge-patient">📝 Cuestionario en curso</span>
+        <span class="badge-patient">Cuestionario en curso</span>
         <h2 id="quizTitle">Pregunta 1 de 5</h2>
       </div>
       <div class="progress"><div id="bar"></div></div>
       <p class="q-count" id="qCount">Pregunta 1 de 5</p>
       <p class="q-text" id="qText"></p>
-      <div style="text-align:center" id="extraWrap"></div>
-      <div class="opts" id="opts"></div>
-      <div class="err-msg" id="errMsg">Debes seleccionar una respuesta para continuar.</div>
+      <div class="extra-wrap" id="extraWrap"></div>
+      <div class="opts" id="opts" role="radiogroup" aria-label="Opciones de respuesta"></div>
+      <div class="err-msg" id="errMsg">Debe seleccionar una respuesta para continuar.</div>
       <div class="quiz-actions">
         <button class="btn-modal close" id="cancelBtn">Cancelar</button>
         <button class="btn-modal ok" id="nextBtn">Siguiente</button>
@@ -181,39 +193,42 @@
     </div>
   </div>
 
-  <!-- RESULTADO -->
+  <!-- Pantalla de resultado -->
   <div class="screen" id="resultScreen">
-    <div class="card" style="text-align:center">
-      <div class="result-icon">✓</div>
-      <h2>Resultado del cuestionario</h2>
-      <p class="sub" style="font-size:12px;color:var(--muted);margin-top:6px">Tus respuestas fueron guardadas en tu historial.</p>
+    <div class="card text-center">
+      <div class="result-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+      </div>
+      <h2 class="result-title">Resultado del cuestionario</h2>
+      <p class="sub" style="font-size:12px;color:var(--muted);margin-top:6px">Sus respuestas fueron guardadas en su historial.</p>
       <div class="result-list" id="resultList"></div>
-      <div class="save-note">💾 Cuestionario <b>guardado en tu historial</b> como paciente autenticado (a diferencia del modo invitado).</div>
+      <div class="save-note"><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> Cuestionario <b>guardado en su historial</b>.</div>
       <button class="btn-big" id="continueBtn">Continuar</button>
     </div>
   </div>
-
 </main>
 
 <footer class="footer">
   <div class="footer-in">
-    <a href="#">Inicio</a>
-    <a href="#">Nosotros</a>
-    <a href="#">Ayuda</a>
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
     <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico</a>
   </div>
 </footer>
 
-<!-- AVISO NO DIAGNÓSTICO -->
-<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true">
+<!-- Aviso: no es un diagnóstico -->
+<div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle">
   <div class="modal">
-    <div class="modal-icon">⚠️</div>
-    <h3>Aviso: no es un diagnóstico</h3>
+    <div class="modal-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+    </div>
+    <h3 id="avisoTitle">Aviso: no es un diagnóstico</h3>
     <div class="aviso-txt">
-      <b>Mindzyx</b> es una herramienta de <b>monitoreo y apoyo del bienestar emocional</b>.
+      <b>Mindzyxs</b> es una herramienta de <b>monitoreo y apoyo del bienestar emocional</b>.
       Este cuestionario <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención profesional</span>.
       <br><br>
-      Si presentas <b>riesgo alto o urgencia</b>, busca ayuda profesional o usa las <b>líneas de ayuda</b> de tu país.
+      Si presenta <b>riesgo alto o urgencia</b>, busque ayuda profesional o use las <b>líneas de ayuda</b> de su país.
     </div>
     <div class="modal-actions">
       <button class="btn-modal close" id="avisoCerrar">Cerrar</button>
@@ -222,12 +237,14 @@
   </div>
 </div>
 
-<!-- CONFIRMAR SALIDA -->
+<!-- Confirmar salida del cuestionario -->
 <div class="modal-overlay" id="exitModal" role="alertdialog" aria-modal="true">
   <div class="modal">
-    <div class="modal-icon err">⚠️</div>
+    <div class="modal-icon err">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+    </div>
     <h3>Salir del cuestionario</h3>
-    <p class="sub">¿Deseas salir del cuestionario? Se perderán tus respuestas no guardadas.</p>
+    <p class="sub">¿Desea salir del cuestionario? Se perderán sus respuestas no guardadas.</p>
     <div class="modal-actions">
       <button class="btn-modal danger" id="exitYes">Sí, salir</button>
       <button class="btn-modal close" id="exitNo">No, continuar</button>
@@ -235,130 +252,176 @@
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-  const BASE_QS = [
-    { id:'q1', text:'¿Con qué frecuencia te has sentido desanimado o triste?' },
-    { id:'q2', text:'¿Con qué frecuencia te has sentido ansioso o preocupado?' },
-    { id:'q3', text:'¿Con qué frecuencia has tenido dificultades para dormir?' },
-    { id:'q4', text:'¿Con qué frecuencia te has sentido con poca energía?' },
-    { id:'q5', text:'¿Con qué frecuencia has perdido interés en actividades que disfrutas?' }
+(function(){
+  var BASE_QS = [
+    { id: 'q1', text: '¿Con qué frecuencia se ha sentido desanimado o triste?' },
+    { id: 'q2', text: '¿Con qué frecuencia se ha sentido ansioso o preocupado?' },
+    { id: 'q3', text: '¿Con qué frecuencia ha tenido dificultades para dormir?' },
+    { id: 'q4', text: '¿Con qué frecuencia se ha sentido con poca energía?' },
+    { id: 'q5', text: '¿Con qué frecuencia ha perdido interés en actividades que disfruta?' }
   ];
-  const EXTRA_Q = { id:'q2b', text:'¿Con qué frecuencia la ansiedad ha interferido en tus actividades diarias?', extra:true };
-  const OPTS = ['Nunca','A veces','A menudo','Casi siempre'];
+  var OPTS = ['Nunca', 'A veces', 'A menudo', 'Casi siempre'];
 
-  const homeScreen=document.getElementById('homeScreen'), quizScreen=document.getElementById('quizScreen'), resultScreen=document.getElementById('resultScreen');
-  const qText=document.getElementById('qText'), optsBox=document.getElementById('opts'), errMsg=document.getElementById('errMsg');
-  const nextBtn=document.getElementById('nextBtn'), bar=document.getElementById('bar'), qCount=document.getElementById('qCount'), quizTitle=document.getElementById('quizTitle');
-  const avisoModal=document.getElementById('avisoModal'), exitModal=document.getElementById('exitModal'), toast=document.getElementById('toast');
-  const avisoChip=document.getElementById('avisoChip'), sinResponderChip=document.getElementById('sinResponderChip'), extraWrap=document.getElementById('extraWrap');
+  var homeScreen = document.getElementById('homeScreen');
+  var quizScreen = document.getElementById('quizScreen');
+  var resultScreen = document.getElementById('resultScreen');
+  var qText = document.getElementById('qText');
+  var optsBox = document.getElementById('opts');
+  var errMsg = document.getElementById('errMsg');
+  var nextBtn = document.getElementById('nextBtn');
+  var bar = document.getElementById('bar');
+  var qCount = document.getElementById('qCount');
+  var quizTitle = document.getElementById('quizTitle');
+  var extraWrap = document.getElementById('extraWrap');
+  var avisoModal = document.getElementById('avisoModal');
+  var exitModal = document.getElementById('exitModal');
+  var toast = document.getElementById('toast');
+  var histList = document.getElementById('histList');
+  var histEmpty = document.getElementById('histEmpty');
 
-  let avisoObligatorio=true, avisoOk=false, simSinResponder=false, pendingStart=false;
-  let idx=0, answers={}, extraActive=false, selected=null;
+  var avisoOk = false, pendingStart = false;
+  var idx = 0, answers = {}, selected = null;
 
-  function addLog(...a){ console.log('[HU1-PB11]', new Date().toLocaleTimeString(), ...a); }
-  function showToast(m){ toast.textContent=m; toast.classList.add('show'); clearTimeout(showToast._t); showToast._t=setTimeout(()=>toast.classList.remove('show'),2400); }
-  function show(el){ homeScreen.classList.remove('active'); quizScreen.classList.remove('active'); resultScreen.classList.remove('active'); el.classList.add('active'); }
-  function currentList(){ const l=[...BASE_QS]; if(extraActive){ l.splice(2,0,EXTRA_Q); } return l; }
+  function showToast(m){
+    toast.textContent = m;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function(){ toast.classList.remove('show'); }, 2400);
+  }
+  function show(el){
+    homeScreen.classList.remove('active');
+    quizScreen.classList.remove('active');
+    resultScreen.classList.remove('active');
+    el.classList.add('active');
+  }
+  function openModal(m){ m.classList.add('open'); }
+  function closeModal(m){ m.classList.remove('open'); }
 
   function startQuiz(){
-    idx=0; answers={}; extraActive=false; selected=null; pendingStart=false;
-    show(quizScreen); renderQ();
-    addLog('Cuestionario INICIADO por paciente — 5 preguntas, escala Nunca/Casi siempre');
+    idx = 0; answers = {}; selected = null; pendingStart = false;
+    show(quizScreen);
+    renderQ();
   }
 
   function renderQ(){
-    const list=currentList(), q=list[idx];
-    selected=answers[q.id]||null;
+    var q = BASE_QS[idx];
+    selected = answers[q.id] || null;
     errMsg.classList.remove('show');
-    quizTitle.textContent='Pregunta '+(idx+1)+' de '+list.length;
-    qCount.textContent='Pregunta '+(idx+1)+' de '+list.length;
-    bar.style.width=((idx)/list.length*100)+'%';
-    qText.textContent=q.text;
-    extraWrap.innerHTML=q.extra?'<span class="q-extra">↳ Pregunta adaptativa de ansiedad</span>':'';
-    optsBox.innerHTML='';
-    OPTS.forEach(o=>{
-      const b=document.createElement('button');
-      b.className='opt'+(selected===o?' selected':'');
-      b.innerHTML='<span class="dot"></span>'+o;
-      b.addEventListener('click',()=>{ selected=o; errMsg.classList.remove('show'); [...optsBox.children].forEach(c=>c.classList.remove('selected')); b.classList.add('selected'); addLog('Respuesta seleccionada', q.id, '=', o); });
+    quizTitle.textContent = 'Pregunta ' + (idx + 1) + ' de ' + BASE_QS.length;
+    qCount.textContent = 'Pregunta ' + (idx + 1) + ' de ' + BASE_QS.length;
+    bar.style.width = ((idx) / BASE_QS.length * 100) + '%';
+    qText.textContent = q.text;
+    extraWrap.innerHTML = '';
+    optsBox.innerHTML = '';
+    OPTS.forEach(function(o){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt' + (selected === o ? ' selected' : '');
+      b.setAttribute('role', 'radio');
+      b.setAttribute('aria-checked', selected === o ? 'true' : 'false');
+      var dot = document.createElement('span');
+      dot.className = 'dot';
+      b.appendChild(dot);
+      b.appendChild(document.createTextNode(o));
+      b.addEventListener('click', function(){
+        selected = o;
+        errMsg.classList.remove('show');
+        Array.prototype.forEach.call(optsBox.children, function(c){
+          c.classList.remove('selected');
+          c.setAttribute('aria-checked', 'false');
+        });
+        b.classList.add('selected');
+        b.setAttribute('aria-checked', 'true');
+      });
       optsBox.appendChild(b);
     });
-    nextBtn.textContent=(idx===list.length-1)?'Finalizar':'Siguiente';
-    addLog('Pregunta mostrada', (idx+1)+'/'+list.length, '—', q.id+(q.extra?' (adaptativa)':''));
+    nextBtn.textContent = (idx === BASE_QS.length - 1) ? 'Finalizar' : 'Siguiente';
   }
 
-  document.getElementById('startBtn').addEventListener('click',()=>{
-    addLog('Click "Responder cuestionario" (paciente autenticado)');
-    if(avisoObligatorio && !avisoOk){ pendingStart=true; avisoModal.classList.add('open'); addLog('Aviso no-diagnóstico MOSTRADO (obligatorio antes del cuestionario)'); }
+  function requestStart(){
+    if (!avisoOk){ pendingStart = true; openModal(avisoModal); }
     else startQuiz();
+  }
+
+  document.getElementById('startBtn').addEventListener('click', requestStart);
+  document.getElementById('asigResponder').addEventListener('click', requestStart);
+
+  document.getElementById('footerAviso').addEventListener('click', function(e){
+    e.preventDefault();
+    pendingStart = false;
+    openModal(avisoModal);
   });
-  document.getElementById('footerAviso').addEventListener('click',e=>{ e.preventDefault(); avisoModal.classList.add('open'); addLog('Aviso visualizado por enlace footer'); });
-  document.getElementById('avisoCerrar').addEventListener('click',()=>{ avisoModal.classList.remove('open'); pendingStart=false; addLog('Aviso CERRADO sin aceptar — no inicia cuestionario'); });
-  document.getElementById('avisoOk').addEventListener('click',()=>{
-    avisoModal.classList.remove('open'); avisoOk=true;
-    addLog('Aviso ACEPTADO — botón "Entendido"');
-    if(pendingStart) startQuiz();
+  document.getElementById('avisoCerrar').addEventListener('click', function(){
+    closeModal(avisoModal);
+    pendingStart = false;
+  });
+  document.getElementById('avisoOk').addEventListener('click', function(){
+    closeModal(avisoModal);
+    avisoOk = true;
+    if (pendingStart) startQuiz();
   });
 
-  nextBtn.addEventListener('click',()=>{
-    if(simSinResponder){ selected=null; [...optsBox.children].forEach(c=>c.classList.remove('selected')); addLog('DEMO: se simula pregunta sin responder (selección limpiada)'); }
-    const list=currentList(), q=list[idx];
-    if(!selected){
+  nextBtn.addEventListener('click', function(){
+    var q = BASE_QS[idx];
+    if (!selected){
       errMsg.classList.add('show');
-      addLog('VALIDACIÓN: intento de avanzar sin responder en', q.id, '— "Debes seleccionar una respuesta para continuar."');
       return;
     }
-    answers[q.id]=selected;
-    addLog('Respuesta GUARDADA (temporal)', q.id, '=', selected);
-    if(q.id==='q2' && selected==='Casi siempre' && !extraActive){
-      extraActive=true;
-      addLog('ADAPTATIVO: ansiedad "Casi siempre" — se agrega pregunta extra de ansiedad');
-      showToast('Pregunta adicional de ansiedad agregada ✓');
-    }
-    const full=currentList();
-    if(idx<full.length-1){ idx++; renderQ(); }
+    answers[q.id] = selected;
+    if (idx < BASE_QS.length - 1){ idx++; renderQ(); }
     else finishQuiz();
   });
 
   function finishQuiz(){
-    const full=currentList();
-    const faltan=full.filter(q=>!answers[q.id]);
-    if(faltan.length){ errMsg.classList.add('show'); addLog('VALIDACIÓN FINAL: faltan', faltan.map(q=>q.id).join(',')); return; }
-    bar.style.width='100%';
-    const fecha=new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'});
-    const li=document.createElement('li');
-    li.innerHTML='<span>Cuestionario '+fecha+' — '+full.length+' respuestas'+(extraActive?' (incluye adaptativa)':'')+'</span><span class="date">guardado ✓</span>';
-    document.getElementById('histList').prepend(li);
-    const rl=document.getElementById('resultList'); rl.innerHTML='';
-    full.forEach(q=>{ const r=document.createElement('div'); r.className='row'; r.innerHTML='<span>'+q.text+'</span><b>'+answers[q.id]+'</b>'; rl.appendChild(r); });
+    var faltan = BASE_QS.filter(function(q){ return !answers[q.id]; });
+    if (faltan.length){ errMsg.classList.add('show'); return; }
+    bar.style.width = '100%';
+    var fecha = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+    var li = document.createElement('li');
+    var left = document.createElement('span');
+    left.textContent = 'Cuestionario ' + fecha + ' — ' + BASE_QS.length + ' respuestas';
+    var right = document.createElement('span');
+    right.className = 'tag';
+    right.textContent = 'guardado ✓';
+    li.appendChild(left);
+    li.appendChild(right);
+    histList.prepend(li);
+    histEmpty.style.display = 'none';
+    var rl = document.getElementById('resultList');
+    rl.innerHTML = '';
+    BASE_QS.forEach(function(q){
+      var r = document.createElement('div');
+      r.className = 'row';
+      var s = document.createElement('span');
+      s.textContent = q.text;
+      var b = document.createElement('b');
+      b.textContent = answers[q.id];
+      r.appendChild(s);
+      r.appendChild(b);
+      rl.appendChild(r);
+    });
     show(resultScreen);
-    addLog('Cuestionario FINALIZADO y guardado en historial del paciente:', JSON.stringify(answers));
-    showToast('Cuestionario guardado en tu historial ✓');
+    showToast('Cuestionario guardado en su historial ✓');
   }
 
-  document.getElementById('cancelBtn').addEventListener('click',()=>{ exitModal.classList.add('open'); addLog('Click "Cancelar" — se pide confirmación de salida'); });
-  document.getElementById('exitNo').addEventListener('click',()=>{ exitModal.classList.remove('open'); addLog('Salida CANCELADA — "No, continuar", sigue en pregunta '+(idx+1)); });
-  document.getElementById('exitYes').addEventListener('click',()=>{
-    exitModal.classList.remove('open'); answers={}; show(homeScreen);
-    addLog('Salida CONFIRMADA — "Sí, salir", respuestas no guardadas descartadas');
+  document.getElementById('cancelBtn').addEventListener('click', function(){ openModal(exitModal); });
+  document.getElementById('exitNo').addEventListener('click', function(){ closeModal(exitModal); });
+  document.getElementById('exitYes').addEventListener('click', function(){
+    closeModal(exitModal);
+    answers = {};
+    show(homeScreen);
     showToast('Cuestionario cancelado — respuestas descartadas');
   });
 
-  document.getElementById('continueBtn').addEventListener('click',()=>{ show(homeScreen); addLog('Click "Continuar" desde Resultado — vuelve al inicio del paciente'); });
+  document.getElementById('continueBtn').addEventListener('click', function(){ show(homeScreen); });
 
-  avisoChip.addEventListener('click',()=>{
-    avisoObligatorio=!avisoObligatorio; avisoChip.classList.toggle('active',avisoObligatorio);
-    if(!avisoObligatorio) avisoOk=false;
-    addLog(avisoObligatorio?'DEMO: aviso obligatorio ACTIVADO':'DEMO: aviso obligatorio DESACTIVADO');
+  document.getElementById('btn-logout').addEventListener('click', function(){
+    showToast('Sesión cerrada (demostración)');
   });
-  sinResponderChip.addEventListener('click',()=>{
-    simSinResponder=!simSinResponder; sinResponderChip.classList.toggle('active',simSinResponder);
-    addLog(simSinResponder?'DEMO: simular pregunta sin responder ACTIVADO':'DEMO: simular pregunta sin responder DESACTIVADO');
-  });
-
-  addLog('Sistema listo — paciente autenticado, botón "Responder cuestionario" disponible');
+})();
 </script>
 </body>
 </html>

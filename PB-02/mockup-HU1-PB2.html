@@ -3,101 +3,243 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindzyx — HU1-PB2 | Iniciar sesión</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Iniciar sesión - Mindzyxs</title>
 <style>
-  :root{--cyan:#6ECFD4;--cyan-hover:#5ABCC2;--text:#2E2E33;--muted:#8E91A3;--error:#E85D7A}
+  :root{
+    --cyan:#6ECFD4; --cyan-hover:#5ABCC2; --text:#2E2E33; --muted:#8E91A3;
+    --error:#E85D7A;
+  }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Inter',Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
-  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#FFF}
-  .blob{position:absolute;border-radius:50%;opacity:0.6}
-  .blob-pink{width:600px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
-  .blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
-  .header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
-  .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
-  .logo-mark{width:30px;height:30px;border-radius:8px;background:#7ED6E8;display:grid;place-items:center;color:white;font-size:14px}
-  .wrap{max-width:440px;margin:28px auto;padding:0 16px 30px}
-  .card{background:white;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:22px 20px}
-  .card-head{text-align:center;margin-bottom:14px}
-  .card-head h2{font-size:22px;font-weight:700}
-  .card-head p{font-size:12px;color:var(--muted);margin-top:4px}
-  .field{display:flex;flex-direction:column;gap:5px;margin-top:12px}
-  .field label{font-size:11px;font-weight:600;color:#5A5D72}
-  .control input{width:100%;height:40px;padding:0 12px;border:1px solid #DFDAEE;background:#FFF;border-radius:10px;font-size:13px;outline:none}
-  .control input:focus{border-color:var(--cyan)}
-  .control.has-error input{border-color:var(--error);background:#FFF6F7}
-  .error-msg{display:none;align-items:center;gap:6px;font-size:11px;color:var(--error);background:#FFF1F3;border:1px solid #FFE0E6;padding:6px 8px;border-radius:8px;margin-top:4px}
-  .error-msg.show{display:flex}
-  .error-general{display:none;background:#FFF1F3;border:1px solid #FFE0E6;padding:8px 10px;border-radius:10px;font-size:12px;color:var(--error);text-align:center;margin-top:10px}
-  .error-general.show{display:block}
-  .btn-primary{width:100%;height:42px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;font-size:13px;cursor:pointer;margin-top:14px}
-  .btn-primary:hover{background:var(--cyan-hover)}
-  .links{display:flex;justify-content:space-between;margin-top:12px}
-  .link{font-size:11px;font-weight:600;color:#5ABCC2;background:none;border:none;cursor:pointer;text-decoration:underline}
-  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.4}
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  body{font-family:Arial,sans-serif;background:#FFF;color:var(--text);min-height:100vh}
+  .header-nav{height:60px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 20px;max-width:1100px;margin:0 auto;border-bottom:1px solid #F0EAF6}
+  .logo-container .logo-link{display:flex;align-items:center;gap:8px;font-weight:700;
+    font-size:18px;color:var(--text);text-decoration:none}
+  .logo-img{width:30px;height:30px;border-radius:8px}
+  .main-nav ul{display:flex;gap:18px;list-style:none}
+  .main-nav a{color:var(--muted);text-decoration:none;font-size:13px}
+  .header-auth-buttons{display:flex;gap:10px}
+  .btn-login{padding:7px 14px;border-radius:20px;border:1px solid #E6E1F2;background:#fff;
+    color:var(--text);font-weight:600;font-size:12px;text-decoration:none}
+  .btn-signup-header{padding:7px 16px;border-radius:20px;border:none;background:var(--cyan);
+    color:#fff;font-weight:600;font-size:12px;text-decoration:none}
+  main{max-width:440px;margin:28px auto;padding:0 16px 30px}
+  .login-card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);padding:22px 20px}
+  .login-card h1{font-size:22px;font-weight:700;text-align:center}
+  .login-subtitulo{font-size:12px;color:var(--muted);text-align:center;margin-top:4px}
+  .alerta-error{display:none;background:#FFF1F3;border:1px solid #FFE0E6;color:var(--error);
+    padding:8px 10px;border-radius:10px;font-size:12px;text-align:center;margin-top:10px}
+  .alerta-error.show{display:block}
+  .form-login{margin-top:6px}
+  .form-group{display:flex;flex-direction:column;gap:5px;margin-top:12px}
+  .form-group label{font-size:11px;font-weight:600;color:#5A5D72}
+  .form-group input{width:100%;height:40px;padding:0 12px;border:1px solid #DFDAEE;
+    border-radius:10px;font-size:13px;outline:none;background:#fff}
+  .form-group input:focus{border-color:var(--cyan)}
+  .form-group input.campo-error{border-color:var(--error);background:#FFF6F7}
+  .error-mensaje{display:none;font-size:11px;color:var(--error);margin-top:4px}
+  .error-mensaje.show{display:block}
+  .btn-login-submit{width:100%;height:42px;border-radius:20px;border:none;background:var(--cyan);
+    color:#fff;font-weight:700;font-size:13px;cursor:pointer;margin-top:14px}
+  .btn-login-submit:hover{background:var(--cyan-hover)}
+  .divider-invitado{text-align:center;color:var(--muted);font-size:12px;margin:14px 0 10px}
+  .invitado-seccion{text-align:center}
+  .invitado-subtexto{font-size:12px;color:var(--muted);margin-bottom:8px}
+  .btn-modo-invitado{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 20px;
+    border-radius:20px;border:1px solid #DFDAEE;background:#fff;font-weight:600;font-size:13px;cursor:pointer}
+  .login-enlaces{display:flex;justify-content:space-between;margin-top:12px}
+  .link-accion{font-size:11px;font-weight:600;color:#5ABCC2;text-decoration:underline}
+  .login-cancelar-contenedor{text-align:center;margin-top:10px}
+  .link-cancelar{font-size:11px;font-weight:600;color:var(--muted);text-decoration:underline}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;
+    align-items:center;justify-content:center;padding:16px;z-index:50}
   .modal-overlay.open{display:flex}
-  .modal{width:min(420px,100%);background:white;border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-align:center}
-  .modal-icon{width:40px;height:40px;border-radius:10px;background:#E8FFF1;display:grid;place-items:center;margin:0 auto 12px;color:#1BBF6B}
-  .modal h3{font-size:15px;font-weight:700}
-  .modal p{font-size:12px;color:var(--muted);margin-top:6px}
-  .modal button{margin-top:14px;width:100%;height:38px;border-radius:20px;border:none;background:var(--cyan);color:white;font-weight:700;cursor:pointer}
+  .modal-contenido{width:min(420px,100%);background:#fff;border-radius:14px;padding:20px;text-align:center}
+  .modal-badge-exito{width:40px;height:40px;border-radius:10px;background:#E8FFF1;display:grid;
+    place-items:center;margin:0 auto 12px;color:#1BBF6B;font-weight:700}
+  .modal-contenido h2{font-size:15px;font-weight:700}
+  .modal-contenido p{font-size:12px;color:var(--muted);margin-top:6px}
+  .btn-modal-continuar{margin-top:14px;width:100%;height:38px;border-radius:20px;border:none;
+    background:var(--cyan);color:#fff;font-weight:700;cursor:pointer}
+  @media(max-width:640px){.header-nav{padding:0 14px}}
 </style>
 </head>
 <body>
-<div class="bg"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
-<header class="header"><div class="logo"><div class="logo-mark">◐</div> Mindzyx</div><div style="font-size:12px;color:var(--muted)">HU1-PB2 — Sprint 1</div></header>
-<main class="wrap">
-  <div class="card">
-    <div class="card-head"><h2>Inicio de sesión</h2><p>Accede según tu rol</p></div>
-    <form id="form" novalidate>
-      <div class="field"><label for="correo">Correo</label><div class="control" id="c-correo"><input id="correo" type="email" placeholder="tu@correo.com"></div><div class="error-msg" id="e-correo"></div></div>
-      <div class="field"><label for="pass">Contraseña</label><div class="control" id="c-pass"><input id="pass" type="password" placeholder="••••••••"></div><div class="error-msg" id="e-pass"></div></div>
-      <div class="error-general" id="e-general">Correo o contraseña incorrectos</div>
-      <button type="submit" class="btn-primary">Iniciar sesión</button>
-      <div class="links"><button type="button" class="link" id="forgot">¿Olvidaste tu contraseña?</button><button type="button" class="link" id="reg">Registrarse</button></div>
-      <div style="text-align:center;margin-top:10px"><button type="button" class="link" id="cancel" style="color:var(--muted)">Cancelar / Volver</button></div>
-    </form>
-    <p class="hint">Prueba: vacío → "Este campo es obligatorio" / correo sin @ → "Ingresa un correo válido" / <b>paciente@test.com / 123456a</b> → Paciente, <b>psicologo@test.com / 123456a</b> → Psicólogo, <b>admin@test.com / 123456a</b> → Admin, otro → "Correo o contraseña incorrectos"</p>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link">
+      <img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img">
+      Mindzyxs
+    </a>
   </div>
+  <nav class="main-nav">
+    <ul>
+      <li><a href="#">Inicio</a></li>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-auth-buttons">
+    <a href="../PB-02/mockup-HU1-PB2.html" class="btn-login">Iniciar sesión</a>
+    <a href="../PB-01/mockup-HU1-PB1.html" class="btn-signup-header">Registrarse</a>
+  </div>
+</header>
+
+<main>
+  <section class="login-card">
+    <h1>Inicio de sesión</h1>
+    <p class="login-subtitulo">Accede según tu rol</p>
+
+    <div id="banner-error-login" class="alerta-error">Correo o contraseña incorrectos</div>
+
+    <form class="form-login" id="form-login" novalidate action="#">
+      <div class="form-group">
+        <label for="correo">Correo</label>
+        <input type="email" id="correo" name="correo" autocomplete="email">
+        <span id="error-correo" class="error-mensaje"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" autocomplete="current-password">
+        <span id="error-password" class="error-mensaje"></span>
+      </div>
+
+      <button type="submit" id="btn-login" class="btn-login-submit">Iniciar sesión</button>
+
+      <div class="divider-invitado">
+        <span>&mdash; o &mdash;</span>
+      </div>
+
+      <div class="invitado-seccion">
+        <p class="invitado-subtexto">Usa servicios básicos sin registrarte ni iniciar sesión</p>
+        <button type="button" id="btn-modo-invitado" class="btn-modo-invitado">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Modo invitado
+        </button>
+      </div>
+
+      <div class="login-enlaces">
+        <a href="../PB-05/mockup-HU1-PB5.html" id="link-olvido" class="link-accion">¿Olvidaste tu contraseña?</a>
+        <a href="../PB-01/mockup-HU1-PB1.html" id="link-registro" class="link-accion">Registrarse</a>
+      </div>
+
+      <div class="login-cancelar-contenedor">
+        <a href="../PB-01/mockup-HU1-PB1.html" id="link-cancelar" class="link-cancelar">Cancelar / Volver</a>
+      </div>
+    </form>
+  </section>
 </main>
-<div class="modal-overlay" id="successModal"><div class="modal"><div class="modal-icon">✓</div><h3 id="s-title">Sesión iniciada</h3><p id="s-msg"></p><button id="s-ok">Continuar</button></div></div>
+
+<div id="modal-rol" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+  <div class="modal-contenido">
+    <div class="modal-badge-exito"><span>&check;</span></div>
+    <h2 id="modal-titulo">Sesión iniciada &mdash; Rol</h2>
+    <p id="modal-subtitulo">Redirigiendo a: Panel</p>
+    <button type="button" id="btn-modal-continuar" class="btn-modal-continuar">Continuar</button>
+  </div>
+</div>
+
 <script>
-  const form=document.getElementById('form'), correo=document.getElementById('correo'), pass=document.getElementById('pass');
-  const cCorreo=document.getElementById('c-correo'), cPass=document.getElementById('c-pass');
-  const eCorreo=document.getElementById('e-correo'), ePass=document.getElementById('e-pass'), eGeneral=document.getElementById('e-general');
-  const successModal=document.getElementById('successModal'), sTitle=document.getElementById('s-title'), sMsg=document.getElementById('s-msg');
-  const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  // simula BD cifrada
-  const users={
-    'paciente@test.com':{pass:'123456a',rol:'Paciente',dest:'Panel del paciente'},
-    'psicologo@test.com':{pass:'123456a',rol:'Psicólogo',dest:'Panel del psicólogo'},
-    'admin@test.com':{pass:'123456a',rol:'Administrador',dest:'Consola de administración'}
-  };
-  function clear(){
-    cCorreo.classList.remove('has-error'); cPass.classList.remove('has-error');
-    eCorreo.classList.remove('show'); ePass.classList.remove('show'); eGeneral.classList.remove('show');
+  var formLogin = document.getElementById('form-login');
+  var inputCorreo = document.getElementById('correo');
+  var inputPassword = document.getElementById('password');
+  var errorCorreo = document.getElementById('error-correo');
+  var errorPassword = document.getElementById('error-password');
+  var bannerError = document.getElementById('banner-error-login');
+  var modalRol = document.getElementById('modal-rol');
+  var modalTitulo = document.getElementById('modal-titulo');
+  var modalSubtitulo = document.getElementById('modal-subtitulo');
+  var btnLoginSubmit = document.getElementById('btn-login');
+  var btnModalContinuar = document.getElementById('btn-modal-continuar');
+  var btnModoInvitado = document.getElementById('btn-modo-invitado');
+
+  function marcarError(input, span, msg) {
+    input.classList.add('campo-error');
+    span.textContent = msg;
+    span.classList.add('show');
   }
-  [correo,pass].forEach(i=>i.addEventListener('input', clear));
-  form.addEventListener('submit', e=>{
-    e.preventDefault(); clear(); let ok=true;
-    const c=correo.value.trim(), p=pass.value;
-    if(!c){ eCorreo.textContent='Este campo es obligatorio'; eCorreo.classList.add('show'); cCorreo.classList.add('has-error'); ok=false; }
-    else if(!emailRegex.test(c)){ eCorreo.textContent='Ingresa un correo válido'; eCorreo.classList.add('show'); cCorreo.classList.add('has-error'); ok=false; }
-    if(!p){ ePass.textContent='Este campo es obligatorio'; ePass.classList.add('show'); cPass.classList.add('has-error'); ok=false; }
-    if(!ok) return;
-    const u=users[c.toLowerCase()];
-    if(!u || u.pass!==p){ eGeneral.classList.add('show'); console.log('LOG: intento fallido',c); return; }
-    console.log('LOG: intento exitoso',c);
-    // crear sesión y redirigir según rol
-    sTitle.textContent='Sesión iniciada — ' + u.rol;
-    sMsg.textContent='Redirigiendo a: ' + u.dest;
-    successModal.classList.add('open');
+  function limpiarError(input, span) {
+    input.classList.remove('campo-error');
+    span.classList.remove('show');
+    span.textContent = '';
+  }
+  function mostrarBanner(msg) { bannerError.textContent = msg; bannerError.classList.add('show'); }
+  function ocultarBanner() { bannerError.classList.remove('show'); }
+
+  inputCorreo.addEventListener('input', function () {
+    limpiarError(inputCorreo, errorCorreo);
+    ocultarBanner();
   });
-  document.getElementById('s-ok').addEventListener('click',()=>successModal.classList.remove('open'));
-  document.getElementById('cancel').addEventListener('click',()=>{form.reset();clear()});
-  document.getElementById('forgot').addEventListener('click',()=>{ eGeneral.textContent='Ir a Recuperar contraseña (HU1-PB5)'; eGeneral.classList.add('show')});
-  document.getElementById('reg').addEventListener('click',()=>{ eGeneral.textContent='Ir a Registrarse (HU1-PB1)'; eGeneral.classList.add('show')});
+  inputPassword.addEventListener('input', function () {
+    limpiarError(inputPassword, errorPassword);
+    ocultarBanner();
+  });
+
+  function esCampoVacio(v) { return !v || v.trim() === ''; }
+
+  // Demostración de interfaz: valida el formato y muestra el modal con los textos
+  // base del front. El sistema real autentica en el servidor y completa rol y destino.
+  formLogin.addEventListener('submit', function (e) {
+    e.preventDefault();
+    ocultarBanner();
+    var correo = inputCorreo.value.trim();
+    var password = inputPassword.value.trim();
+    var valido = true;
+
+    if (esCampoVacio(correo)) {
+      marcarError(inputCorreo, errorCorreo, 'Este campo es obligatorio');
+      valido = false;
+    } else if (correo.indexOf('@') === -1) {
+      marcarError(inputCorreo, errorCorreo, 'Ingresa un correo válido');
+      valido = false;
+    } else {
+      limpiarError(inputCorreo, errorCorreo);
+    }
+
+    if (esCampoVacio(password)) {
+      marcarError(inputPassword, errorPassword, 'Este campo es obligatorio');
+      valido = false;
+    } else {
+      limpiarError(inputPassword, errorPassword);
+    }
+
+    if (!valido) return;
+
+    btnLoginSubmit.disabled = true;
+    btnLoginSubmit.textContent = 'Iniciando sesión...';
+    setTimeout(function () {
+      btnLoginSubmit.disabled = false;
+      btnLoginSubmit.textContent = 'Iniciar sesión';
+      modalTitulo.textContent = 'Sesión iniciada \u2014 Rol';
+      modalSubtitulo.textContent = 'Redirigiendo a: Panel';
+      modalRol.classList.add('open');
+    }, 600);
+  });
+
+  btnModoInvitado.addEventListener('click', function () {
+    btnModoInvitado.disabled = true;
+    var original = btnModoInvitado.innerHTML;
+    btnModoInvitado.textContent = 'Accediendo...';
+    // Demostración: el sistema real registra el acceso y continúa al panel de invitado.
+    setTimeout(function () {
+      btnModoInvitado.disabled = false;
+      btnModoInvitado.innerHTML = original;
+    }, 800);
+  });
+
+  btnModalContinuar.addEventListener('click', function () {
+    modalRol.classList.remove('open');
+  });
+  modalRol.addEventListener('click', function (e) {
+    if (e.target === modalRol) modalRol.classList.remove('open');
+  });
 </script>
 </body>
 </html>
