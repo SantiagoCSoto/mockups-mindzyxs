@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Notificaciones del sistema - Mindzyxs</title>
+<style>
+:root{--cyan:#6ECFD4;--cyan-fuerte:#0E7490;--text:#1E293B;--muted:#64748B;--error:#E85D7A;--ok:#1BBF6B;--violet:#6B5BCE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;opacity:.55}
+.blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+.blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+.header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,.9);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
+.logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
+.logo-container .logo-img{height:38px;width:auto;border-radius:8px}
+.main-nav ul{display:flex;list-style:none;gap:24px}
+.main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+.btn-logout{background:#E85D7A;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.wrap{width:100%;max-width:900px;margin:0 auto;padding:28px 20px 40px;flex:1}
+.card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px}
+.card h1{font-size:20px}
+.card h2{font-size:17px}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.back{display:inline-flex;gap:6px;background:#fff;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;margin-bottom:14px;text-decoration:none}
+.fila{display:flex;align-items:center;gap:12px;border:1px solid #EDE8F0;border-radius:12px;padding:12px 14px;background:#FBFDFF;margin-bottom:10px}
+.info{flex:1;min-width:0}
+.info b{font-size:14px;display:block}
+.badges{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
+.badge{font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px}
+.badge.on{background:#d1fae5;color:#065f46}
+.badge.off{background:#FEF3C7;color:#92400E}
+.est{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;white-space:nowrap}
+.est-ok{background:#E6F7F0;color:#1F7A4D}
+.est-no{background:#F1F5F9;color:#64748B}
+.btn{font-family:inherit;cursor:pointer;border-radius:18px;padding:9px 20px;min-height:44px;font-weight:700;font-size:12.5px;border:none;background:var(--cyan-fuerte);color:#fff}
+.btn-sec{background:#fff;border:1.5px solid #DFDAEE;color:var(--text)}
+.field{margin-top:10px}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+.field .input{width:100%}
+.input{padding:10px 14px;border:1.5px solid #CBD5E1;border-radius:12px;font-size:13px;font-family:inherit;background:#fff}
+textarea.input{font-family:monospace;font-size:12px;min-height:120px;resize:vertical}
+.hint{font-size:12px;color:var(--muted);margin-bottom:4px}
+.hint code{background:#F1F5F9;padding:1px 6px;border-radius:6px}
+.canal-card{border:1px solid #E5E7EB;border-radius:8px;padding:16px;margin-bottom:16px}
+.check{display:flex;align-items:center;gap:12px;font-size:13px}
+.check input{width:16px;height:16px}
+.preview{border:1px dashed #CBD5E1;border-radius:12px;padding:16px;margin-top:14px}
+.preview h4{font-size:13px;margin-bottom:8px}
+.screen{display:none}
+.screen.active{display:block}
+.foot-btns{display:flex;justify-content:space-between;margin-top:18px}
+.footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+.footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+.footer-in a{color:var(--muted);text-decoration:none}
+.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;text-decoration:none}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10000;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--cyan-fuerte);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"><span>Mindzyxs</span></a>
+  </div>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <ul>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout-top" class="btn-logout">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a href="../PB-ADMIN/mockup-panel-admin.html" class="back">← Volver al panel</a>
+
+  <!-- Pantalla: lista -->
+  <section class="card screen active" id="screenLista">
+    <h1>Notificaciones del sistema</h1>
+    <p class="sub">Configura las plantillas y canales de notificación para cada evento del sistema.</p>
+    <div id="lista" style="margin-top:14px;"></div>
+  </section>
+
+  <!-- Pantalla: editor -->
+  <section class="card screen" id="screenEditar">
+    <h2 id="editTitulo">Evento</h2>
+    <p class="sub">Configura los canales y la plantilla de notificación para este evento.</p>
+    <div class="canal-card" style="margin-top:14px;">
+      <div class="check"><strong style="text-transform:uppercase;font-size:13px;">Correo</strong><label><input type="checkbox" id="chCorreo" checked style="margin-right:4px;">Habilitado</label></div>
+      <div class="field"><label for="edAsunto">Asunto</label><input class="input" id="edAsunto" placeholder="Ej: Codigo de verificacion"></div>
+    </div>
+    <div class="canal-card">
+      <div class="check"><strong style="text-transform:uppercase;font-size:13px;">SMS / Interna</strong><label><input type="checkbox" id="chOtros" style="margin-right:4px;">Habilitado</label></div>
+    </div>
+    <div class="field"><label for="edPlantilla">Plantilla</label><p class="hint">Variables disponibles: <code>{nombre}</code>, <code>{codigo}</code>, <code>{fecha}</code>, <code>{motivo}</code></p><textarea class="input" id="edPlantilla" placeholder="HTML de la plantilla..."></textarea></div>
+    <div class="field" style="display:flex;gap:8px;flex-wrap:wrap;">
+      <input class="input" id="pvNombre" placeholder="Nombre de ejemplo" style="flex:1;min-width:140px;">
+      <input class="input" id="pvCodigo" placeholder="Código de ejemplo" style="flex:1;min-width:140px;">
+    </div>
+    <div class="foot-btns">
+      <button type="button" class="btn" id="btnGuardar">Guardar</button>
+      <button type="button" class="btn btn-sec" id="btnPreview">Vista previa</button>
+      <button type="button" class="btn btn-sec" id="btnCancelar">Cancelar</button>
+    </div>
+    <div class="preview" id="previewBox" style="display:none;">
+      <h4>Vista previa</h4>
+      <p style="font-size:13px;font-weight:700;" id="pvAsunto"></p>
+      <div style="font-size:13px;margin-top:6px;" id="pvCuerpo"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso"><span>ℹ️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const toast=document.getElementById('toast');
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),2400);}
+  const eventos=[
+    {code:'CODE_SENT',nombre:'Verificación de cuenta',canales:['correo'],activo:true},
+    {code:'PASSWORD_RECOVERY',nombre:'Recuperación de contraseña',canales:['correo'],activo:true},
+    {code:'APPROVAL_GRANTED',nombre:'Aprobación de psicólogo',canales:['correo'],activo:true},
+    {code:'APPROVAL_REJECTED',nombre:'Rechazo de psicólogo',canales:['correo'],activo:false},
+    {code:'REMINDER',nombre:'Recordatorio diario',canales:['correo','sms'],activo:true},
+    {code:'RISK_HIGH',nombre:'Alerta de riesgo alto',canales:['correo'],activo:true}
+  ];
+  const lista=document.getElementById('lista');
+  function pintar(){
+    lista.innerHTML='';
+    eventos.forEach(ev=>{
+      const el=document.createElement('div');el.className='fila';
+      const badges=ev.canales.map(c=>`<span class="badge ${ev.activo?'on':'off'}">${c}</span>`).join('');
+      el.innerHTML=`<div class="info"><b>${ev.nombre}</b><div class="badges">${badges}</div></div><span class="est ${ev.activo?'est-ok':'est-no'}">${ev.activo?'Activo':'Inactivo'}</span><button type="button" class="btn">Editar</button>`;
+      el.querySelector('button').addEventListener('click',()=>abrir(ev));
+      lista.appendChild(el);
+    });
+  }
+  function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+  let actual=null;
+  function abrir(ev){actual=ev;document.getElementById('editTitulo').textContent=ev.nombre;document.getElementById('chCorreo').checked=ev.canales.includes('correo');document.getElementById('previewBox').style.display='none';show('screenEditar');}
+  document.getElementById('btnCancelar').addEventListener('click',()=>show('screenLista'));
+  document.getElementById('btnGuardar').addEventListener('click',()=>{show('screenLista');showToast('Notificación actualizada correctamente.');});
+  document.getElementById('btnPreview').addEventListener('click',()=>{
+    const tpl=document.getElementById('edPlantilla').value||'<p>Hola {nombre},</p><p>Tu código es: {codigo}</p>';
+    const vars={nombre:document.getElementById('pvNombre').value||'María',codigo:document.getElementById('pvCodigo').value||'482913',fecha:'10/10/2026',motivo:'Tarjeta ilegible'};
+    let out=tpl;Object.keys(vars).forEach(k=>{out=out.split('{'+k+'}').join(vars[k]);});
+    document.getElementById('pvAsunto').textContent=document.getElementById('edAsunto').value||'Mindzyxs';
+    document.getElementById('pvCuerpo').innerHTML=out;
+    document.getElementById('previewBox').style.display='block';
+  });
+  document.getElementById('btn-logout-top').addEventListener('click',()=>{if(confirm('¿Está seguro de que desea cerrar sesión?'))showToast('Sesión cerrada (demo)');});
+  document.getElementById('footerAviso').addEventListener('click',(e)=>{e.preventDefault();showToast('Mindzyxs no realiza diagnósticos clínicos');});
+  pintar();
+</script>
+</body>
+</html>
