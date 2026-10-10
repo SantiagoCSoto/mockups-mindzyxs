@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Validar psicólogos - Mindzyxs</title>
+<style>
+:root{--cyan:#6ECFD4;--cyan-fuerte:#0E7490;--text:#1E293B;--muted:#64748B;--error:#E85D7A;--ok:#1BBF6B;--violet:#6B5BCE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;opacity:.55}
+.blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+.blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+.header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,.9);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
+.logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
+.logo-container .logo-img{height:38px;width:auto;border-radius:8px}
+.main-nav ul{display:flex;list-style:none;gap:24px}
+.main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+.btn-logout{background:#E85D7A;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.wrap{width:100%;max-width:900px;margin:0 auto;padding:28px 20px 40px;flex:1}
+.card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px}
+.card h1{font-size:20px}
+.card h2{font-size:17px}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.back{display:inline-flex;gap:6px;background:#fff;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;margin-bottom:14px;text-decoration:none}
+.input{padding:10px 14px;border:1.5px solid #CBD5E1;border-radius:12px;font-size:13px;font-family:inherit;background:#fff;width:100%;max-width:320px;margin:14px 0}
+.btn{font-family:inherit;cursor:pointer;border-radius:18px;padding:9px 20px;min-height:44px;font-weight:700;font-size:12.5px;border:none;background:var(--cyan-fuerte);color:#fff}
+.btn-danger{background:#fff;border:1.5px solid #DFDAEE;color:var(--text)}
+.fila{display:flex;align-items:center;gap:12px;border:1px solid #EDE8F0;border-radius:12px;padding:12px 14px;background:#FBFDFF;margin-bottom:10px}
+.avatar{width:44px;height:44px;border-radius:50%;background:#EDE7FF;color:#4A38B0;font-weight:700;display:grid;place-items:center;flex:none}
+.info{flex:1;min-width:0}
+.info b{font-size:14px;display:block}
+.info small{font-size:12px;color:var(--muted);display:block}
+.empty{border:1px dashed #CBD5E1;border-radius:12px;padding:20px;text-align:center;color:var(--muted);font-size:13px}
+.dato{padding:8px 0;border-bottom:1px solid #F1F5F9}
+.dato span{display:block;font-size:12px;font-weight:600;color:var(--muted)}
+.dato b{font-size:14px}
+.pill{display:inline-block;padding:4px 12px;border-radius:12px;font-size:13px;background:#FEF3C7;color:#92400E}
+.doc{border:1px solid #E5E7EB;border-radius:8px;padding:20px;text-align:center;color:var(--muted);font-size:13px;margin-top:8px}
+.acciones{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;align-items:center}
+.acciones .input{margin:0;max-width:280px}
+.screen{display:none}
+.screen.active{display:block}
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999}
+.modal-overlay.open{display:flex}
+.modal{width:min(440px,100%);background:#fff;border-radius:16px;padding:26px 22px;text-align:center}
+.modal h3{font-size:17px}
+.modal p{font-size:13px;color:var(--muted);margin-top:8px}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.btn-modal{flex:1;min-height:44px;border-radius:20px;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer;border:none}
+.btn-modal.ok{background:var(--cyan-fuerte);color:#fff}
+.btn-modal.close{background:#fff;border:1px solid #DFDAEE}
+.footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+.footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+.footer-in a{color:var(--muted);text-decoration:none}
+.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;text-decoration:none}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10000;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--cyan-fuerte);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"><span>Mindzyxs</span></a>
+  </div>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <ul>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout-top" class="btn-logout">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a href="../PB-ADMIN/mockup-panel-admin.html" class="back">← Volver al panel</a>
+
+  <!-- Pantalla: pendientes -->
+  <section class="card screen active" id="screenLista">
+    <h1>Validar psicólogos</h1>
+    <p class="sub">Revisa y valida las credenciales profesionales de los psicólogos registrados.</p>
+    <input class="input" id="buscar" placeholder="Buscar por nombre o correo..." aria-label="Buscar psicólogo">
+    <div id="lista"></div>
+    <div class="empty" id="vacio" style="display:none;">No hay solicitudes de validación pendientes.</div>
+  </section>
+
+  <!-- Pantalla: detalle -->
+  <section class="card screen" id="screenDetalle">
+    <h2>Revisar psicólogo</h2>
+    <p class="sub">Revisa los datos y la tarjeta profesional del psicólogo para aprobar o rechazar su solicitud.</p>
+    <div style="margin-top:12px;" id="detalle"></div>
+    <div class="doc">📄 Vista previa de la tarjeta profesional (PDF de demostración)</div>
+    <p style="margin-top:10px;">Estado actual: <span class="pill">Pendiente</span></p>
+    <div class="acciones">
+      <button type="button" class="btn" id="btnAprobar">Aprobar</button>
+      <input class="input" id="motivo" placeholder="Motivo del rechazo (opcional)" aria-label="Motivo del rechazo">
+      <button type="button" class="btn btn-danger" id="btnRechazar">Rechazar</button>
+    </div>
+    <div style="margin-top:14px;"><button type="button" class="btn btn-danger" id="btnVolverLista">Volver a la lista</button></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso"><span>ℹ️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="modal">
+    <h3 id="confirmTitle">Confirmar</h3>
+    <p id="confirmText"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal close" id="btnNo">No</button>
+      <button type="button" class="btn-modal ok" id="btnSi">Sí</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const toast=document.getElementById('toast');
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),2400);}
+  const datos=[
+    {id:7,nombre:'Pedro López',correo:'pedro@correo.com',fecha:'12/09/2026 18:56',genero:'Masculino',esp:'Psicología clínica'}
+  ];
+  const lista=document.getElementById('lista'), vacio=document.getElementById('vacio');
+  function ini(n){return n.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();}
+  function pintar(q){
+    lista.innerHTML='';
+    const rows=datos.filter(d=>!q||(d.nombre+' '+d.correo).toLowerCase().includes(q));
+    vacio.style.display=rows.length?'none':'block';
+    rows.forEach(d=>{
+      const el=document.createElement('div');el.className='fila';
+      el.innerHTML=`<div class="avatar">${ini(d.nombre)}</div><div class="info"><b>${d.nombre}</b><small>${d.correo} · ${d.fecha}</small></div><button type="button" class="btn">Revisar</button>`;
+      el.querySelector('button').addEventListener('click',()=>abrir(d));
+      lista.appendChild(el);
+    });
+  }
+  function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+  let actual=null;
+  function abrir(d){actual=d;document.getElementById('detalle').innerHTML=`<div class="dato"><span>Nombres</span><b>${d.nombre}</b></div><div class="dato"><span>Correo</span><b>${d.correo}</b></div><div class="dato"><span>Género</span><b>${d.genero}</b></div><div class="dato"><span>Especialidad</span><b>${d.esp}</b></div>`;document.getElementById('motivo').value='';show('screenDetalle');}
+  document.getElementById('buscar').addEventListener('input',(e)=>pintar(e.target.value.trim().toLowerCase()));
+  document.getElementById('btnVolverLista').addEventListener('click',()=>show('screenLista'));
+  const modal=document.getElementById('confirmModal');
+  function confirmar(titulo,texto,si,accion){document.getElementById('confirmTitle').textContent=titulo;document.getElementById('confirmText').textContent=texto;document.getElementById('btnSi').textContent=si;modal.classList.add('open');modal.dataset.accion=accion;}
+  document.getElementById('btnAprobar').addEventListener('click',()=>confirmar('Aprobar psicólogo',`¿Confirma aprobar a ${actual?actual.nombre:''}?`,'Sí, aprobar','aprobar'));
+  document.getElementById('btnRechazar').addEventListener('click',()=>confirmar('Rechazar psicólogo',`¿Confirma rechazar a ${actual?actual.nombre:''}?`,'Sí, rechazar','rechazar'));
+  document.getElementById('btnNo').addEventListener('click',()=>modal.classList.remove('open'));
+  document.getElementById('btnSi').addEventListener('click',()=>{modal.classList.remove('open');show('screenLista');showToast('Validación registrada correctamente.');});
+  document.getElementById('btn-logout-top').addEventListener('click',()=>{if(confirm('¿Está seguro de que desea cerrar sesión?'))showToast('Sesión cerrada (demo)');});
+  document.getElementById('footerAviso').addEventListener('click',(e)=>{e.preventDefault();showToast('Mindzyxs no realiza diagnósticos clínicos');});
+  pintar('');
+</script>
+</body>
+</html>

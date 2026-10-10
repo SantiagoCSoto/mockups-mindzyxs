@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Logo1.png">
+<title>Cuestionarios predeterminados - Mindzyxs</title>
+<style>
+:root{--cyan:#6ECFD4;--cyan-fuerte:#0E7490;--text:#1E293B;--muted:#64748B;--error:#E85D7A;--ok:#1BBF6B;--violet:#6B5BCE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;opacity:.55}
+.blob-pink{width:580px;height:420px;background:#FDE0EE;top:-90px;left:-110px;border-radius:40% 60% 50% 50%}
+.blob-lav{width:600px;height:400px;background:#EDE6FF;top:-60px;right:-110px;border-radius:60% 40% 55% 45%}
+.header-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(255,255,255,.9);border-bottom:1px solid #F0EAF6;position:sticky;top:0;z-index:40}
+.logo-container .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1E293B}
+.logo-container .logo-img{height:38px;width:auto;border-radius:8px}
+.main-nav ul{display:flex;list-style:none;gap:24px}
+.main-nav a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+.btn-logout{background:#E85D7A;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.wrap{width:100%;max-width:900px;margin:0 auto;padding:28px 20px 40px;flex:1}
+.card{background:#fff;border:1px solid #EDE8F0;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:24px 22px}
+.card h1{font-size:20px}
+.card h2{font-size:17px}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.back{display:inline-flex;gap:6px;background:#fff;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;margin-bottom:14px;text-decoration:none}
+.fila{display:flex;align-items:center;gap:12px;border:1px solid #EDE8F0;border-radius:12px;padding:12px 14px;background:#FBFDFF;margin-bottom:10px}
+.avatar{width:44px;height:44px;border-radius:12px;background:#EDE7FF;color:#4A38B0;font-weight:700;display:grid;place-items:center;flex:none;font-size:20px}
+.info{flex:1;min-width:0}
+.info b{font-size:14px;display:block}
+.info small{font-size:12px;color:var(--muted);display:block}
+.est{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;white-space:nowrap}
+.est-ok{background:#E6F7F0;color:#1F7A4D}
+.est-no{background:#F1F5F9;color:#64748B}
+.btn{font-family:inherit;cursor:pointer;border-radius:18px;padding:9px 20px;min-height:44px;font-weight:700;font-size:12.5px;border:none;background:var(--cyan-fuerte);color:#fff}
+.btn-sec{background:#fff;border:1.5px solid #DFDAEE;color:var(--text)}
+.acciones{display:flex;gap:8px}
+.field{margin-top:10px}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+.field .input{width:100%}
+.input{padding:10px 14px;border:1.5px solid #CBD5E1;border-radius:12px;font-size:13px;font-family:inherit;background:#fff}
+textarea.input{min-height:90px;resize:vertical}
+.screen{display:none}
+.screen.active{display:block}
+.topbar{display:flex;justify-content:flex-end;margin:14px 0}
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999}
+.modal-overlay.open{display:flex}
+.modal{width:min(440px,100%);background:#fff;border-radius:16px;padding:26px 22px;text-align:center}
+.modal h3{font-size:17px}
+.modal p{font-size:13px;color:var(--muted);margin-top:8px}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.btn-modal{flex:1;min-height:44px;border-radius:20px;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer;border:none}
+.btn-modal.ok{background:var(--cyan-fuerte);color:#fff}
+.btn-modal.close{background:#fff;border:1px solid #DFDAEE}
+.footer{border-top:1px solid #EFE6F8;background:#FDF9FF;padding:14px 0;margin-top:auto}
+.footer-in{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:12.5px}
+.footer-in a{color:var(--muted);text-decoration:none}
+.aviso-link{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#5A45C9;background:linear-gradient(180deg,#F2EBFF,#E3D8FC);border:1px solid #CFBFF0;padding:7px 18px;border-radius:20px;font-size:12px;text-decoration:none}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:10000;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--cyan-fuerte);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="bg-blobs" aria-hidden="true"><div class="blob blob-pink"></div><div class="blob blob-lav"></div></div>
+
+<header class="header-nav">
+  <div class="logo-container">
+    <a href="#" class="logo-link"><img src="../Logo1.png" alt="Logo Mindzyxs" class="logo-img"><span>Mindzyxs</span></a>
+  </div>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <ul>
+      <li><a href="#">Nosotros</a></li>
+      <li><a href="#">Ayuda</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div class="header-auth-buttons">
+      <button type="button" id="btn-logout-top" class="btn-logout">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a href="../PB-ADMIN/mockup-panel-admin.html" class="back">← Volver al panel</a>
+
+  <!-- Pantalla: lista -->
+  <section class="card screen active" id="screenLista">
+    <h1>Cuestionarios predeterminados</h1>
+    <p class="sub">Cree, edite o desactive los cuestionarios base del sistema.</p>
+    <div class="topbar"><button type="button" class="btn" id="btnNuevo">+ Crear cuestionario</button></div>
+    <div id="lista"></div>
+  </section>
+
+  <!-- Pantalla: crear/editar -->
+  <section class="card screen" id="screenEditar">
+    <h2 id="editTitulo">Nuevo cuestionario</h2>
+    <p class="sub">Complete todos los campos obligatorios.</p>
+    <div class="field"><label for="edTitulo">Título *</label><input class="input" id="edTitulo" placeholder="Título del cuestionario"></div>
+    <div class="field"><label for="edDesc">Descripción *</label><textarea class="input" id="edDesc" placeholder="Descripción e instrucciones"></textarea></div>
+    <div class="modal-actions" style="margin-top:18px;">
+      <button type="button" class="btn-modal close" id="btnCancelar">Cancelar</button>
+      <button type="button" class="btn-modal ok" id="btnGuardar">Guardar</button>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <a href="#">Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Términos</a>
+    <a href="#" class="aviso-link" id="footerAviso"><span>ℹ️</span> Aviso: no diagnóstico</a>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="modal">
+    <h3 id="confirmTitle">Confirmar</h3>
+    <p id="confirmText"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal close" id="btnNo">No</button>
+      <button type="button" class="btn-modal ok" id="btnSi">Sí</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const toast=document.getElementById('toast');
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),2400);}
+  const datos=[
+    {id:1,titulo:'Cuestionario de bienestar emocional',preg:5,estado:'Publicado'},
+    {id:2,titulo:'Chequeo de energía semanal',preg:3,estado:'Borrador'}
+  ];
+  const lista=document.getElementById('lista');
+  function pintar(){
+    lista.innerHTML='';
+    datos.forEach(d=>{
+      const el=document.createElement('div');el.className='fila';
+      el.innerHTML=`<div class="avatar">📝</div><div class="info"><b>${d.titulo}</b><small>${d.preg} preguntas</small></div><span class="est ${d.estado==='Publicado'?'est-ok':'est-no'}">${d.estado}</span><div class="acciones"><button type="button" class="btn" data-a="editar">Editar</button><button type="button" class="btn btn-sec" data-a="estado">${d.estado==='Publicado'?'Desactivar':'Publicar'}</button></div>`;
+      const [bE,bS]=el.querySelectorAll('button');
+      bE.addEventListener('click',()=>abrir(d));
+      bS.addEventListener('click',()=>confirmar(d.estado==='Publicado'?'Desactivar cuestionario':"Publicar cuestionario",`¿Desea ${d.estado==='Publicado'?'desactivar':'publicar'} "${d.titulo}"?`,'Sí',()=>{d.estado=d.estado==='Publicado'?'Borrador':'Publicado';pintar();showToast('Cuestionario predeterminado guardado correctamente.');}));
+      lista.appendChild(el);
+    });
+  }
+  function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+  function abrir(d){document.getElementById('editTitulo').textContent=d?'Editar cuestionario':'Nuevo cuestionario';document.getElementById('edTitulo').value=d?d.titulo:'';document.getElementById('edDesc').value='';show('screenEditar');}
+  document.getElementById('btnNuevo').addEventListener('click',()=>abrir(null));
+  document.getElementById('btnCancelar').addEventListener('click',()=>show('screenLista'));
+  const modal=document.getElementById('confirmModal');let accion=null;
+  function confirmar(t,x,si,fn){document.getElementById('confirmTitle').textContent=t;document.getElementById('confirmText').textContent=x;document.getElementById('btnSi').textContent=si;accion=fn;modal.classList.add('open');}
+  document.getElementById('btnNo').addEventListener('click',()=>modal.classList.remove('open'));
+  document.getElementById('btnSi').addEventListener('click',()=>{modal.classList.remove('open');if(accion)accion();});
+  document.getElementById('btnGuardar').addEventListener('click',()=>{
+    if(!document.getElementById('edTitulo').value.trim()||!document.getElementById('edDesc').value.trim()){showToast('Debes completar todos los campos obligatorios.');return;}
+    show('screenLista');showToast('Cuestionario predeterminado guardado correctamente.');
+  });
+  document.getElementById('btn-logout-top').addEventListener('click',()=>{if(confirm('¿Está seguro de que desea cerrar sesión?'))showToast('Sesión cerrada (demo)');});
+  document.getElementById('footerAviso').addEventListener('click',(e)=>{e.preventDefault();showToast('Mindzyxs no realiza diagnósticos clínicos');});
+  pintar();
+</script>
+</body>
+</html>
