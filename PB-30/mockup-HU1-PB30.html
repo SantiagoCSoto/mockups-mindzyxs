@@ -99,9 +99,6 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--cyan-fuerte);outlin
       <div class="check"><strong style="text-transform:uppercase;font-size:13px;">Correo</strong><label><input type="checkbox" id="chCorreo" checked style="margin-right:4px;">Habilitado</label></div>
       <div class="field"><label for="edAsunto">Asunto</label><input class="input" id="edAsunto" placeholder="Ej: Codigo de verificacion"></div>
     </div>
-    <div class="canal-card">
-      <div class="check"><strong style="text-transform:uppercase;font-size:13px;">SMS / Interna</strong><label><input type="checkbox" id="chOtros" style="margin-right:4px;">Habilitado</label></div>
-    </div>
     <div class="field"><label for="edPlantilla">Plantilla</label><p class="hint">Variables disponibles: <code>{nombre}</code>, <code>{codigo}</code>, <code>{fecha}</code>, <code>{motivo}</code></p><textarea class="input" id="edPlantilla" placeholder="HTML de la plantilla..."></textarea></div>
     <div class="field" style="display:flex;gap:8px;flex-wrap:wrap;">
       <input class="input" id="pvNombre" placeholder="Nombre de ejemplo" style="flex:1;min-width:140px;">
@@ -139,7 +136,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--cyan-fuerte);outlin
     {code:'PASSWORD_RECOVERY',nombre:'Recuperación de contraseña',canales:['correo'],activo:true},
     {code:'APPROVAL_GRANTED',nombre:'Aprobación de psicólogo',canales:['correo'],activo:true},
     {code:'APPROVAL_REJECTED',nombre:'Rechazo de psicólogo',canales:['correo'],activo:false},
-    {code:'REMINDER',nombre:'Recordatorio diario',canales:['correo','sms'],activo:true},
+    {code:'REMINDER',nombre:'Recordatorio diario',canales:['correo'],activo:true},
     {code:'RISK_HIGH',nombre:'Alerta de riesgo alto',canales:['correo'],activo:true}
   ];
   const lista=document.getElementById('lista');
